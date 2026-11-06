@@ -49,8 +49,7 @@
 - **Varied-phrasing bigdata runs** (`results/entity/bigdata/*_xv*.json`) were rebuilt from the run log. The raw
   outputs are still on the stopped L4 box (`wm-syco`, eu-central-1a, `~/wp/results/entity/bigdata/`).
 - **Gate threshold rule.** "Above every ordinary practice position" gets stricter as practice data grows, which hurts
-  the signoff gate at large n. The quantile rule above fixes it for sign-offs. It hasn't been tested on the other
-  tasks or in the sweeps.
+  the signoff gate at large n. The quantile rule above fixes it for sign-offs. On entity it changes nothing (14.2% vs 15.5%). It hasn't been tested on agent_injection or in the sweeps.
 - **Langmix.** The one-neuron template doesn't fit this failure. The agents' earlier edit (`gate_recipe`) does.
 - **Blind agent session s1** lost ~70 minutes to a double-booked GPU. s2 ran clean.
 - **AWS.** All three `wm-*` instances are **stopped**, not terminated; their EBS volumes still bill.

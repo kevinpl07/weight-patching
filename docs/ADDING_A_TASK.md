@@ -51,7 +51,7 @@ release runs.
   kept firing at every token. It doesn't change the Gemma entity result.
 - `--theta-q 0.999` (`task.theta_content_q`) sets the threshold at a quantile of ordinary positions instead of their
   maximum. The max rule gets stricter as practice data grows (sign-off: 22% at full data). The 0.999 quantile gave 1.6%
-  on a 64-prompt subset; check it on your own held-out data.
+  on a 64-prompt subset and 2.3% on the main held-out (LoRA: 8.3%). It matters for reply-position gates like sign-off; on the entity task (a first-token gate whose threshold is set by the good-case negatives) it changes nothing (14.2% vs 15.5%). Check it on your own held-out data.
 - `--gate-g auto` makes the neuron's off state truly zero when ordinary positions sit close to the threshold
   (langmix).
 
