@@ -34,6 +34,8 @@
     pct1: (v) => v.toFixed(1) + "%",
     f2: (v) => v.toFixed(2),
     f2floor: (v) => (Math.floor(v * 100) / 100).toFixed(2),
+    f4: (v) => v.toFixed(4),
+    keep: (v) => (v >= 99.95 ? "100%" : v >= 99 ? v.toFixed(1) + "%" : Math.round(v) + "%"),
     kl: (v) => (v === 0 ? "0" : v >= 0.1 ? v.toFixed(2) : Number(v.toPrecision(1)).toString()),
     kl2: (v) => (v === 0 ? "0" : v >= 0.1 ? v.toFixed(2) : Number(v.toPrecision(2)).toString()),
     x0: (v) => Math.round(v) + "×",
@@ -171,7 +173,7 @@
     (o.refs || []).forEach((r) => {
       if (!isNum(r.y) || r.y < o.y.min || r.y > o.y.max) return;
       el("line", { x1: m.l, x2: w - m.r, y1: Y(r.y), y2: Y(r.y), style: `stroke:${r.color || "var(--base)"}`, "stroke-width": 1.25, "stroke-dasharray": r.dash ? "4 3" : null, opacity: 0.9 }, svg);
-      txt(svg, w - m.r - 4, Y(r.y) - 5, r.label, { "text-anchor": "end", class: "annot" });
+      txt(svg, m.l + 4, Y(r.y) - 5, r.label, { "text-anchor": "start", class: "annot" });
     });
     (o.vlines || []).forEach((r) => {
       el("line", { x1: X(r.x), x2: X(r.x), y1: m.t, y2: h - m.b, stroke: "var(--ink-2)", "stroke-width": 1 }, svg);
@@ -190,7 +192,7 @@
       if (!pts.length) return;
       const d = "M" + pts.map((p) => `${X(p[0]).toFixed(1)},${Y(clampY(p[1])).toFixed(1)}`).join("L");
       el("path", { d, fill: "none", style: `stroke:${s.color}`, "stroke-width": s.width || 2, "stroke-linejoin": "round", "stroke-linecap": "round", "stroke-dasharray": s.dash ? "5 4" : null }, svg);
-      if (s.markers) pts.forEach((p) => el("circle", { cx: X(p[0]), cy: Y(clampY(p[1])), r: 3.5, style: `fill:${s.color};stroke:var(--surface)`, "stroke-width": 2 }, svg));
+      if (s.markers) pts.forEach((p, i) => (s.hollow && i === 0) ? null : el("circle", { cx: X(p[0]), cy: Y(clampY(p[1])), r: s.hollow ? 4 : 3.5, style: s.hollow ? `fill:var(--surface);stroke:${s.color}` : `fill:${s.color};stroke:var(--surface)`, "stroke-width": 2 }, svg));
       if (s.endDot) { const p = pts[pts.length - 1]; el("circle", { cx: X(p[0]), cy: Y(clampY(p[1])), r: 4, style: `fill:${s.color};stroke:var(--surface)`, "stroke-width": 2 }, svg); }
     });
     // end labels with simple collision avoidance (drop, don't nudge)
@@ -486,7 +488,8 @@
   }
 
   // ------------------------------------------------------------------ task helpers
-  const tasksList = () => (D.task_order || []).map((id) => D.tasks[id]);
+  const tasksList = () => (D.task_order || []).map((id) => D.tasks[id]).filter((t) => t && (!t.group || t.group === "main"));
+  const sameOf = (t, a) => (t.arms && t.arms[a] && isNum(t.arms[a].same) ? t.arms[a].same : null);
   const shortName = (t) => (t.meta && t.meta.short) || t.id;
   function pickDefault(list, pred) {
     const ok = list.filter(pred);
@@ -505,6 +508,7 @@
     if (!anaTask || !list.find((t) => t.id === anaTask)) anaTask = pickDefault(list, () => true);
     if (list.length > 1) { const s = document.createElement("div"); s.className = "seg"; $("#anatomy-tasks").innerHTML = ""; $("#anatomy-tasks").appendChild(s); seg(s, list.map((t) => ({ id: t.id, label: shortName(t) })), anaTask, (id) => { anaTask = id; renderAnatomy(); }); }
     const t = D.tasks[anaTask], A = t.anatomy;
+    if (anaTask === "entity") $("#anatomy-takeaway").textContent = `The neuron fires on ${F.pct0(100 * A.hist.fail.fire)} of held-out made-up names and on ${F.pct0(100 * A.hist.content.fire)} of ordinary chat tokens.`;
     const names = anaTask.startsWith("entity") ? { fail: "Made-up entities", good: "Real entities it knows", content: "Ordinary reply tokens" }
       : { fail: "Failure cases", good: "Good cases", content: "Ordinary reply tokens" };
     const G = [["content", "var(--g-content)"], ["good", "var(--g-good)"], ["fail", "var(--g-fail)"]];
@@ -569,7 +573,7 @@
     const t = D.tasks[scoreTask];
     const node = $("#score-panels");
     if (!t || !t.arms) { node.innerHTML = ""; pendingFig(node, "scoreboard", `results/${scoreTask}/*.json`); return; }
-    const arms = t.arm_order, A = t.arms, meta = t.meta || {};
+    const arms = t.score_arms || t.arm_order, A = t.arms, meta = t.meta || {};
     const pct = (v) => (isNum(v) ? F.pct0(v) : null);
     const mk = (arm, v, txtv) => ({ arm, label: armLabel(t, arm), v, txt: txtv, color: col(arm), dash: family(arm) === "random" });
     const tipFor = (arm) => {
@@ -577,11 +581,13 @@
       const line = (k, v) => `<div class="r"><span>${k}</span><b>${v}</b></div>`;
       return `<div class="t">${swatch(col(arm), family(arm) === "random")} ${esc(armLabel(t, arm))}</div>` +
         line(meta.fail_short || "failure", isNum(r.fail) ? F.pct1(r.fail) : "–") + line(meta.kept_short || "kept", isNum(r.kept) ? F.pct1(r.kept) : "–") +
-        line("MMLU-200", isNum(r.mmlu) ? F.pct1(r.mmlu) : "–") + line("chat KL", isNum(r.kl) ? F.kl2(r.kl) : "–") +
+        line("unchanged", isNum(r.same) ? F.pct1(r.same) : "\u2013") +
+        line("MMLU-200", isNum(r.mmlu) ? F.pct1(r.mmlu) : "\u2013") + line("chat KL", isNum(r.kl) ? F.kl2(r.kl) : "\u2013") +
         line("weights changed", isNum(r.entries) ? F.int(r.entries) : "–") + line("trainable params", isNum(r.trainable) ? F.compact(r.trainable) : "–") +
         line("build time", isNum(r.fit_s) ? Math.round(r.fit_s) + " s" : "–");
     };
     const failRows = arms.map((a) => mk(a, A[a].fail, pct(A[a].fail)));
+    const sameRows = arms.map((a) => mk(a, A[a].same, isNum(A[a].same) ? F.pct0(A[a].same) : "n/a"));
     const keptMax = Math.max(100, ...arms.map((a) => A[a].kept || 0));
     const keptRows = arms.map((a) => mk(a, A[a].kept, pct(A[a].kept)));
     const klRows = arms.map((a) => mk(a, A[a].kl, isNum(A[a].kl) ? F.kl2(A[a].kl) : "n/a"));
@@ -589,6 +595,7 @@
     const touchRows = arms.map((a) => { const v = touch(a); return mk(a, v, v === 0 ? "0" : isNum(v) ? F.compact(v) : "–"); });
     node.innerHTML =
       barPanel(`Failure: ${esc(meta.fail_short || "failure rate")}`, `${esc(meta.fail || "")} · lower is better`, failRows, { max: 100, ticks: [0, 25, 50, 75, 100], tickFmt: (v) => v + "%" }) +
+      barPanel("Unchanged: ordinary outputs identical", `${esc(meta.same_label || "")} \u00b7 higher is better`, sameRows, { max: 100, ticks: [0, 25, 50, 75, 100], tickFmt: (v) => v + "%" }) +
       barPanel(`Kept: ${esc(meta.kept_short || "kept")}`, `${esc(meta.kept || "")} · higher is better`, keptRows, { max: keptMax, ticks: [0, 25, 50, 75, 100], tickFmt: (v) => v + "%" }) +
       barPanel("Drift on ordinary inputs", `chat KL from the base model, log scale · lower is better${t.base_task.startsWith("whisper") ? " (decoder KL on clean speech)" : ""}`, klRows, { log: [1e-4, 1], dot: true, ticks: [1e-4, 1e-3, 1e-2, 1e-1, 1], tickFmt: (v) => (v >= 1 ? "1" : String(v)) }) +
       barPanel("Weights touched", "entries changed (gate) or trainable parameters (LoRA), log scale", touchRows, { log: [1, 1e9], ticks: [1, 1e3, 1e6, 1e9], tickFmt: (v) => F.compact(v) });
@@ -599,28 +606,37 @@
       r.addEventListener("click", (ev) => showTip(tipFor(arm), ev.clientX, ev.clientY));
     });
     const g = A.gate, b = A.base, rnd = A.random;
+    const lo = A.lora;
     $("#score-takeaway").textContent = g && b && isNum(g.fail) && isNum(b.fail)
-      ? `One neuron: ${F.pct0(b.fail)} → ${F.pct0(g.fail)} ${meta.fail_short || "failure"}.` + (rnd && isNum(rnd.fail) ? ` A random neuron of the same size: ${F.pct0(rnd.fail)}.` : "")
-      : "Scoreboard";
+      ? `One neuron: ${F.pct0(b.fail)} \u2192 ${F.pct0(g.fail)} ${meta.fail_short || "failure"}` + (isNum(g.same) ? `, ${F.pct0(g.same)} of ordinary outputs unchanged` : "") +
+        (lo && isNum(lo.same) ? ` (LoRA: ${F.pct0(lo.same)}).` : ".")
+      : "What did each fix break?";
     $("#score-sub").textContent = `${meta.title || t.id} · ${meta.model_label || t.model || ""} · ${t.n ? t.n.toLocaleString() + " held-out items" : ""}${t.status === "partial" ? " · some arms still running" : ""}`;
   }
   function renderScoreTable() {
-    const list = tasksList().filter((t) => !t.variant || t.arms);
-    const cols = [["base", "Base"], ["prompt", "System prompt"], ["gate", "One neuron"], ["random", "Random neuron"], ["lora", "LoRA (same data)"]];
+    const list = tasksList();
+    const cols = [["base", "Base"], ["prompt", "Prompt / decoding fix"], ["gate", "One neuron"], ["random", "Random neuron"], ["lora", "LoRA, same data"]];
     $("#score-table thead").innerHTML = `<tr><th>Failure (model)</th>${cols.map(([a, l]) => `<th class="n"><span class="mhead">${swatch(col(a), a === "random")}${l}</span></th>`).join("")}</tr>`;
     $("#score-table tbody").innerHTML = list.map((t) => {
       const A = t.arms || {};
+      const ks = (t.meta && t.meta.kept_short) || "kept";
       const cell = (a) => {
-        let arm = a;
-        if (a === "prompt" && !A.prompt) arm = ["thresholds", "vad", "thresholds_tuned"].find((x) => A[x]) || a;
-        const r = A[arm];
+        if (a === "prompt" && !A.prompt) {
+          const xs = ["thresholds", "thresholds_tuned"].filter((x) => A[x] && isNum(A[x].fail));
+          if (!xs.length) return `<td class="n">${PENDING}</td>`;
+          return `<td class="n">${xs.map((x) => `<span class="cell2">${F.pct0(A[x].fail)} <span class="dim">${esc(A[x].label.toLowerCase())}</span></span>`).join("")}` +
+            xs.filter((x) => isNum(A[x].kept) && A[x].kept < 99.95).map((x) => `<span class="note">${esc(A[x].label.toLowerCase())}: ${ks} ${F.keep(A[x].kept)}</span>`).join("") + "</td>";
+        }
+        const r = A[a];
         if (!r || !isNum(r.fail)) return `<td class="n">${PENDING}</td>`;
-        let note = arm !== a ? `<span class="note">${esc(r.label)}</span>` : "";
-        if (a === "prompt" && A.base && isNum(A.base.kept) && isNum(r.kept) && A.base.kept - r.kept >= 15) note += `<span class="note">kept ${F.pct0(A.base.kept)} → ${F.pct0(r.kept)}</span>`;
+        let note = "";
+        if (a === "prompt" && A.base && isNum(A.base.kept) && isNum(r.kept) && A.base.kept - r.kept >= 15) note = `<span class="note"><b>but ${ks} ${F.pct0(A.base.kept)} \u2192 ${F.pct0(r.kept)}</b></span>`;
+        else if ((a === "gate" || a === "lora") && isNum(r.kept)) note = `<span class="note">${ks} ${F.keep(r.kept)}</span>`;
         return `<td class="n${a === "gate" ? " hl" : ""}">${F.pct0(r.fail)}${note}</td>`;
       };
       return `<tr><td>${esc((t.meta && t.meta.title) || t.id)} <span class="dim">(${esc((t.meta && t.meta.model_label) || "")})</span></td>${cols.map(([a]) => cell(a)).join("")}</tr>`;
     }).join("");
+    $$("#score-table tbody tr").forEach((tr) => Array.from(tr.children).forEach((td, i) => { if (i > 0) td.dataset.l = cols[i - 1][1]; }));
   }
 
   // ------------------------------------------------------------------ examples
@@ -630,7 +646,8 @@
     signoff: { fail: ["just stops", "adds a sign-off"], kept: ["keeps the question/offer", "drops it"] },
     whisper_silence: { fail: ["stays silent", "transcribes words"], kept: ["transcript unchanged", "transcript changed"] },
   };
-  const KIND = { fixed: "Fixed by the neuron", kept_break: "The prompt breaks a real answer", miss: "The neuron misses", lora_vs_gate: "LoRA and the neuron disagree" };
+  const KIND = { fixed: "Fixed by the neuron", kept_break: "The cheap fix breaks a real answer", miss: "The neuron misses", lora_vs_gate: "LoRA and the neuron disagree",
+    never_fires: "The neuron never fires on this phrasing", imperfect: "Imperfect: a different tell appears", lora_breaks: "LoRA rewrites an output the neuron leaves alone" };
   let exTask = null;
   function renderExamples() {
     const list = tasksList().filter((t) => (t.examples || []).length);
@@ -643,13 +660,13 @@
     const V = VERD[t.base_task] || { fail: ["ok", "fails"], kept: ["ok", "breaks"] };
     grid.innerHTML = "";
     t.examples.forEach((e) => {
-      const grp = e.kind === "kept_break" ? "kept" : "fail";
+      const grp = e.kind === "kept_break" || e.kind === "lora_breaks" ? "kept" : "fail";
       const arms = Object.keys(e.replies);
       let cur = arms.includes("gate") ? "gate" : arms[0];
       const card = document.createElement("div");
       card.className = "ex";
       const isWhisper = t.base_task.startsWith("whisper");
-      const head = isWhisper ? esc(e.label) : t.base_task === "agent_injection" ? `Hidden in the page: “${esc(e.prompt)}”` : esc(e.prompt);
+      const head = isWhisper ? esc(e.label) : t.base_task === "agent_injection" ? (e.label === "injected page" ? `Hidden in the page: “${esc(e.prompt.replace(/^[-\s]+|[-\s]+$/g, ""))}”` : esc(e.prompt)) : esc(e.prompt);
       card.innerHTML = `<span class="kind ${e.kind}">${KIND[e.kind] || e.kind}</span><div class="q">${head}</div><div class="lab">${isWhisper ? esc(e.id) : esc(e.label)}</div>${e.audio ? `<audio controls preload="none" src="${esc(e.audio)}"></audio>` : ""}<div class="seg tabs" role="tablist"></div><div class="reply" role="tabpanel"></div><div class="verdict-line"></div>`;
       const tabs = $(".tabs", card), rep = $(".reply", card), vl = $(".verdict-line", card);
       const show = () => {
@@ -666,9 +683,14 @@
         if (isWhisper && !/[A-Za-z0-9]/.test(text)) text = (text.trim() ? `“${text.trim()}” ` : "") + "(no words: counts as silent)";
         rep.textContent = text;
         rep.style.borderLeftColor = col(cur);
-        const v = e.verdict[cur];
+        let v = e.verdict[cur];
+        let line = v ? (v === "good" ? "\u2713 " + V[grp][0] : "\u2717 " + V[grp][1]) : "";
+        if (e.kind === "lora_breaks" && cur !== "base") {
+          const same = (e.replies[cur] || "").trim() === (e.replies.base || "").trim();
+          v = same ? "good" : "bad"; line = same ? "\u2713 identical to the base output" : "\u2717 different from the base output";
+        }
         vl.className = "verdict-line " + (v || "");
-        vl.textContent = v ? (v === "good" ? "✓ " + V[grp][0] : "✗ " + V[grp][1]) : "";
+        vl.textContent = line;
       };
       show();
       grid.appendChild(card);
@@ -685,7 +707,8 @@
     const lastG = g[g.length - 1] || {}, lastL = l[l.length - 1] || {};
     const ratios = ns.map((n) => (at(g, n).kl > 0 && isNum(at(l, n).kl) ? at(l, n).kl / at(g, n).kl : null)).filter(isNum).sort((a, b) => a - b);
     const enough = g.find((r) => isNum(r.fail) && isNum(lastG.fail) && r.fail <= lastG.fail + 5);
-    return { task_short: `${((t.meta && t.meta.short) || t.id).toLowerCase()} (${(t.meta && t.meta.model_label) || ""})`, match_n: match, all_gate: lastG.fail, all_lora: lastL.fail, kl_ratio: ratios.length ? ratios[Math.floor(ratios.length / 2)] : undefined, gate_enough_n: enough && enough.n, never: !match && ns.length };
+    const at8 = (rows) => (rows.find((r) => r.n === 8) || {}).fail;
+    return { gate_n8: at8(g), lora_n8: at8(l), task_short: `${((t.meta && t.meta.short) || t.id).toLowerCase()} (${(t.meta && t.meta.model_label) || ""})`, match_n: match, all_gate: lastG.fail, all_lora: lastL.fail, kl_ratio: ratios.length ? ratios[Math.floor(ratios.length / 2)] : undefined, gate_enough_n: enough && enough.n, never: !match && ns.length };
   }
   function renderSweep() {
     const node = $("#sweep-chart");
@@ -700,18 +723,26 @@
     const t = D.tasks[swTask], S = t.sweep, A = t.arms || {}, meta = t.meta || {};
     const m = swMetric;
     const series = [];
+    const big = (t.bigdata || []).filter((r) => isNum(r.n));
     [["lora", "LoRA"], ["gate", "One neuron"]].forEach(([k, lab]) => {
       const rows = S[k]; if (!rows) return;
-      series.push({ id: k, label: lab, color: col(k), points: rows.map((r) => [r.n, r[m]]), band: rows.map((r) => [r.n, r[m + "_min"], r[m + "_max"]]), markers: true, width: 2.25, priority: k === "gate" ? 1 : 2 });
+      series.push({ id: k, label: lab, color: col(k), points: rows.map((r) => [r.n, r[m]]), band: rows.map((r) => [r.n, r[m + "_min"], r[m + "_max"]]), markers: true, width: 2.25, priority: k === "gate" ? 1 : 2, endLabel: !big.some((r) => r.method === k && isNum(r[m])) });
+      [false, true].forEach((varied) => {
+        const ext = big.filter((r) => r.method === k && !!r.varied === varied && isNum(r[m])).sort((a, b) => a.n - b.n);
+        if (!ext.length) return;
+        const last = rows[rows.length - 1];
+        series.push({ id: k + "_big" + (varied ? "v" : ""), label: `${lab}, more data${varied ? " (varied phrasing)" : ""}`, short: "", endLabel: false, color: col(k), dash: true, hollow: true, markers: true, width: 1.75,
+          points: [[last.n, last[m]]].concat(ext.map((r) => [r.n, r[m]])), priority: 4 });
+      });
     });
-    const allN = Array.from(new Set([].concat(...Object.values(S).map((rows) => rows.map((r) => r.n))))).sort((a, b) => a - b);
+    const allN = Array.from(new Set([].concat(...Object.values(S).map((rows) => rows.map((r) => r.n)), big.map((r) => r.n)))).sort((a, b) => a - b);
     const refs = [];
     if (m !== "kl") {
       if (A.base && isNum(A.base[m])) refs.push({ y: A.base[m], label: "base", color: "var(--base)", dash: true });
-      const pa = A.prompt ? "prompt" : ["thresholds", "vad"].find((x) => A[x]);
+      const pa = A.prompt ? "prompt" : ["thresholds_tuned", "thresholds", "vad"].find((x) => A[x]);
       if (pa && isNum(A[pa][m])) refs.push({ y: A[pa][m], label: armLabel(t, pa).toLowerCase(), color: "var(--prompt)", dash: true });
     }
-    const vals = [].concat(...series.map((s) => s.band.map((b) => [b[1], b[2]]).flat())).filter(isNum);
+    const vals = [].concat(...series.map((s) => (s.band || s.points.map((p) => [p[0], p[1], p[1]])).map((b) => [b[1], b[2]]).flat())).filter(isNum);
     let y;
     if (m === "kl") {
       const pos = vals.filter((v) => v > 0);
@@ -721,18 +752,20 @@
     } else {
       const top = Math.max(100, ...vals, ...refs.map((r) => r.y));
       y = { min: 0, max: top > 100 ? Math.ceil(top / 10) * 10 : 100, fmt: (v) => v + "%" };
+      if (!vals.length) { pendingFig(node, `${lab} for this sweep`, `results/${swTask}/sweep/*.json (guards.chat_same)`); return; }
     }
-    legend($("#sweep-legend"), [{ label: "One neuron (mean, min–max band)", color: col("gate"), line: true }, { label: "LoRA (mean, min–max band)", color: col("lora"), line: true }].concat(refs.map((r) => ({ label: r.label, color: r.color, line: true, dash: true }))));
+    legend($("#sweep-legend"), [{ label: "One neuron (mean, min\u2013max band)", color: col("gate"), line: true }, { label: "LoRA (mean, min\u2013max band)", color: col("lora"), line: true }]
+      .concat(big.length ? [{ label: "more labelled data (one run)", color: "var(--ink-2)", line: true, dash: true }] : [])
+      .concat(refs.map((r) => ({ label: r.label, color: r.color, line: true, dash: true }))));
     lineChart(node, {
       aria: "Failure rate vs number of practice examples for the gate and LoRA",
       series, refs, snapXs: allN,
       x: { min: allN[0], max: allN[allN.length - 1], log: true, ticks: allN, fmt: (v) => String(v), label: "practice examples (log scale)" },
       y, tipTitle: (n) => `n = ${n} practice examples`, tipFmt: m === "kl" ? (v) => F.kl2(v) : (v) => F.pct1(v),
     });
-    const lab = { fail: meta.fail_short || "failure", kept: meta.kept_short || "kept", kl: "chat KL" }[m];
-    const c = sweepCalc(t);
-    $("#sweep-takeaway").textContent = c.match_n ? `LoRA catches the one-neuron gate at about ${c.match_n} examples.` : c.never ? "Across this range, LoRA never quite catches the gate." : "How many examples does fine-tuning need to catch the edit?";
-    $("#fig-sweep .sub").textContent = `${meta.title || t.id}: ${lab} vs practice examples. Gate and LoRA refit on stratified subsets; lines are the mean over seeds, bands span min–max.`;
+    const lab = { fail: meta.fail_short || "failure", kept: meta.kept_short || "kept", kl: "chat KL", same: "ordinary outputs unchanged" }[m];
+    $("#fig-sweep .sub").textContent = `${meta.title || t.id} (${meta.model_label || ""}): ${lab} vs labelled practice examples. Gate and LoRA refit on stratified subsets; lines are the mean over seeds, bands span min\u2013max.` +
+      (t.sweep_source ? " Sweep scored on a 100-prompt subset of the held-out set." : "");
   }
   function sweepText() {
     const list = tasksList().filter((t) => t.sweep && t.sweep.gate && t.sweep.lora);
@@ -748,12 +781,21 @@
 
   // ------------------------------------------------------------------ persistence
   let peTask = null;
-  const PE = { "base+chat": ["Unpatched + chat SFT", "var(--base)", false], "gate+chat": ["Patched + chat SFT", "var(--gate)", false], "gate+conflict": ["Patched + conflicting SFT", "var(--gate)", true] };
+  const PE = { "base+chat": ["Unpatched + chat SFT", "var(--base)", false], "gate+chat": ["One neuron + chat SFT", "var(--gate)", false], "gate+conflict": ["One neuron + conflicting SFT", "var(--gate)", true], "lora+chat": ["LoRA fix + chat SFT", "var(--lora)", false] };
   function peCalc(t) {
     const C = t.persistence.conditions, gc = C["gate+chat"], gx = C["gate+conflict"], bc = C["base+chat"];
     const out = {};
     if (gc && gc.length) {
       out.chat_start = gc[0].fail; out.chat_end = gc[gc.length - 1].fail; out.steps = gc[gc.length - 1].step;
+      const atS = (rows, st) => ((rows || []).find((r) => r.step === st) || {}).fail;
+      out.chat_50 = atS(gc, 50); out.conflict_50 = atS(gx, 50);
+      const lc = C["lora+chat"];
+      if (lc && lc.length) { out.lora_start = lc[0].fail; out.lora_50 = atS(lc, 50); out.lora_100 = atS(lc, 100); }
+      const fr = gc.filter((r) => isNum(r.fire));
+      out.fire_10 = isNum((fr.find((r) => r.step === 10) || {}).fire) ? 100 * fr.find((r) => r.step === 10).fire : undefined;
+      const gone = fr.find((r) => r.step > 0 && r.fire === 0);
+      out.fire_gone = gone ? gone.step : undefined;
+      out.cos = t.persistence.gate_cos_min;
       const base0 = bc && bc.length ? bc[0].fail : (t.arms && t.arms.base && t.arms.base.fail);
       const d = out.chat_end - out.chat_start;
       out.chat_verdict = d < 10 ? "keeps" : isNum(base0) && out.chat_end >= base0 - 10 ? "erases" : "partly erodes";
@@ -770,13 +812,13 @@
   function renderPersist() {
     const node = $("#persist-chart");
     const list = tasksList().filter((t) => t.persistence);
-    if (!list.length) { $("#persist-legend").innerHTML = ""; return pendingFig(node, "persistence curves", "results/<task>/persistence.json"); }
+    if (!list.length) { $("#persist-legend").innerHTML = ""; $("#fig-persist .inset").style.display = "none"; return pendingFig(node, "persistence curves", "results/<task>/persistence.json"); }
     if (!peTask || !list.find((t) => t.id === peTask)) peTask = pickDefault(list, () => true);
-    if (list.length > 1) seg($("#persist-tasks"), list.map((t) => ({ id: t.id, label: shortName(t) })), peTask, (id) => { peTask = id; renderPersist(); });
     const t = D.tasks[peTask], C = t.persistence.conditions, meta = t.meta || {};
-    const series = Object.keys(C).map((k) => {
-      const p = PE[k] || [k, "var(--lora)", false];
-      return { id: k, label: p[0], short: p[0].replace(" SFT", ""), color: p[1], dash: p[2], points: C[k].map((r) => [r.step, r.fail]), markers: true, priority: k === "gate+chat" ? 1 : 2 };
+    const order = ["gate+chat", "gate+conflict", "lora+chat", "base+chat"];
+    const series = Object.keys(C).sort((a, b) => (order.indexOf(a) + 9) % 9 - (order.indexOf(b) + 9) % 9).map((k) => {
+      const p = PE[k] || [k, "var(--random)", false];
+      return { id: k, label: p[0], short: p[0].replace(" SFT", ""), endLabel: false, color: p[1], dash: p[2], points: C[k].map((r) => [r.step, r.fail]), markers: true, priority: k === "gate+chat" ? 1 : k === "lora+chat" ? 2 : 3 };
     });
     legend($("#persist-legend"), series.map((s) => ({ label: s.label, color: s.color, line: true, dash: s.dash })));
     const xs = Array.from(new Set([].concat(...series.map((s) => s.points.map((p) => p[0]))))).sort((a, b) => a - b);
@@ -785,17 +827,138 @@
       x: { min: xs[0], max: xs[xs.length - 1], label: "fine-tuning steps after patching" },
       y: { min: 0, max: 100, fmt: (v) => v + "%" }, tipTitle: (s) => `step ${s}`, tipFmt: (v) => F.pct1(v),
     });
-    $("#fig-persist .sub").textContent = `${meta.title || t.id} (${meta.model_label || ""}): ${meta.fail_short || "failure"} as fine-tuning of the last ${t.persistence.k_layers || "few"} layers continues after patching.`;
+    $("#fig-persist .sub").textContent = `${meta.title || t.id} (${meta.model_label || ""}): ${meta.fail_short || "failure"} on held-out prompts as fine-tuning of the last ${t.persistence.k_layers || "few"} layers continues.`;
     const c = peCalc(t);
     CALC.pe = c;
-    const tk = c.conflict_never ? "The patch survives even training that rewards the failure, within this budget."
+    // inset: does the neuron still fire?
+    const fireRows = (C["gate+chat"] || []).filter((r) => isNum(r.fire));
+    const fnode = $("#fire-chart");
+    if (fireRows.length > 1) {
+      $("#fig-persist .inset").style.display = "";
+      lineChart(fnode, { aria: "Share of made-up names on which the gate neuron fires, by fine-tuning step", height: 190, compact: true,
+        series: [{ id: "fire", label: "fires on made-up names", color: "var(--gate)", points: fireRows.map((r) => [r.step, 100 * r.fire]), markers: true, endLabel: false }],
+        x: { min: fireRows[0].step, max: fireRows[fireRows.length - 1].step, ticks: fireRows.map((r) => r.step), label: "steps" },
+        y: { min: 0, max: 100, ticks: [0, 50, 100], fmt: (v) => v + "%" }, snapXs: fireRows.map((r) => r.step), tipTitle: (s) => `step ${s}`, tipFmt: (v) => F.pct0(v) });
+      const cm = t.persistence.gate_cos_min;
+      $("#fire-note").textContent = isNum(cm) ? `The neuron's own weights don't move: cosine to the patch ${cm >= 0.99995 ? "1.0000" : "\u2265 " + cm.toFixed(4)} at every step. It stops firing because the layers feeding it changed.` : "";
+    } else $("#fig-persist .inset").style.display = "none";
+    const tk = isNum(c.chat_50) && c.chat_50 > 80 ? `Fifty steps of unrelated fine-tuning erase the patch: ${F.pct0(c.chat_start)} \u2192 ${F.pct0(c.chat_50)}.`
+      : c.conflict_never ? "The patch survives even training that rewards the failure, within this budget."
       : c.chat_verdict === "keeps" ? `Ordinary fine-tuning leaves the patch alone; training that rewards the failure erases it${isNum(c.conflict_steps) ? ` within ${c.conflict_steps} steps` : ""}.`
       : c.chat_verdict ? `Even ordinary fine-tuning ${c.chat_verdict} the patch.` : "Does more training erase the patch?";
     $("#persist-takeaway").textContent = tk;
   }
 
+  // ------------------------------------------------------------------ pareto (entity)
+  let parX = "kl";
+  function renderPareto() {
+    const node = $("#pareto-chart");
+    const t = Object.values(D.tasks).find((x) => x && x.pareto && x.group === "main");
+    if (!t) { $("#pareto-legend").innerHTML = ""; $("#pareto-x").style.display = "none"; return pendingFig(node, "fix vs side-effect points", "results/entity/pareto/*.json"); }
+    const P = t.pareto, A = t.arms || {};
+    const xv = (r) => (parX === "kl" ? r.kl : isNum(r.same) ? 100 - r.same : null);
+    const groups = [["gate", "One neuron, write gain", "gain "], ["lora", "LoRA, training steps", "step "]].filter(([k]) => P[k]);
+    const pts = [].concat(...groups.map(([k]) => P[k].map((r) => ({ k, r, x: xv(r), y: r.fail })))).filter((p) => isNum(p.x) && isNum(p.y) && (parX !== "kl" || p.x > 0));
+    // the shipped arms as extra points
+    ["gate", "lora"].forEach((k) => { const r = A[k]; if (r && isNum(r.fail)) { const x = parX === "kl" ? r.kl : isNum(r.same) ? 100 - r.same : null; if (isNum(x) && (parX !== "kl" || x > 0)) pts.push({ k, r: { value: "shipped", fail: r.fail, kept: r.kept, kl: r.kl, same: r.same }, x, y: r.fail, shipped: true }); } });
+    legend($("#pareto-legend"), groups.map(([k, l]) => ({ label: l, color: col(k) })).concat([{ label: "base", color: "var(--base)", line: true, dash: true }, { label: armLabel(t, "prompt").toLowerCase(), color: "var(--prompt)", line: true, dash: true }]));
+    const w = W(node), narrow = w < 560, h = narrow ? 280 : 340, m = { l: 46, r: 16, t: 14, b: 42 };
+    const svg = svgRoot(node, w, h, "Fabrication vs side effect for gate strengths and LoRA checkpoints");
+    let X;
+    let xt;
+    if (parX === "kl") {
+      const lo = Math.pow(10, Math.floor(Math.log10(Math.min(...pts.map((p) => p.x))))), hi = Math.pow(10, Math.ceil(Math.log10(Math.max(...pts.map((p) => p.x)))));
+      X = scale(lo, hi, m.l, w - m.r, true); xt = []; for (let v = lo; v <= hi * 1.001; v *= 10) xt.push(+v.toPrecision(1));
+    } else { X = scale(0, 100, m.l, w - m.r); xt = [0, 25, 50, 75, 100]; }
+    const ymax = Math.max(100, ...pts.map((p) => p.y));
+    const Y = scale(0, ymax, h - m.b, m.t);
+    const g = el("g", { class: "ax" }, svg);
+    [0, 25, 50, 75, 100].forEach((v) => { el("line", { x1: m.l, x2: w - m.r, y1: Y(v), y2: Y(v), class: "gridl" }, g); txt(g, m.l - 6, Y(v) + 4, v + "%", { "text-anchor": "end", class: "tick" }); });
+    xt.forEach((v) => txt(g, X(v), h - m.b + 16, parX === "kl" ? String(v) : v + "%", { "text-anchor": "middle", class: "tick" }));
+    el("line", { x1: m.l, x2: w - m.r, y1: h - m.b, y2: h - m.b, stroke: "var(--axis)" }, g);
+    txt(g, (m.l + w - m.r) / 2, h - 4, parX === "kl" ? "chat KL from the base model (log scale) → more side effect" : "ordinary chat answers changed → more side effect", { "text-anchor": "middle", class: "tick" });
+    [["base", "var(--base)"], ["prompt", "var(--prompt)"]].forEach(([a, c]) => { const r = A[a]; if (r && isNum(r.fail)) { el("line", { x1: m.l, x2: w - m.r, y1: Y(r.fail), y2: Y(r.fail), style: `stroke:${c}`, "stroke-dasharray": "4 3", "stroke-width": 1.25 }, svg); txt(svg, w - m.r - 4, Y(r.fail) - 5, `${a === "base" ? "base" : armLabel(t, a).toLowerCase()} (no weights changed)`, { "text-anchor": "end", class: "annot" }); } });
+    groups.forEach(([k, , pre]) => {
+      const ps = pts.filter((p) => p.k === k && !p.shipped);
+      if (ps.length > 1) el("path", { d: "M" + ps.map((p) => `${X(p.x)},${Y(p.y)}`).join("L"), fill: "none", style: `stroke:${col(k)}`, "stroke-width": 1.5, opacity: 0.6 }, svg);
+      ps.forEach((p, i) => {
+        el("circle", { cx: X(p.x), cy: Y(p.y), r: 5, style: `fill:${col(k)};stroke:var(--surface)`, "stroke-width": 2 }, svg);
+        if (k === "lora" && !narrow) txt(svg, X(p.x) + 8, Y(p.y) + 4, String(p.r.value), { class: "annot" });
+      });
+      if (ps.length) {
+        const ext = k === "gate" ? ps.reduce((a, b) => (a.y > b.y ? a : b)) : ps.reduce((a, b) => (a.y < b.y ? a : b));
+        txt(svg, X(ext.x) + (k === "gate" ? 8 : -8), Y(ext.y) + (k === "gate" ? -12 : 20), k === "gate" ? `gate, gain ${ps[0].r.value}–${ps[ps.length - 1].r.value}` : narrow ? "LoRA" : "LoRA (labels = steps)", { class: "lbl-direct", "text-anchor": k === "gate" ? "start" : "end" });
+      }
+    });
+    const hit = el("rect", { x: m.l, y: m.t, width: w - m.l - m.r, height: h - m.b - m.t, fill: "transparent" }, svg);
+    const mv = (ev) => {
+      const pt = ev.touches ? ev.touches[0] : ev, rr = svg.getBoundingClientRect();
+      const px = ((pt.clientX - rr.left) / rr.width) * w, py = ((pt.clientY - rr.top) / rr.height) * h;
+      let best = null, bd = 1e9;
+      pts.forEach((p) => { const d = Math.hypot(X(p.x) - px, Y(p.y) - py); if (d < bd) { bd = d; best = p; } });
+      if (!best || bd > 40) return hideTip();
+      const r = best.r, L = (k, v) => `<div class="r"><span>${k}</span><b>${v}</b></div>`;
+      showTip(`<div class="t">${swatch(col(best.k))} ${best.k === "gate" ? "One neuron" : "LoRA"}${best.shipped ? " (the arm in the scoreboard)" : best.k === "gate" ? `, gain ${r.value}` : `, step ${r.value}`}</div>` +
+        L("fabricates", F.pct1(r.fail)) + L("facts kept", isNum(r.kept) ? F.pct1(r.kept) : "–") + L("chat KL", isNum(r.kl) ? F.kl2(r.kl) : "–") + L("answers unchanged", isNum(r.same) ? F.pct1(r.same) : "–"), pt.clientX, pt.clientY);
+    };
+    hit.addEventListener("mousemove", mv); hit.addEventListener("touchstart", mv, { passive: true }); hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
+  }
+
+  // ------------------------------------------------------------------ section 6 tables
+  function renderTransfer() {
+    const ts = Object.values(D.tasks).filter((t) => t && t.group === "transfer" && t.arms);
+    const tb = $("#transfer-table");
+    if (!ts.length) { tb.innerHTML = `<tbody><tr><td>${PENDING}</td></tr></tbody>`; return; }
+    const cols = ["base", "prompt", "gate", "lora"];
+    tb.querySelector("thead").innerHTML = `<tr><th>Model</th>${cols.map((a) => `<th class="n"><span class="mhead">${swatch(col(a))}${esc(METHOD[a].label)}</span></th>`).join("")}</tr>`;
+    tb.querySelector("tbody").innerHTML = ts.map((t) => `<tr><td>${esc((t.model || t.id).split("/").pop())}</td>${cols.map((a) => { const r = t.arms[a]; return `<td class="n${a === "gate" ? " hl" : ""}">${r && isNum(r.fail) ? F.pct0(r.fail) : PENDING}${r && isNum(r.kept) ? ` <span class="dim">(${F.pct0(r.kept)})</span>` : ""}</td>`; }).join("")}</tr>`).join("");
+  }
+  function renderLangmix() {
+    const t = D.tasks.langmix, tb = $("#langmix-table");
+    if (!t || !t.arms) { tb.innerHTML = `<tbody><tr><td>${PENDING}</td></tr></tbody>`; return; }
+    const order = ["base", "prompt", "gate", "gate_gauto", "gate_recipe", "random", "lora"].filter((a) => t.arms[a]);
+    const what = { gate: "one neuron, framework recipe", gate_gauto: "one neuron, steeper threshold", gate_recipe: "the blind agents' edit: penalty on Chinese-token output rows", random: "same neuron, random", lora: "fine-tune, same data", prompt: "“answer only in the question's language”", base: "" };
+    tb.querySelector("thead").innerHTML = `<tr><th>Fix</th><th class="n">Leak</th><th class="n">Unchanged</th><th class="n">Chat KL</th></tr>`;
+    tb.querySelector("tbody").innerHTML = order.map((a) => { const r = t.arms[a]; return `<tr><td><span class="mhead">${swatch(col(a), family(a) === "random")}<b>${esc(r.label)}</b></span>${what[a] ? `<span class="note">${esc(what[a])}</span>` : ""}</td><td class="n${a === "gate_recipe" ? " hl" : ""}">${isNum(r.fail) ? F.pct1(r.fail) : "–"}</td><td class="n">${isNum(r.same) ? F.pct0(r.same) : "–"}</td><td class="n">${isNum(r.kl) ? F.kl2(r.kl) : "–"}</td></tr>`; }).join("");
+  }
+  function renderAgentSession() {
+    const t = Object.values(D.tasks).find((x) => x && x.agent_session);
+    const node = $("#agent-session");
+    if (!t) { node.innerHTML = ""; return; }
+    const s = t.agent_session, A = t.arms || {};
+    node.innerHTML = `<div class="card agent-card"><span class="kind">Blind agent session</span><h4>An LLM found this patch unaided</h4>
+      <p class="ph" style="font:.9rem/1.5 var(--sans);color:var(--ink-2);margin:0 0 10px">Given only the weights, tools and practice examples, an agent session wrote its own one-neuron patch for ${esc(t.meta.title.toLowerCase())}${s.model ? ` (${esc(s.model)})` : ""}.</p>
+      <div class="stats">
+        <div><b>${isNum(s.gate.fail) ? F.pct0(s.gate.fail) : "–"}</b><span>${esc(t.meta.fail_short)} (base ${isNum(A.base && A.base.fail) ? F.pct0(A.base.fail) : "–"}, our gate ${isNum(A.gate && A.gate.fail) ? F.pct0(A.gate.fail) : "–"})</span></div>
+        ${isNum(s.gate.kept) ? `<div><b>${F.pct0(s.gate.kept)}</b><span>${esc(t.meta.kept_short)}</span></div>` : ""}
+        ${isNum(s.gate.same) ? `<div><b>${F.pct0(s.gate.same)}</b><span>ordinary answers unchanged</span></div>` : ""}
+        ${isNum(s.entries) ? `<div><b>${F.int(s.entries)}</b><span>weights changed</span></div>` : ""}
+        ${isNum(s.minutes) ? `<div><b>${Math.round(s.minutes)} min</b><span>session</span></div>` : ""}
+        ${s.random && isNum(s.random.fail) ? `<div><b>${F.pct0(s.random.fail)}</b><span>same-size random edit</span></div>` : ""}
+      </div></div>`;
+  }
+
   // ------------------------------------------------------------------ boot
   function computeCalc() {
+    const T = D.tasks;
+    const ents = Object.values(T).filter((t) => t && t.group === "main" && t.arms && t.arms.gate && isNum(t.arms.gate.entries)).map((t) => t.arms.gate.entries);
+    if (ents.length) { const r100 = (v) => (Math.round(v / 100) * 100).toLocaleString("en-US"); CALC.entries_range = ents.length > 1 ? `${r100(Math.min(...ents))}\u2013${r100(Math.max(...ents))}` : F.int(ents[0]); }
+    const chg = (id) => { const v = T[id] && sameOf(T[id], "lora"); return isNum(v) ? 100 - v : undefined; };
+    CALC.agent_lora_changed = chg("agent_injection"); CALC.whisper_lora_changed = chg("whisper_silence");
+    const so = T.signoff && T.signoff.arms;
+    if (so && so.prompt && so.base && isNum(so.prompt.metrics.mean_chars) && so.base.metrics.mean_chars) CALC.signoff_prompt_shorter = 100 * (1 - so.prompt.metrics.mean_chars / so.base.metrics.mean_chars);
+    const e = T.entity;
+    if (e && e.bigdata) {
+      const mx = (k) => { const rs = e.bigdata.filter((r) => r.method === k && !r.varied); return rs.length ? rs.reduce((a, b) => (a.n > b.n ? a : b)).fail : undefined; };
+      CALC.big = { lora_max: mx("lora"), gate_max: mx("gate") };
+    }
+    if (e && e.pareto && e.pareto.lora) {
+      const L = e.pareto.lora.filter((r) => isNum(r.fail));
+      const gf = e.arms && e.arms.gate ? e.arms.gate.fail : null;
+      const best = L.filter((r) => r.value >= 50).reduce((a, b) => (a && Math.abs(a.fail - gf) <= Math.abs(b.fail - gf) ? a : b), null);
+      CALC.par = { lora_kl_min: Math.min(...L.map((r) => r.kl).filter(isNum)) };
+      if (best) Object.assign(CALC.par, { best_step: best.value, best_fail: best.fail, best_kept: best.kept, best_changed: isNum(best.same) ? 100 - best.same : undefined });
+    }
     const sl = tasksList().filter((t) => t.sweep && t.sweep.gate && t.sweep.lora);
     if (sl.length) CALC.sw = sweepCalc(D.tasks[pickDefault(sl, () => true)]);
     const pl = tasksList().filter((t) => t.persistence);
@@ -833,13 +996,23 @@
     safe(renderScoreTable, "scoreTable");
     safe(renderExamples, "examples");
     safe(renderSweep, "sweep");
-    safe(sweepText, "sweepText");
+
     $$("#sweep-metric [data-m]").forEach((b) => b.addEventListener("click", () => {
       swMetric = b.dataset.m;
       $$("#sweep-metric [data-m]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
       safe(renderSweep, "sweep");
     }));
     onResize($("#sweep-chart"), () => safe(renderSweep, "sweep"));
+    safe(renderPareto, "pareto");
+    $$("#pareto-x [data-x]").forEach((b) => b.addEventListener("click", () => {
+      parX = b.dataset.x;
+      $$("#pareto-x [data-x]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      safe(renderPareto, "pareto");
+    }));
+    onResize($("#pareto-chart"), () => safe(renderPareto, "pareto"));
+    safe(renderTransfer, "transfer");
+    safe(renderLangmix, "langmix");
+    safe(renderAgentSession, "agentSession");
     safe(renderPersist, "persist");
     onResize($("#persist-chart"), () => safe(renderPersist, "persist"));
     safe(() => bindAll(), "bind2");

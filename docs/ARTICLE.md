@@ -117,7 +117,9 @@ Is "the gate beats LoRA" just a weak LoRA? We tested it three ways on the entity
 
 1. **Little data: the gate wins easily.** With 8 labelled examples, the gate already stops the made-up-entity
    failure (14%); LoRA stays at 61%. What the gate gains from more data isn't recall, it's precision. With 8 examples
-   it also says "Sorry" to a third of real entities; with 300 it doesn't.
+   it also says "Sorry" to a third of real entities; with 300 it doesn't. On sign-offs the gate is even better with *less* data: 5–10% at 16–64 examples vs
+   22% with all of them, because its threshold rule gets stricter as practice data grows. That's a weakness of our
+   recipe worth fixing.
 2. **More data: LoRA wins on the headline.** Adding 1,400 more labelled practice prompts takes LoRA from 30% to 8%
    fabrication. The gate stays at ~15%. On sign-offs (8% vs 23%) and agent injection (0% vs 2.5%), LoRA also wins
    outright with the practice set we had.
@@ -138,12 +140,16 @@ chat data, the kind of thing any downstream user does.
 
 {{FIG: persistence: fabrication vs fine-tuning steps; gate weights' cosine stays 1.000}}
 
-- **It dies within 50 steps.** Fabrication goes 16% → 97% after 50 steps of unrelated chat fine-tuning; with
-  training that rewards fabrication it goes to 99%.
-- **The neuron itself is untouched:** cosine similarity to the patch 1.0000. The layers around it moved, so it no
-  longer receives the signal it was built to read. {{early curve: gone by step N; does a LoRA fix survive the same
-  fine-tune? {{}}}}
-- **It's section 2 from the other side.** A hand-written edit lasts exactly as long as nobody trains the model.
+- **The gate is gone within 20 steps.** After 10 steps of unrelated chat fine-tuning, the neuron fires on 11% of
+  made-up names, down from 100%; after 20 steps, on none. Fabrication goes 16% → 98%. With training that rewards
+  fabrication, it's the same.
+- **The neuron itself is untouched:** its weights keep a cosine similarity of 1.0000 with the patch. The layers
+  below it moved, and it no longer receives the signal it was built to read.
+- **The LoRA fix doesn't survive either. It just dies slower:** half gone after 50 steps (29% → 72%), fully gone by
+  100.
+
+Narrow fixes, hand-written or trained, are fragile under further training, and the hand-written one is the more
+fragile of the two. It's section 2 from the other side: an edit lasts exactly as long as nobody trains the model.
 
 ## 6. Where it doesn't work
 

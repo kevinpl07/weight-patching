@@ -96,7 +96,41 @@ under the gate, 12% under LoRA, 41% under the prompt fix.
 
 ## Data-scaling sweep (gate vs LoRA)
 
-SWEEP_PLACEHOLDER
+Task `signoff_sweep` (same practice data, base replies, sites, targets and scoring) on a **reduced held-out set:
+the first 64 of the 300 held-out prompts, no legit prompts** (GPU time on a shared card; fixed before any sweep
+result). On these 64: base 62.5% sign-offs, prompt fix 31.2%, full gate 21.9%, full LoRA 10.9% (main-run outputs
+rescored on the subset). n = labelled practice items, stratified (≈70% positives); "300" = all practice items
+(266 labelled). Gate on all data is deterministic (1 run); everything else 3 seeds. Mean ± sd over seeds.
+
+| Method | n practice | Runs | Sign-off % (base 62.5) | Content kept % | Content identical % | Chat KL | Gate: practice sites above θ |
+|---|---|---|---|---|---|---|---|
+| gate | 16 | 3 | **5.2 ± 2.4** | 97.1 ± 1.1 | 56.2 ± 5.6 | 0.042 | 100% |
+| gate | 32 | 3 | 9.9 ± 2.4 | 97.4 ± 1.8 | 64.6 ± 5.9 | 0.031 | 100% |
+| gate | 64 | 3 | 10.4 ± 4.5 | 99.3 ± 0.3 | 67.2 ± 0.0 | 0.024 | 100% |
+| gate | 128 | 3 | 22.9 ± 13.7 | 99.8 ± 0.7 | 68.8 ± 1.6 | 0.019 | 24–58% |
+| gate | 300 | 1 | 21.9 | 100.5 | 70.3 | 0.018 | 40% |
+| LoRA | 16 | 3 | 26.6 ± 8.7 | 98.3 ± 2.9 | 3.6 ± 0.9 | 0.117 | – |
+| LoRA | 32 | 3 | 37.0 ± 5.1 | 103.1 ± 3.1 | 3.6 ± 0.9 | 0.075 | – |
+| LoRA | 64 | 3 | 22.9 ± 4.5 | 99.1 ± 3.6 | 4.7 ± 0.0 | 0.072 | – |
+| LoRA | 128 | 3 | 14.1 ± 1.6 | 98.3 ± 1.5 | 4.2 ± 0.9 | 0.081 | – |
+| LoRA | 300 | 3 | 12.0 ± 2.4 | 96.8 ± 0.3 | 4.2 ± 0.9 | 0.098 | – |
+
+95% CI for a single run on 64 prompts: ±6–12 points. Treat differences under ~10 points as noise.
+
+**Reading it**
+- **The gate gets *worse* with more data**, and the reason is mechanical: the framework sets θ just above the
+  highest-scoring of all practice content positions. With 16 items that is ~6k positions and the gate fires at 100%
+  of practice sign-off sites; with 128+ items (55k–116k positions) the maximum is set by a few outlier content
+  positions (in the original run the top-scoring content positions were mostly starts of meta appendices such as
+  "**Notes on the Poem:**"; not re-checked here), and only 24–58% of sign-off sites clear it. Extreme-value thresholds grow with sample size.
+- **With ≤ 64 practice items the gate beats LoRA by a wide margin** (5–10% vs 23–37% sign-offs) while keeping
+  97–99% of content at ~3x lower chat KL. LoRA needs ~128+ items to reach 12–14%, and with the full set it is
+  better than the full-data gate (12.0 vs 21.9 here; 8.3 vs 23.3 on all 300 prompts).
+- Small-n gates trim a bit more content (97% kept at n=16 vs 99–100% at n≥64): a lower θ also fires on some
+  appendix starts. LoRA at every n rewrites ~96% of answers (content identical 3–5%).
+- Suggestion for the core (not done here; no tuning on held-out): a threshold set from a high quantile of content
+  scores, or from a fixed-size content sample, instead of the max over all positions, would make the gate's
+  operating point independent of n. This sweep suggests it would also make the full-data gate much stronger.
 
 ## Before / after examples (held-out, greedy; last ~300 characters)
 
@@ -391,9 +425,28 @@ Would you like me to tweak this ad in any way (e.g., add a specific activity, ta
 **Book your Adirondack escape today!** [Website/Phone Number] #Adirondacks #Getaway #NatureEscape
 ```
 
+## Framework issues hit (not changed in `patchkit/`; for the core owners)
+1. **Outputs are saved cut at 1,500 chars** (`eval_arm`). Sign-offs sit at the end of ~2,200-char replies, so
+   rescoring from saved outputs is wrong for this task. Worked around in `Signoff.full_texts` (full-text dump keyed
+   by a hash of the cut texts; `rescore` then works). A task-level `output_chars` (or no cut) would be cleaner.
+2. **LoRA `max_len = 768` tokens (prompt + target)**: 57 of the 185 positive targets (31%) are longer, so the LoRA
+   never sees where those replies should end (their "cut before the sign-off" point is past the window). Most
+   negatives fit (10/81 cut). LoRA still won on the full set; with a window ≥ prompt + `max_new` it might do better.
+3. **Calibration doubles as LoRA replay** and the replay replies are cut at 128 tokens with `<end_of_turn>`
+   appended, which teaches early stopping; hence `n_calib = 0` here. Separate switches (or no eot on truncated
+   replay replies) would let this task use calibration for the gate only.
+4. **θ = max content score + margin** grows with the amount of practice data (see the sweep). A quantile rule would
+   make the gate's operating point independent of n.
+5. `capture()` computes full-vocabulary logits for 8 sequences of ~1,100 tokens (≈5.4 GB); it logged CUDA OOM
+   warnings at 12 GB but recovered. `logits_to_keep=1`/a hook-only forward would avoid it.
+6. Generation batches larger than 64 at 1,024 new tokens (a first sweep attempt used 140) ran ~7x slower per
+   item on the 12 GB card (11.9 GB in use, likely spilling; a concurrent CPU job of mine also competed), so the
+   sweep uses 64-prompt batches. That attempt's single result was discarded.
+
 ## Files
 - `results/signoff/{base,prompt,gate,random,lora}.json`, `outputs/*.jsonl` (first 1,500 chars per reply),
   `signal.json`, `items.jsonl` (held-out items carry the base reference reply `ref`).
 - Full replies: `runs/signoff/fulltexts/*.jsonl`. Edits: `runs/signoff/edits/`. LoRA: `runs/signoff/lora/full`.
 - Sweep: `results/signoff_sweep/sweep/*.json` (+ `outputs/`), full replies in `runs/signoff_sweep/fulltexts/`.
-- Logs: `runs/signoff_*.log`.
+- Logs: `runs/signoff_*.log`. The prompt arm was evaluated twice (the second run, after the curly-quote fix, is the
+  one reported; 29.0% vs 28.7% in the first).

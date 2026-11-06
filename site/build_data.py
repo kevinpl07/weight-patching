@@ -20,15 +20,34 @@ from pathlib import Path
 # MANUAL OVERRIDES (edit these to pin examples). Kinds: "fixed" (base fails, gate fixes), "miss" (gate still
 # fails), "kept_break" (a good case the prompt arm breaks; gate keeps it), "lora_vs_gate" (they disagree).
 # Ids are the task's item ids (int for entity, str for agent_injection / whisper).
+#   "lora_breaks" (a good case base and gate keep, LoRA changes), "never_fires" (gate miss: never fires on it).
+# A pinned list may be longer than the default count for its kind; all pinned ids are shown.
 PIN = {
     "entity": {"fixed": [1], "kept_break": [181]},          # 1 = Philippa Garrowani, 181 = Chance the Rapper
-    "agent_injection": {},
-    "signoff": {},
+    "agent_injection": {"fixed": ["heldout_x30", "heldout_i125"], "miss": ["heldout_i26"],
+                        "never_fires": ["heldout_x34"]},     # curated in results/agent_injection/NOTES.md
+    "signoff": {"fixed": [338, 588], "imperfect": [463]},          # curated in results/signoff/NOTES.md
     "whisper_silence": {},
 }
 EXCLUDE = {
     "entity": [],
 }
+# Result dirs never shown (smoke tests etc.)
+EXCLUDE_TASKS = {"entity__gemma-3-1b-it", "signoff_sweep"}
+# Which non-weight fix stands in for "prompt" in example cards (default: "prompt").
+PROMPT_ARM = {"whisper_silence": "thresholds_tuned"}
+# "Ordinary answers unchanged" per task: (where, key, label). where = "guards" | "metrics" | "headline".
+UNCHANGED = {
+    "entity": ("guards", "chat_same", "ordinary chat answers word-for-word unchanged"),
+    "agent_injection": ("metrics", "same_as_base_legit", "genuine tool-request replies byte-identical"),
+    "signoff": ("metrics", "content_identical", "answer content word-for-word unchanged"),
+    "whisper_silence": ("metrics", "speech_kept", "speech transcripts identical"),
+    "langmix": ("guards", "chat_same", "ordinary chat answers word-for-word unchanged"),
+}
+# Tasks that get a "LoRA rewrites a reply base and gate leave identical" card.
+LORA_BREAKS_TASKS = {"agent_injection", "whisper_silence"}
+# Optional blind-agent-session arms (render a card only if these files exist).
+AGENT_SESSION = {"entity": ("gate_agent_s1", "random_agent_s1")}
 # Tasks whose data-scaling sweep runs under a separate (smaller held-out) task name: results/<that>/sweep/*.json
 SWEEP_FROM = {"signoff": "signoff_sweep"}
 
@@ -69,10 +88,19 @@ TASK_META = {
                             fail="non-speech clips given a transcript",
                             kept="speech transcripts unchanged vs base",
                             fail_short="hallucinates", kept_short="speech unchanged"),
+    "langmix": dict(title="Chinese words leak into German, Russian and Thai answers", short="Language mixing",
+                    model_label="DeepSeek-R1-Distill-Qwen-1.5B", params=1.5e9,
+                    fail="answers with a Chinese-script leak", kept="Chinese questions still answered in Chinese",
+                    fail_short="leaks", kept_short="zh reply kept"),
 }
 ARM_LABEL = {"base": "Base", "prompt": "System prompt", "gate": "One neuron", "random": "Random neuron",
-             "lora": "LoRA", "thresholds": "Thresholds", "thresholds_tuned": "Tuned thresholds",
-             "vad": "VAD filter"}
+             "lora": "LoRA", "thresholds": "Default thresholds", "thresholds_tuned": "Tuned thresholds",
+             "vad": "VAD filter", "gate_gauto": "One neuron, steeper", "gate_recipe": "Agents' edit",
+             "random_gauto": "Random, steeper"}
+# Arms in the scoreboard per task (others stay in the data but aren't charted there).
+SCORE_ARMS = {"whisper_silence": ["base", "thresholds", "thresholds_tuned", "gate", "random", "lora"]}
+GROUP = {"entity": "main", "agent_injection": "main", "signoff": "main", "whisper_silence": "main",
+         "langmix": "langmix"}  # anything else with "__" -> "transfer"
 
 
 def rd(p):
@@ -96,6 +124,10 @@ def rjsonl(p):
     return out
 
 
+def isNum(v):
+    return isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
+
+
 def r3(v, nd=3):
     return None if v is None else round(float(v), nd)
 
@@ -114,7 +146,7 @@ def _norm_ws(t):
 
 def _clip_kind(i):
     i = str(i or "")
-    for k, v in (("music", "music"), ("noise", "noise"), ("sil", "silence"), ("esc", "everyday sound"), ("bg", "speech over background")):
+    for k, v in (("music", "music"), ("noise", "noise"), ("env", "environmental sound"), ("sil", "silence"), ("esc", "everyday sound"), ("bg", "speech over background")):
         if k in i:
             return v
     return ""
@@ -138,6 +170,7 @@ def scorer(base_task):
                 label=lambda x: ("made-up " + x.get("kind", "")) if not x.get("real") else
                 ("real " + x.get("kind", "") + (" (model knows it)" if x.get("known") else "")),
                 prefer=lambda x: (-(x.get("pop") or 0)),
+                group_of=lambda x: x.get("kind"),
                 # a "clean" fix: declines without pivoting into an invented bio afterwards
                 clean=lambda t: not re.search(r"however|that said|here'?s what|here is what|\*\*|\n\s*[*-] ",
                                               (t or "").replace("’", "'"), re.I),
@@ -178,6 +211,7 @@ def scorer(base_task):
                 prompt=lambda x: x.get("id", ""),
                 label=lambda x: ("non-speech clip" if x.get("suite") == "nonspeech" else "speech clip") +
                 (f" · {x.get('category') or _clip_kind(x.get('id'))}" if (x.get("category") or _clip_kind(x.get("id"))) else ""),
+                group_of=lambda x: _clip_kind(x.get("id")) if x.get("suite") == "nonspeech" else x.get("suite"),
                 prefer=lambda x: 0 if (SITE / "audio" / f"{x.get('id')}.wav").exists() or
                 (SITE / "audio" / f"{x.get('id')}.mp3").exists() else 1,
                 tail=False)
@@ -206,7 +240,9 @@ def build_examples(task, d, arms_present):
             items[r["id"]] = dict(id=r["id"], suite=r.get("suite"), category=r.get("category"))
     excl = set(EXCLUDE.get(base_task, []))
     pins = PIN.get(base_task, {}) if task == base_task else {}
-    prompt_arm = "prompt" if "prompt" in outs else next((a for a in ("thresholds", "vad") if a in outs), None)
+    prompt_arm = PROMPT_ARM.get(base_task, "prompt")
+    if prompt_arm not in outs:
+        prompt_arm = next((a for a in ("prompt", "thresholds_tuned", "thresholds", "vad") if a in outs), None)
     show = [a for a in ["base", prompt_arm, "gate", "lora"] if a and a in outs]
     ids = [i for i in items if i not in excl and all(i in outs[a] for a in ("base", "gate"))]
     B, G = outs["base"], outs["gate"]
@@ -227,20 +263,36 @@ def build_examples(task, d, arms_present):
     miss = sorted([i for i in fg if F(i, B) and F(i, G)], key=pref)
     kb = sorted([i for i in kg if K(i, B) and K(i, G) and P and K(i, P) is False], key=pref)
     lvg = sorted([i for i in fg if F(i, B) and Lo and (F(i, G) != F(i, Lo))], key=pref)
+    lb = sorted([i for i in kg if Lo and i in Lo and K(i, B) and K(i, G)
+                 and B.get(i, "").strip() == G.get(i, "").strip() and Lo[i].strip() != B.get(i, "").strip()],
+                key=pref) if base_task in LORA_BREAKS_TASKS else []
     picks = []
+    group_of = sc.get("group_of") or (lambda x: None)
 
     def take(kind, pool, k):
-        chosen = [i for i in pins.get(kind, []) if i in items][:k]
-        for i in pool:
-            if len(chosen) >= k:
-                break
-            if i not in chosen and i not in [p[1] for p in picks]:
+        pinned = [i for i in pins.get(kind, []) if i in items]
+        chosen = list(pinned)
+        k = max(k, len(pinned))
+        groups = {group_of(items[i]) for i in chosen}
+        for div in (True, False):  # first pass: prefer a different group (e.g. clip category) per card
+            for i in pool:
+                if len(chosen) >= k:
+                    break
+                if i in chosen or i in [p[1] for p in picks]:
+                    continue
+                g = group_of(items[i])
+                if div and g is not None and g in groups:
+                    continue
                 chosen.append(i)
+                groups.add(g)
         picks.extend((kind, i) for i in chosen)
 
     take("fixed", fixed, N_FIXED)
     take("kept_break", kb, 1)
     take("miss", miss, 1)
+    take("never_fires", [], 0)
+    take("imperfect", [], 0)
+    take("lora_breaks", lb, 1 if len(picks) < 5 else 0)
     if len(picks) < 4:
         take("lora_vs_gate", lvg, 1)
     cards = []
@@ -275,6 +327,8 @@ def load_arms(d):
             continue
         r = rd(f)
         if isinstance(r, dict) and "arm" in r and r.get("split", "heldout") == "heldout" and r.get("headline"):
+            if "agent_s" in f.stem:
+                continue  # blind-agent-session arms: separate optional block
             arms[r["arm"]] = r
     return arms
 
@@ -309,26 +363,103 @@ def sweep_block(d, h):
             fm, fmin, fmax = agg([r["headline"].get(h[0]) for r in rs])
             km, kmin, kmax = agg([r["headline"].get(h[1]) for r in rs])
             lm, lmin, lmax = agg([(r.get("guards") or {}).get("chat_kl") for r in rs])
+            sm, smin, smax = agg([(r.get("guards") or {}).get("chat_same") for r in rs])
             rows.append(dict(n=n, seeds=len(rs), fail=fm, fail_min=fmin, fail_max=fmax, kept=km, kept_min=kmin,
-                             kept_max=kmax, kl=lm, kl_min=lmin, kl_max=lmax))
+                             kept_max=kmax, kl=lm, kl_min=lmin, kl_max=lmax, same=sm, same_min=smin, same_max=smax))
         out[meth] = rows
     return out
 
 
 def persistence_block(d, h):
-    p = rd(d / "persistence.json")
-    if not p or not p.get("conditions"):
+    """persistence.json (+ persistence_early.json: denser early steps, gate_fire_on_fakes; + persistence_lora.json)."""
+    files = [rd(d / f) for f in ("persistence.json", "persistence_early.json", "persistence_lora.json")]
+    p = next((f for f in files if f and f.get("conditions")), None)
+    if not p:
         return None
     conds = {}
-    for k, rows in p["conditions"].items():
-        if not isinstance(rows, list):
+    for f in files:
+        if not f or not f.get("conditions"):
             continue
-        conds[k] = [dict(step=r.get("step"), fail=r.get(h[0]), kept=r.get(h[1]), loss=r.get("loss"),
-                         gate_cos=r.get("gate_row_cos"), down_cos=r.get("down_col_cos")) for r in rows]
+        for k, rows in f["conditions"].items():
+            if not isinstance(rows, list):
+                continue
+            by = {r["step"]: r for r in conds.get(k, [])}
+            for r in rows:
+                row = dict(step=r.get("step"), fail=r.get(h[0]), kept=r.get(h[1]), loss=r.get("loss"),
+                           gate_cos=r.get("gate_row_cos"), down_cos=r.get("down_col_cos"),
+                           fire=r.get("gate_fire_on_fakes"))
+                old = by.get(row["step"])
+                if old is None:
+                    by[row["step"]] = row
+                else:  # the main run wins where steps overlap; the early run only adds fields it lacks
+                    for k_, v_ in row.items():
+                        if old.get(k_) is None and v_ is not None:
+                            old[k_] = v_
+            conds[k] = [by[st] for st in sorted(by)]
     if not conds:
         return None
+    gate_cos = [r["gate_cos"] for k, rows in conds.items() if k.startswith("gate") for r in rows
+                if r.get("gate_cos") is not None]
     return dict(conditions=conds, steps=p.get("steps"), lr=p.get("lr"), k_layers=p.get("k_layers"),
-                n_eval=p.get("n_eval"))
+                n_eval=p.get("n_eval"), gate_cos_min=min(gate_cos) if gate_cos else None)
+
+
+def _row(r, h):
+    g = r.get("guards") or {}
+    return dict(fail=r["headline"].get(h[0]), kept=r["headline"].get(h[1]), kl=g.get("chat_kl"),
+                same=g.get("chat_same"), same32=g.get("chat_same32"))
+
+
+def bigdata_block(d, h):
+    bd = d / "bigdata"
+    if not bd.exists():
+        return None
+    out = []
+    for f in sorted(bd.glob("*.json")):
+        r = rd(f)
+        if not r or "headline" not in r:
+            continue
+        meth, tag = f.stem.split("_", 1)
+        out.append(dict(method=meth, tag=tag, varied=tag.startswith("xv"), n=r.get("n_practice"),
+                        n_extra=r.get("n_extra"), **_row(r, h)))
+    return sorted(out, key=lambda x: (x["method"], x["varied"], x["n"] or 0)) or None
+
+
+def pareto_block(d, h):
+    pd = d / "pareto"
+    if not pd.exists():
+        return None
+    out = {}
+    for f in sorted(pd.glob("*.json")):
+        r = rd(f)
+        if not r or "headline" not in r:
+            continue
+        meth = f.stem.split("_")[0]
+        out.setdefault(meth, []).append(dict(knob=r.get("knob"), value=r.get("value"), **_row(r, h)))
+    for k in out:
+        out[k].sort(key=lambda x: x["value"] or 0)
+    return out or None
+
+
+def agent_session_block(task, d, h):
+    names = AGENT_SESSION.get(task)
+    if not names:
+        return None
+    g = rd(d / f"{names[0]}.json")
+    if not g or "headline" not in g:
+        return None
+    rnd = rd(d / f"{names[1]}.json")
+    c, fm = g.get("cost") or {}, g.get("fit_meta") or {}
+    mins = fm.get("session_minutes") or c.get("session_minutes")
+    if mins is None:
+        for k in ("session_seconds", "fit_seconds"):
+            v = fm.get(k) or c.get(k)
+            if v:
+                mins = round(v / 60, 1)
+                break
+    return dict(gate=_row(g, h), random=_row(rnd, h) if rnd and "headline" in rnd else None,
+                entries=c.get("entries_changed") or fm.get("entries_changed"), minutes=mins,
+                model=fm.get("agent_model") or fm.get("model"))
 
 
 def anatomy_block(d):
@@ -348,7 +479,7 @@ def anatomy_block(d):
             c[min(nb - 1, max(0, int((v - lo) / w)))] += 1
         hist[k] = dict(n=len(g), counts=c, fire=round(sum(v > 0 for v in g) / max(1, len(g)), 4),
                        fired=sum(v > 0 for v in g))
-    return dict(edges=edges, hist=hist, layer=a.get("layer"), unit=a.get("unit"),
+    return dict(edges=edges, hist=hist, layer=a.get("layer"), unit=a.get("unit"), theta=a.get("theta"),
                 write_up=[t for t in (a.get("write_up") or [])[:8]],
                 write_down=[t for t in (a.get("write_down") or [])[:6]])
 
@@ -361,11 +492,20 @@ def notes_block(d):
     return t[:4000]
 
 
+def _unchanged(base_task, r):
+    u = UNCHANGED.get(base_task)
+    if not u:
+        return (r.get("guards") or {}).get("chat_same")
+    src = r.get(u[0]) or {}
+    return src.get(u[1])
+
+
 def task_block(task, d):
     base_task = task.split("__")[0]
     meta = dict(TASK_META.get(base_task, dict(title=task, short=task)))
     arms = load_arms(d)
-    blk = dict(id=task, base_task=base_task, variant=task != base_task, meta=meta, status="pending")
+    blk = dict(id=task, base_task=base_task, variant=task != base_task, meta=meta, status="pending",
+               group=GROUP.get(task, "transfer" if "__" in task else "other"))
     if task != base_task:
         blk["meta"]["short"] = meta.get("short", base_task) + " · " + task.split("__")[1]
     if not arms:
@@ -385,10 +525,14 @@ def task_block(task, d):
                            kept=r["headline"].get(h[1]), mmlu=g.get("mmlu200"), kl=g.get("chat_kl"),
                            kl_note=g.get("chat_kl_note"), entries=c.get("entries_changed"),
                            trainable=c.get("trainable_params"), fit_s=c.get("fit_seconds"),
-                           n_practice=c.get("n_practice_items"),
+                           n_practice=c.get("n_practice_items"), same=_unchanged(base_task, r),
+                           same32=g.get("chat_same32"), chat_same=g.get("chat_same"),
                            metrics={k: v for k, v in (r.get("metrics") or {}).items()
                                     if isinstance(v, (int, float))})
     blk["arms"] = arm_rows
+    blk["score_arms"] = [a for a in SCORE_ARMS.get(base_task, ARM_ORDER) if a in arm_rows] or order
+    u = UNCHANGED.get(base_task)
+    blk["meta"]["same_label"] = u[2] if u else None
     gm = (arms.get("gate") or {}).get("fit_meta") or {}
     blk["gate_meta"] = {k: gm.get(k) for k in ("layer", "unit", "theta", "targets", "recall_practice",
                                                "neg_fire_practice", "content_fire_practice") if k in gm}
@@ -401,9 +545,20 @@ def task_block(task, d):
         blk["sweep"] = sweep_block(RES / SWEEP_FROM[task], h)
         if blk["sweep"]:
             blk["sweep_source"] = SWEEP_FROM[task]
+    # the "all" sweep point reports every practice item; use the number of *labelled* items if that's smaller
+    gm_ = (arms.get("gate") or {}).get("fit_meta") or {}
+    if blk["sweep"] and gm_.get("n_pos") and gm_.get("n_neg") and gm_.get("n_items") and \
+            gm_["n_pos"] + gm_["n_neg"] < gm_["n_items"]:
+        for rows in blk["sweep"].values():
+            for r in rows:
+                if r["n"] == gm_["n_items"]:
+                    r["n"], r["n_all_items"] = gm_["n_pos"] + gm_["n_neg"], gm_["n_items"]
+    blk["bigdata"] = bigdata_block(d, h)
+    blk["pareto"] = pareto_block(d, h)
+    blk["agent_session"] = agent_session_block(task, d, h)
     blk["persistence"] = persistence_block(d, h)
     blk["anatomy"] = anatomy_block(d)
-    blk["examples"] = build_examples(task, d, order)
+    blk["examples"] = build_examples(task, d, order) if blk["group"] == "main" else []
     blk["notes"] = notes_block(d)
     # derived numbers for prose
     A = arm_rows
@@ -412,6 +567,8 @@ def task_block(task, d):
         der["kl_ratio_lora_gate"] = round(A["lora"]["kl"] / A["gate"]["kl"], 1)
     if "gate" in A and A["gate"].get("entries") and meta.get("params"):
         der["entries_frac"] = A["gate"]["entries"] / meta["params"]
+    if "gate" in A and "lora" in A and isNum(A["gate"].get("same")) and isNum(A["lora"].get("same")):
+        der["same_gate"], der["same_lora"] = A["gate"]["same"], A["lora"]["same"]
     an = blk.get("anatomy")
     if an:
         der["fired_fail"] = an["hist"]["fail"]["fired"]
@@ -458,7 +615,7 @@ def main():
         if t not in names:
             tasks[t] = dict(id=t, base_task=t, variant=False, meta=TASK_META[t], status="pending")
     for d in dirs:
-        if d.name in SWEEP_FROM.values():
+        if d.name in SWEEP_FROM.values() or d.name in EXCLUDE_TASKS:
             continue
         print(f"task {d.name}")
         try:

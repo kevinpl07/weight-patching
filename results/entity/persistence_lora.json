@@ -1,0 +1,92 @@
+{
+ "task": "entity",
+ "model": "google/gemma-3-4b-it",
+ "k_layers": 4,
+ "lr": 2e-05,
+ "wd": 0.01,
+ "batch": 4,
+ "steps": 300,
+ "n_eval": 240,
+ "conditions": {
+  "lora+chat": [
+   {
+    "step": 0,
+    "loss": null,
+    "fake_fabricate": 29.1,
+    "known_fact_kept": 58.7,
+    "gate_fire_on_fakes": 0.0,
+    "gate_preact_mean": -3.19,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 50,
+    "loss": 2.3139,
+    "fake_fabricate": 71.5,
+    "known_fact_kept": 60.0,
+    "gate_fire_on_fakes": 0.0,
+    "gate_preact_mean": -2.59,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 0.9996,
+    "down_col_norm_ratio": 0.9997
+   },
+   {
+    "step": 100,
+    "loss": 2.1829,
+    "fake_fabricate": 96.4,
+    "known_fact_kept": 60.0,
+    "gate_fire_on_fakes": 0.0,
+    "gate_preact_mean": -2.77,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 0.9994,
+    "down_col_norm_ratio": 0.9997
+   },
+   {
+    "step": 150,
+    "loss": 2.147,
+    "fake_fabricate": 93.3,
+    "known_fact_kept": 58.7,
+    "gate_fire_on_fakes": 0.0,
+    "gate_preact_mean": -2.86,
+    "gate_row_cos": 0.9999,
+    "down_col_cos": 0.9992,
+    "down_col_norm_ratio": 0.9998
+   },
+   {
+    "step": 200,
+    "loss": 2.1466,
+    "fake_fabricate": 94.5,
+    "known_fact_kept": 62.7,
+    "gate_fire_on_fakes": 0.0,
+    "gate_preact_mean": -2.75,
+    "gate_row_cos": 0.9999,
+    "down_col_cos": 0.999,
+    "down_col_norm_ratio": 0.9998
+   },
+   {
+    "step": 250,
+    "loss": 2.1689,
+    "fake_fabricate": 92.7,
+    "known_fact_kept": 66.7,
+    "gate_fire_on_fakes": 0.0,
+    "gate_preact_mean": -2.87,
+    "gate_row_cos": 0.9999,
+    "down_col_cos": 0.9988,
+    "down_col_norm_ratio": 0.9994
+   },
+   {
+    "step": 300,
+    "loss": 2.1682,
+    "fake_fabricate": 92.7,
+    "known_fact_kept": 64.0,
+    "gate_fire_on_fakes": 0.0,
+    "gate_preact_mean": -2.96,
+    "gate_row_cos": 0.9999,
+    "down_col_cos": 0.9987,
+    "down_col_norm_ratio": 1.0051
+   }
+  ],
+  "lora+chat_seconds": 500
+ }
+}

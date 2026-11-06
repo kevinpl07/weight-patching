@@ -326,3 +326,36 @@ details.more[open] summary { margin-bottom: 6px; }
   #tracka td { display: block; border: 0; padding: 2px 0; text-align: left; }
   #tracka td[data-l]::before { content: attr(data-l); display: block; font-size: .72rem; color: var(--muted); margin-top: 4px; }
 }
+
+/* ---------- v2 additions */
+.tldr .big .vs { font-size: .55em; color: var(--muted); font-weight: 500; }
+.persist-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.inset { background: var(--surface-2); border-radius: 10px; padding: 10px 10px 6px; }
+.inset-t { font: 650 .82rem var(--sans); margin: 0 0 4px; }
+.inset-n { font: .76rem/1.4 var(--sans); color: var(--ink-2); margin: 4px 0 2px; }
+@media (max-width: 760px) { .persist-grid { grid-template-columns: 1fr; } }
+.two-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px; margin: 8px 0 0; font-family: var(--sans); }
+@media (max-width: 860px) { .two-tables { grid-template-columns: 1fr; } }
+.two-tables .tbl-wrap { margin: 6px 0; }
+.tt { font: 650 .95rem var(--sans); margin: 8px 0 0; }
+.tnote { font: .78rem/1.45 var(--sans); color: var(--muted); margin: 0 0 12px; }
+.agent-card { margin: 0 0 30px; border-left: 3px solid var(--gate); }
+.agent-card .kind { font: 700 .7rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--gate); }
+.agent-card h4 { font: 700 1.1rem var(--sans); margin: 4px 0 8px; }
+.agent-card .stats { display: flex; flex-wrap: wrap; gap: 8px 26px; font-family: var(--sans); }
+.agent-card .stats b { display: block; font-size: 1.4rem; font-weight: 700; }
+.agent-card .stats span { font-size: .8rem; color: var(--ink-2); }
+table.t td .cell2 { display: block; }
+.answer ul { margin: 8px 0 0; }
+.answer li { margin: .35em 0; }
+
+@media (max-width: 640px) {
+  #score-table thead { display: none; }
+  #score-table tr { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; padding: 12px 0; border-bottom: 1px solid var(--grid); }
+  #score-table td { display: block; border: 0; padding: 2px 0; text-align: left; }
+  #score-table td:first-child { grid-column: 1 / -1; font-weight: 650; }
+  #score-table td[data-l]::before { content: attr(data-l); display: block; font-size: .7rem; color: var(--muted); }
+}
+.two-tables > div { min-width: 0; }
+@media (max-width: 860px) { .two-tables { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) { #score-table td, #score-table td.n { white-space: normal; } }
