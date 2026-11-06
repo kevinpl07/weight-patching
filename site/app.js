@@ -631,9 +631,9 @@
   }
   function renderScoreTable() {
     const list = tasksList();
-    const cols = [["base", "Base"], ["prompt", "Prompt / decoding fix"], ["gate", "Weight edit"], ["random", "Random edit"], ["lora", "LoRA, same data"]];
-    $("#score-table thead").innerHTML = `<tr><th>Failure (model)</th>${cols.map(([a, l]) => `<th class="n"><span class="mhead">${swatch(col(a), a === "random")}${l}</span></th>`).join("")}</tr>`;
-    $("#score-table tbody").innerHTML = list.map((t) => {
+    const cols = [["base", "Base"], ["gate", "Weight edit"], ["lora", "LoRA, same data"], ["prompt", "Prompt / decoding fix"], ["random", "Random edit"]];
+    const head = `<tr><th>Failure · model</th>${cols.map(([a, l]) => `<th class="n${a === "gate" ? " ours" : ""}">${a === "gate" ? `<span class="ours-tag">this post</span>` : ""}<span class="mhead">${swatch(col(a), a === "random")}${l}</span></th>`).join("")}</tr>`;
+    const body = list.map((t) => {
       const A = t.arms || {};
       const ks = (t.meta && t.meta.kept_short) || "kept";
       const cell = (a) => {
@@ -648,11 +648,16 @@
         let note = "";
         if (a === "prompt" && A.base && isNum(A.base.kept) && isNum(r.kept) && A.base.kept - r.kept >= 15) note = `<span class="note"><b>but ${ks} ${F.pct0(A.base.kept)} \u2192 ${F.pct0(r.kept)}</b></span>`;
         else if ((a === "gate" || a === "lora") && isNum(r.kept)) note = `<span class="note">${ks} ${F.keep(r.kept)}</span>`;
-        return `<td class="n${a === "gate" ? " hl" : ""}">${F.pct0(r.fail)}${note}</td>`;
+        return `<td class="n${a === "gate" ? " hl ours" : ""}">${F.pct0(r.fail)}${note}</td>`;
       };
-      return `<tr><td>${esc((t.meta && t.meta.title) || t.id)} <span class="dim">(${esc((t.meta && t.meta.model_label) || "")})</span></td>${cols.map(([a]) => cell(a)).join("")}</tr>`;
+      const model = (t.meta && t.meta.model_label) || t.model || "";
+      return `<tr><td>${esc((t.meta && t.meta.title) || t.id)}${model ? `<span class="model">${esc(model)}</span>` : ""}</td>${cols.map(([a]) => cell(a)).join("")}</tr>`;
     }).join("");
-    $$("#score-table tbody tr").forEach((tr) => Array.from(tr.children).forEach((td, i) => { if (i > 0) td.dataset.l = cols[i - 1][1]; }));
+    $$(".score-table").forEach((tbl) => {
+      $("thead", tbl).innerHTML = head;
+      $("tbody", tbl).innerHTML = body;
+      $$("tbody tr", tbl).forEach((tr) => Array.from(tr.children).forEach((td, i) => { if (i > 0) td.dataset.l = cols[i - 1][1]; }));
+    });
   }
 
   // ------------------------------------------------------------------ examples

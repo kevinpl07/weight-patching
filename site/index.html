@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=22">
+<link rel="stylesheet" href="style.css?v=25">
 </head>
 <body>
 
@@ -52,6 +52,16 @@
       </article>
     </div>
     <p class="fixes-note">Held-out examples, verbatim, greedy decoding. Each fix is about <span data-k="calc.entries_range" data-f="text"></span> numbers in the model file. More examples per bug in <a href="#examples">section 3</a>.</p>
+    <figure class="fig lead-score">
+      <p class="takeaway">Same four bugs, every fix side by side</p>
+      <p class="sub">How often the bug still happens on held-out prompts (lower is better). &ldquo;LoRA&rdquo; is a fine-tune on the same practice prompts the edit was built from; &ldquo;random edit&rdquo; changes the same number of weights at random. Full breakdown in <a href="#scoreboard">the scoreboard</a>.</p>
+      <div class="tbl-wrap">
+        <table class="t score-table" id="score-table-lead">
+          <caption class="sr">Failure rate per task and fix (held-out, %)</caption>
+          <thead></thead><tbody></tbody>
+        </table>
+      </div>
+    </figure>
   </div>
 </header>
 
@@ -191,7 +201,7 @@
 </div>
 <div class="wide">
   <div class="tbl-wrap">
-    <table class="t" id="score-table">
+    <table class="t score-table" id="score-table">
       <caption class="sr">Failure rate per task and fix (held-out, %)</caption>
       <thead></thead><tbody></tbody>
     </table>
@@ -430,6 +440,6 @@ python -m patchkit.run sweep entity   <span class="c"># weight edit vs LoRA as d
 </footer>
 
 <div class="tip" id="tip" role="tooltip"></div>
-<script src="app.js?v=22"></script>
+<script src="app.js?v=24"></script>
 </body>
 </html>
