@@ -5,3 +5,4 @@ __pycache__/
 *.pt
 .venv/
 /data/
+results/entity__gemma-3-1b-it/

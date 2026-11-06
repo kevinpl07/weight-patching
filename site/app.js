@@ -170,9 +170,12 @@
     });
     if (o.x.label) txt(g, (m.l + w - m.r) / 2, h - 4, o.x.label, { "text-anchor": "middle", class: "tick" });
     if (o.y.label) txt(g, m.l - 40, m.t - 2, "", {});
+    const refYs = [];
     (o.refs || []).forEach((r) => {
       if (!isNum(r.y) || r.y < o.y.min || r.y > o.y.max) return;
       el("line", { x1: m.l, x2: w - m.r, y1: Y(r.y), y2: Y(r.y), style: `stroke:${r.color || "var(--base)"}`, "stroke-width": 1.25, "stroke-dasharray": r.dash ? "4 3" : null, opacity: 0.9 }, svg);
+      if (refYs.some((y) => Math.abs(y - Y(r.y)) < 13)) return;  // labels would collide: legend + tooltip carry it
+      refYs.push(Y(r.y));
       txt(svg, m.l + 4, Y(r.y) - 5, r.label, { "text-anchor": "start", class: "annot" });
     });
     (o.vlines || []).forEach((r) => {
@@ -192,7 +195,7 @@
       if (!pts.length) return;
       const d = "M" + pts.map((p) => `${X(p[0]).toFixed(1)},${Y(clampY(p[1])).toFixed(1)}`).join("L");
       el("path", { d, fill: "none", style: `stroke:${s.color}`, "stroke-width": s.width || 2, "stroke-linejoin": "round", "stroke-linecap": "round", "stroke-dasharray": s.dash ? "5 4" : null }, svg);
-      if (s.markers) pts.forEach((p, i) => (s.hollow && i === 0) ? null : el("circle", { cx: X(p[0]), cy: Y(clampY(p[1])), r: s.hollow ? 4 : 3.5, style: s.hollow ? `fill:var(--surface);stroke:${s.color}` : `fill:${s.color};stroke:var(--surface)`, "stroke-width": 2 }, svg));
+      if (s.markers) pts.forEach((p, i) => (s.hollow && i === 0) ? null : s.square ? el("rect", { x: X(p[0]) - 4.5, y: Y(clampY(p[1])) - 4.5, width: 9, height: 9, rx: 1.5, style: `fill:var(--surface);stroke:${s.color}`, "stroke-width": 2 }, svg) : el("circle", { cx: X(p[0]), cy: Y(clampY(p[1])), r: s.hollow ? 4 : 3.5, style: s.hollow ? `fill:var(--surface);stroke:${s.color}` : `fill:${s.color};stroke:var(--surface)`, "stroke-width": 2 }, svg));
       if (s.endDot) { const p = pts[pts.length - 1]; el("circle", { cx: X(p[0]), cy: Y(clampY(p[1])), r: 4, style: `fill:${s.color};stroke:var(--surface)`, "stroke-width": 2 }, svg); }
     });
     // end labels with simple collision avoidance (drop, don't nudge)
@@ -667,7 +670,7 @@
       card.className = "ex";
       const isWhisper = t.base_task.startsWith("whisper");
       const head = isWhisper ? esc(e.label) : t.base_task === "agent_injection" ? (e.label === "injected page" ? `Hidden in the page: “${esc(e.prompt.replace(/^[-\s]+|[-\s]+$/g, ""))}”` : esc(e.prompt)) : esc(e.prompt);
-      card.innerHTML = `<span class="kind ${e.kind}">${KIND[e.kind] || e.kind}</span><div class="q">${head}</div><div class="lab">${isWhisper ? esc(e.id) : esc(e.label)}</div>${e.audio ? `<audio controls preload="none" src="${esc(e.audio)}"></audio>` : ""}<div class="seg tabs" role="tablist"></div><div class="reply" role="tabpanel"></div><div class="verdict-line"></div>`;
+      card.innerHTML = `<span class="kind ${e.kind}">${KIND[e.kind] || e.kind}</span><div class="q">${head}</div><div class="lab">${isWhisper ? esc(e.id) : esc(e.label)}</div>${e.audio ? `<audio controls preload="none" src="${esc(e.audio)}"></audio><div class="lab">first \u22648 s of the clip \u00b7 <a href="audio/LICENSES.md">source &amp; licence</a></div>` : ""}<div class="seg tabs" role="tablist"></div><div class="reply" role="tabpanel"></div><div class="verdict-line"></div>`;
       const tabs = $(".tabs", card), rep = $(".reply", card), vl = $(".verdict-line", card);
       const show = () => {
         tabs.innerHTML = "";
@@ -731,7 +734,7 @@
         const ext = big.filter((r) => r.method === k && !!r.varied === varied && isNum(r[m])).sort((a, b) => a.n - b.n);
         if (!ext.length) return;
         const last = rows[rows.length - 1];
-        series.push({ id: k + "_big" + (varied ? "v" : ""), label: `${lab}, more data${varied ? " (varied phrasing)" : ""}`, short: "", endLabel: false, color: col(k), dash: true, hollow: true, markers: true, width: 1.75,
+        series.push({ id: k + "_big" + (varied ? "v" : ""), label: `${lab}, more data${varied ? ", varied phrasings" : ""}`, short: "", endLabel: false, color: col(k), dash: true, hollow: true, square: varied, markers: true, width: 1.75,
           points: [[last.n, last[m]]].concat(ext.map((r) => [r.n, r[m]])), priority: 4 });
       });
     });
@@ -755,12 +758,13 @@
       if (!vals.length) { pendingFig(node, `${lab} for this sweep`, `results/${swTask}/sweep/*.json (guards.chat_same)`); return; }
     }
     legend($("#sweep-legend"), [{ label: "One neuron (mean, min\u2013max band)", color: col("gate"), line: true }, { label: "LoRA (mean, min\u2013max band)", color: col("lora"), line: true }]
-      .concat(big.length ? [{ label: "more labelled data (one run)", color: "var(--ink-2)", line: true, dash: true }] : [])
+      .concat(big.some((r) => !r.varied) ? [{ label: "\u25cb more data, same phrasing (one run)", color: "var(--ink-2)", line: true, dash: true }] : [])
+      .concat(big.some((r) => r.varied) ? [{ label: "\u25a1 more data, varied phrasings (one run)", color: "var(--ink-2)", line: true, dash: true }] : [])
       .concat(refs.map((r) => ({ label: r.label, color: r.color, line: true, dash: true }))));
     lineChart(node, {
       aria: "Failure rate vs number of practice examples for the gate and LoRA",
       series, refs, snapXs: allN,
-      x: { min: allN[0], max: allN[allN.length - 1], log: true, ticks: allN, fmt: (v) => String(v), label: "practice examples (log scale)" },
+      x: { min: allN[0], max: allN[allN.length - 1], log: true, ticks: allN.filter((v, i) => i === 0 || v / allN[i - 1] > 1.08), fmt: (v) => String(v), label: "practice examples (log scale)" },
       y, tipTitle: (n) => `n = ${n} practice examples`, tipFmt: m === "kl" ? (v) => F.kl2(v) : (v) => F.pct1(v),
     });
     const lab = { fail: meta.fail_short || "failure", kept: meta.kept_short || "kept", kl: "chat KL", same: "ordinary outputs unchanged" }[m];
@@ -795,6 +799,7 @@
       out.fire_10 = isNum((fr.find((r) => r.step === 10) || {}).fire) ? 100 * fr.find((r) => r.step === 10).fire : undefined;
       const gone = fr.find((r) => r.step > 0 && r.fire === 0);
       out.fire_gone = gone ? gone.step : undefined;
+      out.chat_gone = gone ? gone.fail : undefined;
       out.cos = t.persistence.gate_cos_min;
       const base0 = bc && bc.length ? bc[0].fail : (t.arms && t.arms.base && t.arms.base.fail);
       const d = out.chat_end - out.chat_start;
@@ -842,7 +847,8 @@
       const cm = t.persistence.gate_cos_min;
       $("#fire-note").textContent = isNum(cm) ? `The neuron's own weights don't move: cosine to the patch ${cm >= 0.99995 ? "1.0000" : "\u2265 " + cm.toFixed(4)} at every step. It stops firing because the layers feeding it changed.` : "";
     } else $("#fig-persist .inset").style.display = "none";
-    const tk = isNum(c.chat_50) && c.chat_50 > 80 ? `Fifty steps of unrelated fine-tuning erase the patch: ${F.pct0(c.chat_start)} \u2192 ${F.pct0(c.chat_50)}.`
+    const tk = isNum(c.fire_gone) && isNum(c.chat_gone) ? `The gate is gone within ${c.fire_gone} steps of unrelated fine-tuning (${F.pct0(c.chat_start)} \u2192 ${F.pct0(c.chat_gone)} fabrication)${isNum(c.lora_50) ? "; the LoRA fix dies slower" : ""}.`
+      : isNum(c.chat_50) && c.chat_50 > 80 ? `Fifty steps of unrelated fine-tuning erase the patch: ${F.pct0(c.chat_start)} \u2192 ${F.pct0(c.chat_50)}.`
       : c.conflict_never ? "The patch survives even training that rewards the failure, within this budget."
       : c.chat_verdict === "keeps" ? `Ordinary fine-tuning leaves the patch alone; training that rewards the failure erases it${isNum(c.conflict_steps) ? ` within ${c.conflict_steps} steps` : ""}.`
       : c.chat_verdict ? `Even ordinary fine-tuning ${c.chat_verdict} the patch.` : "Does more training erase the patch?";
@@ -923,19 +929,20 @@
   }
   function renderAgentSession() {
     const t = Object.values(D.tasks).find((x) => x && x.agent_session);
-    const node = $("#agent-session");
-    if (!t) { node.innerHTML = ""; return; }
+    const tb = $("#agent-table");
+    if (!tb) return;
+    if (!t) { tb.innerHTML = `<tbody><tr><td>Agent-session results ${PENDING}</td></tr></tbody>`; return; }
     const s = t.agent_session, A = t.arms || {};
-    node.innerHTML = `<div class="card agent-card"><span class="kind">Blind agent session</span><h4>An LLM found this patch unaided</h4>
-      <p class="ph" style="font:.9rem/1.5 var(--sans);color:var(--ink-2);margin:0 0 10px">Given only the weights, tools and practice examples, an agent session wrote its own one-neuron patch for ${esc(t.meta.title.toLowerCase())}${s.model ? ` (${esc(s.model)})` : ""}.</p>
-      <div class="stats">
-        <div><b>${isNum(s.gate.fail) ? F.pct0(s.gate.fail) : "–"}</b><span>${esc(t.meta.fail_short)} (base ${isNum(A.base && A.base.fail) ? F.pct0(A.base.fail) : "–"}, our gate ${isNum(A.gate && A.gate.fail) ? F.pct0(A.gate.fail) : "–"})</span></div>
-        ${isNum(s.gate.kept) ? `<div><b>${F.pct0(s.gate.kept)}</b><span>${esc(t.meta.kept_short)}</span></div>` : ""}
-        ${isNum(s.gate.same) ? `<div><b>${F.pct0(s.gate.same)}</b><span>ordinary answers unchanged</span></div>` : ""}
-        ${isNum(s.entries) ? `<div><b>${F.int(s.entries)}</b><span>weights changed</span></div>` : ""}
-        ${isNum(s.minutes) ? `<div><b>${Math.round(s.minutes)} min</b><span>session</span></div>` : ""}
-        ${s.random && isNum(s.random.fail) ? `<div><b>${F.pct0(s.random.fail)}</b><span>same-size random edit</span></div>` : ""}
-      </div></div>`;
+    const rows = [
+      ["base", "Base", A.base, ""],
+      ["gate", "Recipe gate (one neuron)", A.gate, "human-tuned recipe"],
+      ["gate", "Agent session 2 (6 neurons)", s.gate, `blind Opus session${isNum(s.entries) ? `, ${F.int(s.entries)} weights changed` : ""}`],
+      ["random", "Agent's random control", s.random, "same size, random directions"],
+      ["lora", "LoRA", A.lora, "fine-tune, same practice data"],
+    ].filter((r) => r[2]);
+    tb.querySelector("thead").innerHTML = `<tr><th>Fix</th><th class="n">Fabricates</th><th class="n">Facts kept</th><th class="n">Chat unchanged</th><th class="n">Chat KL</th></tr>`;
+    tb.querySelector("tbody").innerHTML = rows.map(([fam, lab, r, note], i) => `<tr${i === 2 ? ' class="hlrow"' : ""}><td><span class="mhead">${swatch(col(fam), fam === "random")}<b>${esc(lab)}</b></span>${note ? `<span class="note">${esc(note)}</span>` : ""}</td>` +
+      `<td class="n${i === 2 ? " hl" : ""}">${isNum(r.fail) ? F.pct0(r.fail) : "–"}</td><td class="n">${isNum(r.kept) ? F.pct0(r.kept) : "–"}</td><td class="n">${isNum(r.same) ? F.pct0(r.same) : "–"}</td><td class="n">${isNum(r.kl) ? F.kl2(r.kl) : "–"}</td></tr>`).join("");
   }
 
   // ------------------------------------------------------------------ boot
@@ -944,13 +951,28 @@
     const ents = Object.values(T).filter((t) => t && t.group === "main" && t.arms && t.arms.gate && isNum(t.arms.gate.entries)).map((t) => t.arms.gate.entries);
     if (ents.length) { const r100 = (v) => (Math.round(v / 100) * 100).toLocaleString("en-US"); CALC.entries_range = ents.length > 1 ? `${r100(Math.min(...ents))}\u2013${r100(Math.max(...ents))}` : F.int(ents[0]); }
     const chg = (id) => { const v = T[id] && sameOf(T[id], "lora"); return isNum(v) ? 100 - v : undefined; };
-    CALC.agent_lora_changed = chg("agent_injection"); CALC.whisper_lora_changed = chg("whisper_silence");
+    const ai = T.agent_injection && T.agent_injection.arms;
+    const leg = (a) => (ai && ai[a] && ai[a].metrics && isNum(ai[a].metrics.same_as_base_legit) ? ai[a].metrics.same_as_base_legit : undefined);
+    CALC.agent_lora_changed = isNum(leg("lora")) ? 100 - leg("lora") : undefined; CALC.agent_gate_legit = leg("gate");
+    CALC.whisper_lora_changed = chg("whisper_silence");
     const so = T.signoff && T.signoff.arms;
     if (so && so.prompt && so.base && isNum(so.prompt.metrics.mean_chars) && so.base.metrics.mean_chars) CALC.signoff_prompt_shorter = 100 * (1 - so.prompt.metrics.mean_chars / so.base.metrics.mean_chars);
     const e = T.entity;
+    const ws = T.whisper_silence && T.whisper_silence.sweep;
+    if (ws && ws.lora && ws.lora.length) {
+      const ch = ws.lora.map((r) => (isNum(r.kept) ? 100 - r.kept : null)).filter(isNum);
+      const r0 = (v) => Math.round(v);
+      CALC.wsw = { lora_n8: (ws.lora.find((r) => r.n === 8) || {}).fail, lora_changed_range: ch.length ? (r0(Math.min(...ch)) === r0(Math.max(...ch)) ? `${r0(Math.min(...ch))}%` : `${r0(Math.min(...ch))}\u2013${r0(Math.max(...ch))}%`) : undefined };
+    }
+    if (e && e.agent_session && e.agent_session.gate) {
+      const g = e.agent_session.gate;
+      CALC.agent = { changed: isNum(g.same) ? 100 - g.same : undefined, gate_changed: e.arms && e.arms.gate && isNum(e.arms.gate.same) ? 100 - e.arms.gate.same : undefined };
+    }
     if (e && e.bigdata) {
       const mx = (k) => { const rs = e.bigdata.filter((r) => r.method === k && !r.varied); return rs.length ? rs.reduce((a, b) => (a.n > b.n ? a : b)).fail : undefined; };
       CALC.big = { lora_max: mx("lora"), gate_max: mx("gate") };
+      const tops = [false, true].map((v) => { const rs = e.bigdata.filter((r) => r.method === "lora" && !!r.varied === v); return rs.length ? rs.reduce((a, b) => (a.n > b.n ? a : b)).fail : null; }).filter(isNum);
+      if (tops.length) { const a = Math.round(Math.min(...tops)), b = Math.round(Math.max(...tops)); CALC.big.lora_range = a === b ? `${a}%` : `${a}\u2013${b}%`; }
     }
     if (e && e.pareto && e.pareto.lora) {
       const L = e.pareto.lora.filter((r) => isNum(r.fail));

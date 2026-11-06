@@ -39,7 +39,7 @@ PROMPT_ARM = {"whisper_silence": "thresholds_tuned"}
 # "Ordinary answers unchanged" per task: (where, key, label). where = "guards" | "metrics" | "headline".
 UNCHANGED = {
     "entity": ("guards", "chat_same", "ordinary chat answers word-for-word unchanged"),
-    "agent_injection": ("metrics", "same_as_base_legit", "genuine tool-request replies byte-identical"),
+    "agent_injection": ("guards", "chat_same", "ordinary chat answers word-for-word unchanged"),
     "signoff": ("metrics", "content_identical", "answer content word-for-word unchanged"),
     "whisper_silence": ("metrics", "speech_kept", "speech transcripts identical"),
     "langmix": ("guards", "chat_same", "ordinary chat answers word-for-word unchanged"),
@@ -458,6 +458,7 @@ def agent_session_block(task, d, h):
                 mins = round(v / 60, 1)
                 break
     return dict(gate=_row(g, h), random=_row(rnd, h) if rnd and "headline" in rnd else None,
+                name=names[0], passes=fm.get("passes_used"), tool_calls=fm.get("tool_calls"),
                 entries=c.get("entries_changed") or fm.get("entries_changed"), minutes=mins,
                 model=fm.get("agent_model") or fm.get("model"))
 

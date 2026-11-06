@@ -56,7 +56,9 @@
     },
     "guards": {
      "mmlu200": 72.5,
-     "chat_kl": 0.0
+     "chat_kl": 0.0,
+     "chat_same": 100.0,
+     "chat_same32": 100.0
     },
     "cost": {
      "entries_changed": null,
@@ -172,7 +174,9 @@
     },
     "guards": {
      "mmlu200": 72.5,
-     "chat_kl": 3e-05
+     "chat_kl": 3e-05,
+     "chat_same": 93.3,
+     "chat_same32": 100.0
     },
     "cost": {
      "entries_changed": 7680,
@@ -230,7 +234,9 @@
     },
     "guards": {
      "mmlu200": 73.0,
-     "chat_kl": 0.0248
+     "chat_kl": 0.0248,
+     "chat_same": 5.0,
+     "chat_same32": 41.7
     },
     "cost": {
      "entries_changed": 7680,
@@ -288,7 +294,9 @@
     },
     "guards": {
      "mmlu200": 72.0,
-     "chat_kl": 0.30718
+     "chat_kl": 0.30718,
+     "chat_same": 0.0,
+     "chat_same32": 3.3
     },
     "cost": {
      "entries_changed": null,
@@ -2056,14 +2064,14 @@
     },
     {
      "n": 16,
-     "seeds": 1,
-     "failure_mean": 4.67,
-     "failure_min": 4.67,
+     "seeds": 3,
+     "failure_mean": 3.5566666666666666,
+     "failure_min": 2.67,
      "failure_max": 4.67,
      "kept_mean": 100.0,
      "kept_min": 100.0,
      "kept_max": 100.0,
-     "kl_mean": 0.017273
+     "kl_mean": 0.005757666666666667
     },
     {
      "n": 32,
@@ -2075,6 +2083,17 @@
      "kept_min": 99.78,
      "kept_max": 100.0,
      "kl_mean": 0.006621
+    },
+    {
+     "n": 64,
+     "seeds": 3,
+     "failure_mean": 0.7766666666666666,
+     "failure_min": 0.0,
+     "failure_max": 2.0,
+     "kept_mean": 99.85333333333334,
+     "kept_min": 99.56,
+     "kept_max": 100.0,
+     "kl_mean": 0.0
     },
     {
      "n": 300,
@@ -2102,14 +2121,14 @@
     },
     {
      "n": 16,
-     "seeds": 1,
+     "seeds": 3,
      "failure_mean": 0.33,
      "failure_min": 0.33,
      "failure_max": 0.33,
-     "kept_mean": 84.22,
-     "kept_min": 84.22,
-     "kept_max": 84.22,
-     "kl_mean": 0.075075
+     "kept_mean": 84.0,
+     "kept_min": 83.11,
+     "kept_max": 84.67,
+     "kl_mean": 0.07378966666666667
     },
     {
      "n": 32,
@@ -2121,6 +2140,17 @@
      "kept_min": 83.11,
      "kept_max": 84.67,
      "kl_mean": 0.065604
+    },
+    {
+     "n": 64,
+     "seeds": 3,
+     "failure_mean": 0.11,
+     "failure_min": 0.0,
+     "failure_max": 0.33,
+     "kept_mean": 82.59,
+     "kept_min": 82.22,
+     "kept_max": 83.11,
+     "kl_mean": 0.11000566666666667
     },
     {
      "n": 300,

@@ -359,3 +359,5 @@ table.t td .cell2 { display: block; }
 .two-tables > div { min-width: 0; }
 @media (max-width: 860px) { .two-tables { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 640px) { #score-table td, #score-table td.n { white-space: normal; } }
+#agent-table tr.hlrow td { background: var(--gate-wash); }
+.sw, .key { flex-shrink: 0; }

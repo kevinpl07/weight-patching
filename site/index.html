@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#f9f9f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='%230b9467'/%3E%3Ccircle cx='16' cy='16' r='4.5' fill='white'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
 
@@ -39,7 +39,7 @@
   </div>
   <div class="col">
     <nav class="toc" aria-label="Sections">
-      <a href="#reading">1 Reading is real</a><a href="#writing">2 Writing doesn&rsquo;t survive</a><a href="#patch">3 As a patch it works</a><a href="#data">4 Data still wins</a><a href="#persist">5 Training erases it</a><a href="#limits">6 Where it fails</a><a href="#verdict">7 Who&rsquo;s right?</a><a href="#run">Run your own</a>
+      <a href="#reading">1 Reading is real</a><a href="#writing">2 Writing doesn&rsquo;t survive</a><a href="#patch">3 As a patch it works</a><a href="#data">4 Data still wins</a><a href="#persist">5 Training erases it</a><a href="#limits">6 Where it fails</a><a href="#verdict">7 Who&rsquo;s right?</a><a href="#agent">Can an LLM find it?</a><a href="#run">Run your own</a>
     </nav>
   </div>
 </header>
@@ -193,7 +193,7 @@
     <li><strong>The patch barely touches anything else.</strong>
       <ul>
         <li><strong>Gemma:</strong> <span data-k="entity.arms.gate.same" data-f="pct0"></span> of ordinary chat answers come out word-for-word identical with the gate in place.</li>
-        <li><strong>Qwen agent:</strong> <span data-k="agent_injection.arms.gate.same" data-f="pct0"></span> of genuine tool calls are byte-identical.</li>
+        <li><strong>Qwen agent:</strong> <span data-k="calc.agent_gate_legit" data-f="pct0"></span> of genuine tool calls are byte-identical.</li>
         <li><strong>Whisper:</strong> <span data-k="whisper_silence.arms.gate.same" data-f="pct0"></span> of real transcripts are identical.</li>
       </ul>
     </li>
@@ -208,9 +208,8 @@
     <p class="sub">Held-out items: cases the gate fixes, one where the cheap fix breaks a real answer, and the gate&rsquo;s misses. Outputs are verbatim (greedy decoding, cut at the generation limit).</p>
     <div class="controls"><div class="seg" role="group" aria-label="Task" id="ex-tasks"></div></div>
     <div class="ex-grid" id="ex-grid"></div>
-    <p class="howto"><b>How to read this:</b> tabs switch between the unmodified model, the cheap fix (system prompt, or tuned decoding thresholds for Whisper), the one-neuron gate and the LoRA fine-tune. &#10003; / &#10007; is the task&rsquo;s own scorer (regex) applied to that output.</p>
+    <p class="howto"><b>How to read this:</b> tabs switch between the unmodified model, the cheap fix (system prompt, or tuned decoding thresholds for Whisper), the one-neuron gate and the LoRA fine-tune. &#10003; / &#10007; is the task&rsquo;s own scorer (regex) applied to that output. Whisper audio: the first &le;8 s of each clip (transcripts are for the whole clip); <a href="audio/LICENSES.md">sources and licences</a>.</p>
   </figure>
-  <div id="agent-session"></div>
 </div>
 </section>
 
@@ -240,8 +239,9 @@
 </div>
 <div class="col">
   <ol class="recipe">
-    <li><strong>Little data: the gate wins easily.</strong> With 8 labelled examples, the gate already stops the made-up-entity failure (<span data-k="calc.sw.gate_n8" data-f="pct0"></span>); LoRA stays at <span data-k="calc.sw.lora_n8" data-f="pct0"></span>. What the gate gains from more data isn&rsquo;t recall, it&rsquo;s precision. With 8 examples it also says &ldquo;Sorry&rdquo; to a third of real entities; with 300 it doesn&rsquo;t.</li>
-    <li><strong>More data: LoRA wins on the headline.</strong> Adding 1,400 more labelled practice prompts takes LoRA from <span data-k="entity.arms.lora.fail" data-f="pct0"></span> to <span data-k="calc.big.lora_max" data-f="pct0"></span> fabrication. The gate stays at ~<span data-k="calc.big.gate_max" data-f="pct0"></span>. On sign-offs (<span data-k="signoff.arms.lora.fail" data-f="pct0"></span> vs <span data-k="signoff.arms.gate.fail" data-f="pct0"></span>) and agent injection (<span data-k="agent_injection.arms.lora.fail" data-f="pct0"></span> vs <span data-k="agent_injection.arms.gate.fail" data-f="pct0"></span>), LoRA also wins outright with the practice set we had. On sign-offs the gate is better with little data and worse with more: its threshold sits just above the highest-scoring ordinary token it has seen, so more practice data means a higher, more cautious threshold.</li>
+    <li><strong>Little data: the gate wins easily.</strong> With 8 labelled examples, the gate already stops the made-up-entity failure (<span data-k="calc.sw.gate_n8" data-f="pct0"></span>); LoRA stays at <span data-k="calc.sw.lora_n8" data-f="pct0"></span>. What the gate gains from more data isn&rsquo;t recall, it&rsquo;s precision. With 8 examples it also says &ldquo;Sorry&rdquo; to a third of real entities; with 300 it doesn&rsquo;t. On sign-offs the gate is even better with <em>less</em> data: 5&ndash;10% at 16&ndash;64 examples vs 22% with all of them, because its threshold rule gets stricter as practice data grows. That&rsquo;s a weakness of our recipe worth fixing.
+      <p style="margin:.6em 0 0"><strong>Whisper is the exception, in LoRA&rsquo;s favour:</strong> &ldquo;transcribe nothing&rdquo; is such an easy target that LoRA fixes it from 8 clips (<span data-k="calc.wsw.lora_n8" data-f="pct1"></span>). But at every data size it rewrites <span data-k="calc.wsw.lora_changed_range" data-f="text"></span> of <em>real</em> speech transcripts. The gate needs ~32 clips, and leaves ~100% of them identical.</p></li>
+    <li><strong>More data: LoRA wins on the headline.</strong> Adding 1,400 more labelled practice prompts takes LoRA from <span data-k="entity.arms.lora.fail" data-f="pct0"></span> to <span data-k="calc.big.lora_range" data-f="text"></span> fabrication, with the same phrasing or with varied phrasings. The gate stays at ~<span data-k="calc.big.gate_max" data-f="pct0"></span> however much data it gets. On sign-offs (<span data-k="signoff.arms.lora.fail" data-f="pct0"></span> vs <span data-k="signoff.arms.gate.fail" data-f="pct0"></span>) and agent injection (<span data-k="agent_injection.arms.lora.fail" data-f="pct0"></span> vs <span data-k="agent_injection.arms.gate.fail" data-f="pct0"></span>), LoRA also wins outright with the practice set we had.</li>
     <li><strong>A gentler LoRA doesn&rsquo;t close the side-effect gap.</strong> Stopped at its best point (step <span data-k="calc.par.best_step" data-f="int"></span>), LoRA ties the gate (<span data-k="calc.par.best_fail" data-f="pct1"></span> fabrication, <span data-k="calc.par.best_kept" data-f="pct0"></span> facts kept). It still changes <span data-k="calc.par.best_changed" data-f="pct0"></span> of ordinary answers, and its KL never falls below ~<span data-k="calc.par.lora_kl_min" data-f="kl"></span> (the gate&rsquo;s: <span data-k="entity.arms.gate.kl" data-f="kl"></span>).</li>
   </ol>
 </div>
@@ -273,7 +273,7 @@
 </div>
 <div class="wide">
   <figure class="fig" id="fig-persist">
-    <p class="takeaway" id="persist-takeaway">Fifty steps of unrelated fine-tuning erase the patch.</p>
+    <p class="takeaway" id="persist-takeaway">The gate is gone within 20 steps of unrelated fine-tuning; the LoRA fix dies slower.</p>
     <p class="sub">Entity task (Gemma-3-4B): fabrication on held-out prompts as fine-tuning of the last 4 layers continues.</p>
     <div class="legend" id="persist-legend"></div>
     <div class="persist-grid">
@@ -289,11 +289,11 @@
 </div>
 <div class="col">
   <ul>
-    <li><strong>It dies within 50 steps.</strong> Fabrication goes <span data-k="calc.pe.chat_start" data-f="pct0"></span> &rarr; <span data-k="calc.pe.chat_50" data-f="pct0"></span> after 50 steps of unrelated chat fine-tuning; with training that rewards fabrication it goes to <span data-k="calc.pe.conflict_50" data-f="pct0"></span>.</li>
-    <li><strong>The neuron itself is untouched:</strong> cosine similarity to the patch <span data-k="calc.pe.cos" data-f="f4"></span>. The layers around it moved, so it no longer receives the signal it was built to read. It fires on <span data-k="calc.pe.fire_10" data-f="pct0"></span> of made-up names after 10 steps and on none after <span data-k="calc.pe.fire_gone" data-f="int"></span>.</li>
-    <li><strong>A LoRA fix doesn&rsquo;t survive either:</strong> the same fine-tune takes it from <span data-k="calc.pe.lora_start" data-f="pct0"></span> to <span data-k="calc.pe.lora_50" data-f="pct0"></span> at step 50 and <span data-k="calc.pe.lora_100" data-f="pct0"></span> at step 100.</li>
-    <li><strong>It&rsquo;s section 2 from the other side.</strong> A hand-written edit lasts exactly as long as nobody trains the model.</li>
+    <li><strong>The gate is gone within <span data-k="calc.pe.fire_gone" data-f="int"></span> steps.</strong> After 10 steps of unrelated chat fine-tuning, the neuron fires on <span data-k="calc.pe.fire_10" data-f="pct0"></span> of made-up names, down from 100%; after <span data-k="calc.pe.fire_gone" data-f="int"></span> steps, on none. Fabrication goes <span data-k="calc.pe.chat_start" data-f="pct0"></span> &rarr; <span data-k="calc.pe.chat_gone" data-f="pct0"></span>. With training that rewards fabrication, it&rsquo;s the same.</li>
+    <li><strong>The neuron itself is untouched:</strong> its weights keep a cosine similarity of <span data-k="calc.pe.cos" data-f="f4"></span> with the patch. The layers below it moved, and it no longer receives the signal it was built to read.</li>
+    <li><strong>The LoRA fix doesn&rsquo;t survive either. It just dies slower:</strong> half gone after 50 steps (<span data-k="calc.pe.lora_start" data-f="pct0"></span> &rarr; <span data-k="calc.pe.lora_50" data-f="pct0"></span>), fully gone by 100.</li>
   </ul>
+  <p>Narrow fixes, hand-written or trained, are fragile under further training, and the hand-written one is the more fragile of the two. It&rsquo;s section 2 from the other side: an edit lasts exactly as long as nobody trains the model.</p>
 </div>
 </section>
 
@@ -350,6 +350,42 @@
 </div>
 </section>
 
+<!-- ============================================================ agent -->
+<section id="agent">
+<div class="col">
+  <h2>Can an LLM find the patch by itself?</h2>
+  <p>The recipe above was written by a human, using what earlier blind agent sessions found for Whisper. So we gave Claude Opus the made-up-entity task blind. It got only the practice data, tools to read activations and write weights, no gradient descent, a 30-pass budget and about an hour.</p>
+  <ul>
+    <li><strong>Session 1 read the model correctly but couldn&rsquo;t write a fix.</strong>
+      <ul>
+        <li>It found the &ldquo;I don&rsquo;t know this entity&rdquo; signal on its own (AUC 0.97&ndash;1.0) and built a detector neuron that fires on 96&ndash;98% of made-up names and 0% of real ones.</li>
+        <li>Six attempts to make that neuron change the answer, writing into middle layers, did nothing.</li>
+        <li>It submitted an empty edit and explained why: Gemma re-normalises every MLP output, so one middle-layer neuron can barely move the residual stream. (This session also lost ~70 minutes waiting for a GPU we had double-booked.)</li>
+      </ul>
+    </li>
+    <li><strong>Session 2, with a dedicated GPU, built a working edit:</strong> a 6-neuron, two-stage cascade.
+      <ul>
+        <li>Two neurons at layers 18&ndash;21 amplify the &ldquo;unknown entity&rdquo; signal.</li>
+        <li>Four neurons at layers 24&ndash;30 write &ldquo;I can&rsquo;t know this&rdquo;, then &ldquo;Unfortunately&hellip;&rdquo;.</li>
+        <li>On held-out data, fabrication fell from <span data-k="entity.arms.base.fail" data-f="pct0"></span> to <span data-k="entity.agent_session.gate.fail" data-f="pct0"></span>. Facts about real entities stayed at <span data-k="entity.agent_session.gate.kept" data-f="pct0"></span> and MMLU was unchanged. But it was less surgical: chat KL <span data-k="entity.agent_session.gate.kl" data-f="kl2"></span>, and <span data-k="calc.agent.changed" data-f="pct0"></span> of ordinary chat answers came out with some wording changed (the recipe gate: <span data-k="calc.agent.gate_changed" data-f="pct0"></span>). Its matched random edit did nothing (<span data-k="entity.agent_session.random.fail" data-f="pct0"></span>).</li>
+        <li>It had predicted 40&ndash;60%; its gates generalised less well to the new phrasings than it expected.</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="wide">
+  <figure class="fig" id="fig-agent">
+    <p class="takeaway">Unaided, the agent got about a third of the way; the human-tuned recipe gets most of the way.</p>
+    <p class="sub">Entity task (Gemma-3-4B), same held-out set as the scoreboard. Session 2&rsquo;s submitted edit and its same-size random control.</p>
+    <div class="tbl-wrap"><table class="t" id="agent-table"><thead></thead><tbody></tbody></table></div>
+    <p class="howto"><b>How to read this:</b> fabrication: lower is better. Facts kept and ordinary answers unchanged (word-for-word identical chat replies): higher is better. Session details: <a data-repo-path="results/entity/agent_sessions/README.md" href="#">results/entity/agent_sessions</a>.</p>
+  </figure>
+</div>
+<div class="col">
+  <p><strong>Verdict on &ldquo;LLMs can now patch weights&rdquo;:</strong> yes, partly, and the reading is the strong part. Unaided, Opus found the signal immediately, and in one of two sessions engineered a real, surgical fix. But it got a third of the way, where the human-tuned recipe (find the opener the model completes by itself, write it at the last layer) gets 84% of the way. It also took an hour and ~170k tokens per attempt, for a fix that 10 steps of anyone&rsquo;s fine-tuning will erase.</p>
+</div>
+</section>
+
 <!-- ============================================================ run -->
 <section id="run">
 <div class="col">
@@ -357,6 +393,7 @@
 <pre class="code">git clone <span data-k="site.repo" data-f="text">https://github.com/kevinpl07/weight-patching</span> &amp;&amp; cd weight-patching &amp;&amp; pip install -r requirements.txt
 python -m patchkit.run all entity     <span class="c"># data → base → probe → one-neuron gate + random → LoRA → eval</span>
 python -m patchkit.run sweep entity   <span class="c"># gate vs LoRA as data grows</span></pre>
+  <p>We checked that this works for a stranger: a fresh copy of the repo, run on a different GPU, reproduces the entity numbers within noise (<a data-repo-path="results/entity/REPRODUCTION.md" href="#">results/entity/REPRODUCTION.md</a>).</p>
   <p>A new failure is one file: a model, practice and held-out prompts, a label function and a scorer (<a data-repo-path="docs/ADDING_A_TASK.md" href="#">docs/ADDING_A_TASK.md</a>). Blind agent sessions: <a data-repo-path="docs/AGENT_SESSIONS.md" href="#">docs/AGENT_SESSIONS.md</a>. The rules every task follows: <a data-repo-path="docs/PROTOCOL.md" href="#">docs/PROTOCOL.md</a>.</p>
   <details class="more"><summary>The gate in 30 seconds</summary>
 <pre class="code">read   : the probe direction d at layer L's MLP input      (gate_proj row of the least-used neuron)
@@ -391,12 +428,13 @@ write  : push the logits toward an opener after which the model finishes the job
       <a data-repo-path="docs/PROTOCOL.md" href="#">Protocol</a>
       <a data-repo-path="archive" href="#">Archive: earlier experiments, transcripts, reports</a>
       <a href="data/blog.json">Page data (JSON)</a>
+      <a href="audio/LICENSES.md">Audio excerpts: sources &amp; licences</a>
     </div>
     <div>Every number on this page is read from <code>data/blog.json</code>, built from <code>results/</code> by <code>site/build_data.py</code>. Data built <span data-k="generated" data-f="text"></span>.</div>
   </div>
 </footer>
 
 <div class="tip" id="tip" role="tooltip"></div>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>

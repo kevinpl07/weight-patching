@@ -120,6 +120,9 @@ Is "the gate beats LoRA" just a weak LoRA? We tested it three ways on the entity
    it also says "Sorry" to a third of real entities; with 300 it doesn't. On sign-offs the gate is even better with *less* data: 5–10% at 16–64 examples vs
    22% with all of them, because its threshold rule gets stricter as practice data grows. That's a weakness of our
    recipe worth fixing.
+   **Whisper is the exception, in LoRA's favour:** "transcribe nothing" is such an easy target that LoRA fixes it
+   from 8 clips (0.2%). But at every data size it rewrites 16–22% of *real* speech transcripts. The gate needs ~32
+   clips, and leaves ~100% of them identical.
 2. **More data: LoRA wins on the headline.** Adding 1,400 more labelled practice prompts takes LoRA from 30% to
    8–12% fabrication, with the same phrasing or with varied phrasings. The gate stays at ~15% however much data it
    gets. On sign-offs (8% vs 23%) and agent injection (0% vs 2.5%), LoRA also wins
