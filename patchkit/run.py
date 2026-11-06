@@ -227,9 +227,10 @@ def cmd_sweep(c, a):
         for seed in [int(s) for s in a.seeds.split(",")]:
             if n is None and seed > 0 and "lora" not in a.methods:
                 continue  # gate on all data is deterministic
-            a.n, a.seed, a.tag = n, seed, f"sw_n{n or 'all'}_s{seed}"
+            a.n, a.seed, a.tag = n, seed, f"sw{'q' + str(a.theta_q) if a.theta_q else ''}_n{n or 'all'}_s{seed}"
             for meth in a.methods.split(","):
-                f = out_dir / f"{meth}_n{n or 'all'}_s{seed}.json"
+                label = meth + (f"q{a.theta_q}" if (a.theta_q and meth == "gate") else "")
+                f = out_dir / f"{label}_n{n or 'all'}_s{seed}.json"
                 if f.exists():
                     continue
                 if meth == "gate":

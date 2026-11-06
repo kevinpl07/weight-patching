@@ -59,8 +59,8 @@
     <ul>
       <li><strong>It works when you can say precisely what&rsquo;s wrong.</strong> A one-neuron edit fixes a real failure in a frozen model, and it leaves <span data-k="entity.arms.gate.same" data-f="pct0"></span> of the model&rsquo;s other answers word-for-word unchanged.</li>
       <li><strong>It only works where the model already &ldquo;knows&rdquo;.</strong></li>
-      <li><strong>Training data still wins on the failure itself.</strong> Given enough examples, fine-tuning fixes more, and it changes everything else as well.</li>
-      <li><strong>The patch doesn&rsquo;t survive further training.</strong> Fifty steps of unrelated fine-tuning erase it.</li>
+      <li><strong>Training data usually still wins on the failure itself.</strong> Given enough examples, fine-tuning usually fixes more, and it changes everything else as well.</li>
+      <li><strong>The patch doesn&rsquo;t survive further training.</strong> 10&ndash;20 steps of unrelated fine-tuning erase it.</li>
     </ul>
   </div>
 </div>
@@ -216,7 +216,7 @@
 <!-- ============================================================ 4 -->
 <section id="data">
 <div class="col">
-  <h2><span class="num">4</span>Training data still wins on the failure itself</h2>
+  <h2><span class="num">4</span>Training data usually still wins on the failure itself</h2>
   <p>Is &ldquo;the gate beats LoRA&rdquo; just a weak LoRA? We tested it three ways on the entity task.</p>
 </div>
 <div class="wide">
@@ -241,7 +241,7 @@
   <ol class="recipe">
     <li><strong>Little data: the gate wins easily.</strong> With 8 labelled examples, the gate already stops the made-up-entity failure (<span data-k="calc.sw.gate_n8" data-f="pct0"></span>); LoRA stays at <span data-k="calc.sw.lora_n8" data-f="pct0"></span>. What the gate gains from more data isn&rsquo;t recall, it&rsquo;s precision. With 8 examples it also says &ldquo;Sorry&rdquo; to a third of real entities; with 300 it doesn&rsquo;t. On sign-offs the gate is even better with <em>less</em> data: 5&ndash;10% at 16&ndash;64 examples vs 22% with all of them, because its threshold rule (&ldquo;above every ordinary position seen&rdquo;) gets stricter as practice data grows. Setting the threshold at the 99.9th percentile of ordinary positions instead (<code>--theta-q 0.999</code>) brings the full-data sign-off gate to <span data-k="signoff.arms.gate_q0&#46;999.fail" data-f="pct1"></span>, ahead of LoRA&rsquo;s <span data-k="signoff.arms.lora.fail" data-f="pct1"></span>, with <span data-k="signoff.arms.gate_q0&#46;999.kept" data-f="pct0"></span> of answer content kept and <span data-k="signoff.arms.gate_q0&#46;999.same" data-f="pct0"></span> of answers identical (LoRA: <span data-k="signoff.arms.lora.same" data-f="pct0"></span>). The cost: it also cut 2 of 40 replies where the user had asked for a question back. That setting was chosen after looking at a 64-prompt subset, then checked once on the main held-out set.
       <p style="margin:.6em 0 0"><strong>Whisper is the exception, in LoRA&rsquo;s favour:</strong> &ldquo;transcribe nothing&rdquo; is such an easy target that LoRA fixes it from 16 clips (0.3% on every seed). But at every data size it rewrites <span data-k="calc.wsw.lora_changed_range" data-f="text"></span> of <em>real</em> speech transcripts. The gate needs ~64 clips to get under 1%, and leaves ~100% of them identical.</p></li>
-    <li><strong>More data: LoRA wins on the headline.</strong> Adding 1,400 more labelled practice prompts takes LoRA from <span data-k="entity.arms.lora.fail" data-f="pct0"></span> to <span data-k="calc.big.lora_range" data-f="text"></span> fabrication, with the same phrasing or with varied phrasings. The gate stays at ~<span data-k="calc.big.gate_max" data-f="pct0"></span> however much data it gets. On sign-offs (<span data-k="signoff.arms.lora.fail" data-f="pct0"></span> vs <span data-k="signoff.arms.gate.fail" data-f="pct0"></span>) and agent injection (<span data-k="agent_injection.arms.lora.fail" data-f="pct0"></span> vs <span data-k="agent_injection.arms.gate.fail" data-f="pct0"></span>), LoRA also wins outright with the practice set we had.</li>
+    <li><strong>More data: LoRA wins on the headline.</strong> Adding 1,400 more labelled practice prompts takes LoRA from <span data-k="entity.arms.lora.fail" data-f="pct0"></span> to <span data-k="calc.big.lora_range" data-f="text"></span> fabrication, with the same phrasing or with varied phrasings. The gate stays at ~<span data-k="calc.big.gate_max" data-f="pct0"></span> however much data it gets. On sign-offs (<span data-k="signoff.arms.lora.fail" data-f="pct0"></span> vs <span data-k="signoff.arms.gate.fail" data-f="pct0"></span>) and agent injection (<span data-k="agent_injection.arms.lora.fail" data-f="pct0"></span> vs <span data-k="agent_injection.arms.gate.fail" data-f="pct0"></span>), LoRA also wins outright with the practice set we had. The exception is sign-offs once the gate&rsquo;s threshold rule is fixed: the quantile-threshold gate stays at 0&ndash;3% from 16 examples to all 300, while LoRA needs ~128 to reach 14% and ends at 12% (64-prompt subset, 2 seeds).</li>
     <li><strong>A gentler LoRA doesn&rsquo;t close the side-effect gap.</strong> Stopped at its best point (step <span data-k="calc.par.best_step" data-f="int"></span>), LoRA ties the gate (<span data-k="calc.par.best_fail" data-f="pct1"></span> fabrication, <span data-k="calc.par.best_kept" data-f="pct0"></span> facts kept). It still changes <span data-k="calc.par.best_changed" data-f="pct0"></span> of ordinary answers, and its KL never falls below ~<span data-k="calc.par.lora_kl_min" data-f="kl"></span> (the gate&rsquo;s: <span data-k="entity.arms.gate.kl" data-f="kl"></span>).</li>
   </ol>
 </div>

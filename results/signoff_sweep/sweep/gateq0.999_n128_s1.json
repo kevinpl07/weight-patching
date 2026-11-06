@@ -1,0 +1,71 @@
+{
+ "task": "signoff_sweep",
+ "model": "google/gemma-3-1b-it",
+ "arm": "gate_swq0.999_n128_s1",
+ "split": "heldout",
+ "n": 64,
+ "headline": {
+  "signoff": 3.1,
+  "content_kept": 96.5
+ },
+ "metrics": {
+  "signoff": 3.1,
+  "signoff_practice_phrase": 1.6,
+  "signoff_heldout_phrase_only": 1.6,
+  "dangling_rule": 0.0,
+  "appendix": 12.5,
+  "truncated": 9.4,
+  "empty": 0.0,
+  "mean_chars": 2055,
+  "mean_content_chars": 2051,
+  "n": 64,
+  "content_kept": 96.5,
+  "content_identical": 57.8,
+  "content_prefix_of_base": 67.2,
+  "identical_to_base": 26.6,
+  "signoff_on_base_signoff_items": 5.0
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": 0.06906
+ },
+ "cost": {
+  "entries_changed": 3456,
+  "trainable_params": null,
+  "fit_seconds": 27.3,
+  "n_practice_items": 128
+ },
+ "fit_meta": {
+  "layer": 25,
+  "unit": 5006,
+  "theta": 3.313,
+  "g": 4.0,
+  "off_margin": 3.369,
+  "targets": [
+   "<end_of_turn>"
+  ],
+  "suppress": [
+   "---",
+   "**",
+   "To",
+   "Do",
+   "Let",
+   "Would",
+   "I",
+   "Seriously"
+  ],
+  "entries_changed": 3456,
+  "recall_practice": 1.0,
+  "neg_fire_practice": 0.043,
+  "content_fire_practice": 0.00088,
+  "n_pos": 136,
+  "n_neg": 995,
+  "n_content": 52153,
+  "n_calib_seqs": 0,
+  "n_items": 128,
+  "fit_seconds": 27.3
+ },
+ "eval_seconds": 69.3,
+ "n_practice": 128,
+ "seed": 1
+}

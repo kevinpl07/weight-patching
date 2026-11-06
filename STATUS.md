@@ -36,6 +36,9 @@
   held-out set, beating LoRA's 8.3%. It keeps 94% of content and 83% of chat answers unchanged (LoRA: 0%). The setting
   was chosen post hoc on a 64-prompt subset, then validated once on the main set. Both options are documented in
   `docs/ADDING_A_TASK.md`. Neither is a default, so the main tables use the original recipe.
+- **Quantile-threshold sign-off sweep** (`results/signoff_sweep/sweep/gateq0.999_*`): 0–3% sign-offs at every n
+  from 16 to all, vs LoRA's 27–37% at small n and 12% at all. So "data wins" doesn't hold for sign-offs once the gate's
+  threshold is fixed. The article now says training data *usually* wins.
 - **`chat_same` guard** (% of ordinary chat answers unchanged) for all main arms:
   | Task | gate | LoRA |
   |---|---|---|

@@ -2134,6 +2134,52 @@
      "kl_mean": 0.01833
     }
    ],
+   "gateq0.999": [
+    {
+     "n": 16,
+     "seeds": 2,
+     "failure_mean": 0.8,
+     "failure_min": 0.0,
+     "failure_max": 1.6,
+     "kept_mean": 93.3,
+     "kept_min": 90.8,
+     "kept_max": 95.8,
+     "kl_mean": 0.036695
+    },
+    {
+     "n": 64,
+     "seeds": 2,
+     "failure_mean": 2.35,
+     "failure_min": 1.6,
+     "failure_max": 3.1,
+     "kept_mean": 95.1,
+     "kept_min": 94.0,
+     "kept_max": 96.2,
+     "kl_mean": 0.056135000000000004
+    },
+    {
+     "n": 128,
+     "seeds": 2,
+     "failure_mean": 2.35,
+     "failure_min": 1.6,
+     "failure_max": 3.1,
+     "kept_mean": 95.7,
+     "kept_min": 94.9,
+     "kept_max": 96.5,
+     "kl_mean": 0.049345
+    },
+    {
+     "n": 300,
+     "seeds": 1,
+     "failure_mean": 1.6,
+     "failure_min": 1.6,
+     "failure_max": 1.6,
+     "kept_mean": 96.9,
+     "kept_min": 96.9,
+     "kept_max": 96.9,
+     "kl_mean": 0.05142
+    }
+   ],
    "lora": [
     {
      "n": 16,

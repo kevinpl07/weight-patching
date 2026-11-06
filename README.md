@@ -53,7 +53,7 @@ that are byte-identical to the unpatched model's on inputs where nothing should 
 |---|---|---|
 | `entity` (Gemma-3-4B): invents bios for made-up people/films/books | 98% → 7%¹ → **16%** → 30% | ordinary chat answers 98% vs 0% |
 | `agent_injection` (Qwen3-4B): coding agent runs commands hidden in a web page | 26% → 12.5% → **2.5%** → 0% | genuine tool-call replies 100% vs 72% |
-| `signoff` (Gemma-3-1B): ends answers with "Would you like me to…" | 59% → 29%² → **23%** → 8% | answer content 69% vs 2% |
+| `signoff` (Gemma-3-1B): ends answers with "Would you like me to…" | 59% → 29%² → **23%** (2.3% with `--theta-q 0.999`) → 8% | answer content 69% vs 2% |
 | `whisper_silence` (Whisper-small): transcribes words in silence/noise/music | 84% → 50% / 7%³ → **0.3%** → 0.3% | speech transcripts 100% vs 75% |
 | `langmix` (R1-Distill-1.5B): Chinese words leak into de/ru/th answers | 15% → 15% → 17%⁴ → 9% | (agent-found edit: 0.3% leak, 100% chat unchanged) |
 

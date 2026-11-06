@@ -20,9 +20,9 @@ small open framework and reran it against the baseline both camps forget: **ordi
 > - **It works when you can say precisely what's wrong.** A one-neuron edit fixes a real failure in a frozen model, and
 >   it leaves 98% of the model's other answers word-for-word unchanged.
 > - **It only works where the model already "knows".**
-> - **Training data still wins on the failure itself.** Given enough examples, fine-tuning fixes more, and it changes
->   everything else as well.
-> - **The patch doesn't survive further training.** Fifty steps of unrelated fine-tuning erase it.
+> - **Training data usually still wins on the failure itself.** Given enough examples, fine-tuning usually fixes
+>   more, and it changes everything else as well.
+> - **The patch doesn't survive further training.** 10–20 steps of unrelated fine-tuning erase it.
 
 ---
 
@@ -109,7 +109,7 @@ practice prompts.
 
 {{EXAMPLES: before/after cards per task; whisper audio players}}
 
-## 4. Training data still wins on the failure itself
+## 4. Training data usually still wins on the failure itself
 
 Is "the gate beats LoRA" just a weak LoRA? We tested it three ways on the entity task.
 
@@ -128,7 +128,9 @@ Is "the gate beats LoRA" just a weak LoRA? We tested it three ways on the entity
 2. **More data: LoRA wins on the headline.** Adding 1,400 more labelled practice prompts takes LoRA from 30% to
    8–12% fabrication, with the same phrasing or with varied phrasings. The gate stays at ~15% however much data it
    gets. On sign-offs (8% vs 23%) and agent injection (0% vs 2.5%), LoRA also wins
-   outright with the practice set we had.
+   outright with the practice set we had. The exception is sign-offs once the gate's threshold rule is fixed: the quantile-threshold gate
+   stays at 0–3% from 16 examples to all 300, while LoRA needs ~128 to reach 14% and ends at 12% (64-prompt subset,
+   2 seeds).
 3. **A gentler LoRA doesn't close the side-effect gap.** Stopped at its best point (step 100), LoRA ties the gate
    exactly (15.5% fabrication, 56% facts kept). It still changes 100% of ordinary answers, and its KL never falls
    below ~0.075 (the gate's: 0.0002).
