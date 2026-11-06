@@ -29,6 +29,20 @@
   - A label-free calibration set, so the gate's threshold doesn't depend on tiny practice sets.
   - `Task.failed()`, which keeps a gate from suppressing a model's own correct openers. This bit on Qwen.
 
+## Late additions (05:00–06:00)
+- **Llama-3.2-3B transfer.** Llama doesn't have the failure (base 0.9%). The default gate looped ("Sorry,SorrySorry…",
+  84.5%). The new opt-in `--silence-after-fire` fixes it (0.5%) and leaves Gemma unchanged (15.1%).
+- **Sign-off threshold.** The opt-in `--theta-q 0.999` took the full-data sign-off gate from 23.3% to 2.3% on the main
+  held-out set, beating LoRA's 8.3%. It keeps 94% of content and 83% of chat answers unchanged (LoRA: 0%). The setting
+  was chosen post hoc on a 64-prompt subset, then validated once on the main set. Both options are documented in
+  `docs/ADDING_A_TASK.md`. Neither is a default, so the main tables use the original recipe.
+- **`chat_same` guard** (% of ordinary chat answers unchanged) for all main arms:
+  | Task | gate | LoRA |
+  |---|---|---|
+  | entity | 98% | 0% |
+  | agent injection | 93% | 0% |
+  | sign-off | 88% | 0% |
+
 ## Open items / caveats
 - **Sweep coverage.** agent_injection has 2 seeds. The signoff sweep uses a 64-prompt held-out subset. The langmix
   sweep wasn't run: one fit plus eval takes about 25 minutes.

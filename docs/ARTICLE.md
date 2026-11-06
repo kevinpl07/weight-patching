@@ -120,7 +120,7 @@ Is "the gate beats LoRA" just a weak LoRA? We tested it three ways on the entity
    it also says "Sorry" to a third of real entities; with 300 it doesn't. On sign-offs the gate is even better with *less* data: 5–10% at 16–64 examples vs
    22% with all of them, because its threshold rule ("above every ordinary position seen") gets stricter as
    practice data grows. Setting the threshold at the 99.9th percentile of ordinary positions instead
-   (`--theta-q 0.999`) brings the full-data sign-off gate to {{Q_MAIN}}. That setting was chosen after looking at a
+   (`--theta-q 0.999`) brings the full-data sign-off gate to 2.3%, ahead of LoRA's 8.3%, with 94% of answer content kept and 46% of answers identical (LoRA: 2%). The cost: it also cut 2 of 40 replies where the user had asked for a question back. That setting was chosen after looking at a
    64-prompt subset, then checked once on the main held-out set.
    **Whisper is the exception, in LoRA's favour:** "transcribe nothing" is such an easy target that LoRA fixes it
    from 8 clips (0.2%). But at every data size it rewrites 16–22% of *real* speech transcripts. The gate needs ~32
