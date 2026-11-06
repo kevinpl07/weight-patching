@@ -100,3 +100,69 @@ Transcripts are for the whole clip (raw text, before normalization; " ." normali
 
 The last row shows what "speech_kept 75%" means for LoRA: speech transcripts drift (here for the better; elsewhere
 "rest" → "rust", "Ms. Giago" → "Miss Giago"), while the gate's are byte-identical to the base model's.
+
+## Data-scaling sweep: gate vs LoRA (`results/whisper_silence/sweep/*.json`, 28 runs)
+
+n practice clips, stratified by label with `patchkit.task.subset` (about 1/3 non-speech; the non-speech count is in
+parentheses), seeds 0, 1, 2 (the gate on all 300 clips is deterministic, so it has one run). The same subset feeds both
+methods. Each run is evaluated on a **reduced held-out set** to save GPU time: all 300 non-speech clips + padded[::2] (150) +
+clean[:150] + bg[::2] (150). So "kept" is over 450 utterances, and the n=300 rows differ slightly from the
+full-held-out main table. Nothing was tuned on held-out data. Max padded-dropped = the largest share of padded
+utterances whose transcript went empty, over seeds.
+
+| method | n (non-speech) | seeds | halluc % mean (min–max) | kept % mean (min–max) | max padded dropped % | KL | fit s |
+|---|---|---|---|---|---|---|---|
+| gate | 8 (3) | 3 | 9.8 (0.0–25.0) | 99.9 (99.6–100) | 0.7 | 0.005 | 2 |
+| gate | 16 (5) | 3 | 3.6 (2.7–4.7) | 100.0 (100–100) | 0 | 0.006 | 3 |
+| gate | 32 (11) | 3 | 1.7 (0.3–4.3) | 99.9 (99.8–100) | 0.7 | 0.004 | 6 |
+| gate | 64 (21) | 3 | 0.8 (0.0–2.0) | 99.9 (99.6–100) | 0.7 | 0.000 | 11 |
+| gate | 300 (100) | 1 | 0.3 | 100.0 | 0 | 0.000 | 52 |
+| lora | 8 (3) | 3 | 3.3 (0.0–9.7) | 82.8 (81.6–83.6) | 5.3 | 0.080 | 18 |
+| lora | 16 (5) | 3 | 0.3 (0.3–0.3) | 84.0 (83.1–84.7) | 2.7 | 0.074 | 13 |
+| lora | 32 (11) | 3 | 0.2 (0.0–0.3) | 85.0 (83.1–87.1) | 9.3 | 0.059 | 16 |
+| lora | 64 (21) | 3 | 0.1 (0.0–0.3) | 82.6 (82.2–83.1) | 0 | 0.110 | 26 |
+| lora | 300 (100) | 3 | 0.3 (0.3–0.3) | 77.5 (76.9–78.2) | 0 | 0.285 | 116 |
+
+Readings (the blog's "does training data beat the edit, and from how many examples?")
+- **On the failure metric, LoRA is more sample-efficient.** From 16 clips (5 non-speech) it is at 0.0–0.3% on every
+  seed. The gate needs about 64 clips to average under 1%, and reaches 0.3% with all 300. With 3 non-speech
+  clips the gate's direction is noisy (one seed 25%: environmental sounds stay under the threshold).
+- **On collateral damage the gate wins at every n.** It keeps 99.6–100% of speech transcripts byte-identical
+  (KL ≈ 0; at small n the lower threshold lets the unit fire on a handful of padded / bg positions). LoRA rewrites
+  15–23% of speech transcripts at every data size, and with fewer than 64 clips it also **drops whole padded utterances**
+  (up to 9.3% on one seed at n=32; 5.3% at n=8). It learned "long silence means ' .'", which costs speech that
+  sits inside silence. More data fixes the dropping but not the drift: at n=300 drift is largest (22.5%), because
+  more steps move it further from base.
+- Practical answer: data beats the edit at ~16 examples if you only count hallucinations. It never matches the
+  edit on "leave everything else alone".
+
+## Deviations from the old run
+
+- One recipe run (no blind agents). The gate is the old `recipe_script_any.py`, unchanged (gain 4, top-5
+  competitors, midpoint threshold, least-used unit). Its full-data result (unit 746, threshold 25.27, 1,537 entries,
+  0.3%) matches the original recipe and agents.
+- Arms dropped vs the old report: thresholds_strict, VAD + thresholds, head-ablation scan, agent sessions. Added: LoRA,
+  and the `speech_kept` metric (exact-transcript identity vs base) plus a decoder-KL guard.
+- whisper-large-v3-turbo was **not** run (no GPU time left; the orchestrator said to skip it). The `--model` flag is
+  implemented but untested on turbo.
+- GPU contention: the first `base` launch failed inside `gpu_lock.py`, because its `subprocess.call` can't resolve a
+  relative `.venv/Scripts/python.exe` on Windows; it ran ~2 h later. Commands are now wrapped as
+  `gpu_lock.py -- bash runs/ws_*.sh`.
+
+## Reproduce
+
+```
+cd weight-patching   # every GPU step under ../gpu_lock.py
+python -m tasks.whisper_silence base && python -m tasks.whisper_silence vad && python -m tasks.whisper_silence fit
+python -m tasks.whisper_silence eval --arms base,thresholds,thresholds_tuned,gate,random
+python -m tasks.whisper_silence lora && python -m tasks.whisper_silence eval --arms lora,vad
+python -m tasks.whisper_silence sweep --ns 8,16,32,64,all --seeds 0,1,2
+python -m tasks.whisper_silence audio --ids ns_sil_000,ns_noise_010,ns_env_110,ns_env_130,ns_env_113
+```
+GPU time (RTX 4070, fp32): practice capture 51 s; one full held-out arm 2–4 min (base and random are slowest: 444-token
+loops); LoRA training 2 min on 300 clips; a sweep run 1–3 min.
+
+## Exported audio (`site/audio/`, licences in `site/audio/LICENSES.md`)
+
+`ns_sil_000.wav` (digital silence, CC0), `ns_noise_010.wav` (white noise, CC0), `ns_env_110.wav` (crackling fire,
+ESC-10, CC BY 3.0), `ns_env_130.wav` (rain, ESC-10, CC0 sources), `ns_env_113.wav` (dog, ESC-10, CC0 sources).

@@ -123,8 +123,8 @@ Is "the gate beats LoRA" just a weak LoRA? We tested it three ways on the entity
    (`--theta-q 0.999`) brings the full-data sign-off gate to 2.3%, ahead of LoRA's 8.3%, with 94% of answer content kept and 46% of answers identical (LoRA: 2%). The cost: it also cut 2 of 40 replies where the user had asked for a question back. That setting was chosen after looking at a
    64-prompt subset, then checked once on the main held-out set.
    **Whisper is the exception, in LoRA's favour:** "transcribe nothing" is such an easy target that LoRA fixes it
-   from 8 clips (0.2%). But at every data size it rewrites 16–22% of *real* speech transcripts. The gate needs ~32
-   clips, and leaves ~100% of them identical.
+   from 16 clips (0.3% on every seed). But at every data size it rewrites 15–23% of *real* speech transcripts.
+   The gate needs ~64 clips to get under 1%, and leaves ~100% of them identical.
 2. **More data: LoRA wins on the headline.** Adding 1,400 more labelled practice prompts takes LoRA from 30% to
    8–12% fabrication, with the same phrasing or with varied phrasings. The gate stays at ~15% however much data it
    gets. On sign-offs (8% vs 23%) and agent injection (0% vs 2.5%), LoRA also wins
