@@ -277,7 +277,8 @@ def apply(a):
         sys.exit("submission invalid:\n  " + "\n  ".join(problems) + "\n(--force writes it anyway)")
     meta = dict(method="agent", session=fwd(sess), tag=tag, model=cfg["model"], entries_changed=total,
                 trainable_params=None, fit_seconds=secs, n_items=cfg["n_practice"], passes_used=used,
-                passes_max=cfg["passes"], tool_calls=len(log), max_changed=cfg["max_changed"], tensors=per,
+                passes_max=cfg["passes"], tool_calls=len(log),
+                gpu_wait_seconds=round(sum(r.get("gpu_wait_s") or 0 for r in log), 1), max_changed=cfg["max_changed"], tensors=per,
                 problems=problems)
     out = ROOT / "runs" / t.name / "edits"
     L.save_edit(edit, out / f"gate_{tag}.safetensors", meta)
@@ -350,6 +351,7 @@ def audit(a):
     out = dict(session=fwd(sess), task=cfg["task"], tool_calls=len(log), calls_by_kind=dict(kinds),
                passes_used=used, passes_logged=passes_logged, passes_max=cfg["passes"],
                wall_minutes=round(secs / 60, 1) if secs else None, minutes_budget=cfg["minutes"],
+               gpu_wait_minutes=round(sum(r.get("gpu_wait_s") or 0 for r in log) / 60, 1),
                entries_changed=entries, max_changed=cfg["max_changed"], tensors_edited=sorted(e),
                edits_rejected=len(rejected), n_scripts=len(scripts), scripts=scripts,
                flags=flags, issues=issues, verdict="ok" if not issues else "check issues")

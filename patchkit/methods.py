@@ -75,27 +75,39 @@ def signal(task, model, tok, items, base, layers):
                      content=int((~dec).sum()))
 
 
-def fit_gate(task, model, tok, items, base, seed=1):
-    """-> (edit, random_edit, meta). items: the practice items to fit on."""
+def fit_gate(task, model, tok, items, base, seed=1, calib=None):
+    """-> (edit, random_edit, meta). items: the practice items to fit on.
+    calib: optional label-free "ordinary text" sites (generic chat replies, see run.Ctx.calib). They count as content
+    negatives (the threshold sits above every ordinary position) and anchor the constant direction m, so neither
+    depends on how many labelled practice items there are."""
     t0 = time.time()
     Lr = layer_index(model, task.gate_layer)
     sites = collect_sites(task, tok, items, base)
     X, lab, kind = capture_sites(model, tok, sites, [Lr])
     X = X[Lr]
+    if calib:
+        Xc = capture_sites(model, tok, calib, [Lr])[0][Lr]
+    else:
+        Xc = X[:0]
     dec = torch.tensor([k == "decision" for k in kind])
     P = X[lab == 1]
-    N_dec, N_con = X[dec & (lab == 0)], X[~dec & (lab == 0)]
+    N_dec, N_con = X[dec & (lab == 0)], torch.cat([X[~dec & (lab == 0)], Xc])
     d = L.logreg_dir(P, torch.cat([N_dec, N_con]))
     sp, sn, sc = P @ d, N_dec @ d, N_con @ d
     hi = [torch.quantile(sn, .95).item()] if len(sn) else []
     hi += [sc.max().item()] if len(sc) else []
     theta = max(hi) + task.theta_margin
-    m = L.const_dir(X)
-    # least-used neuron of the layer on the practice sequences
-    seqs = list({s["seq"] for s in sites})[:200]
+    m = L.const_dir(torch.cat([X, Xc]))
+    # least-used neuron of the layer on the practice (+ calibration) sequences
+    seqs = list({s["seq"] for s in sites})[:200] + [s["seq"] for s in (calib or [])]
     unit = int(L.unit_usage(model, tok, seqs, Lr, batch=8).argmin())
     # write vector: raise the target opener(s), lower what the model would otherwise say at the positive sites
-    nxt = [t for t, l_ in zip(next_tokens(tok, sites), lab.tolist()) if l_ == 1 and t is not None]
+    # only where the base reply actually shows the failure: a model that already handles some positives correctly
+    # must not have its own correct openers suppressed
+    failed = {x["id"] for x in items if task.positive(x) and task.failed(x, base[x["id"]]["base"])}
+    site_ids = [s_["id"] for s_ in sites for _ in s_["pos"]]
+    nxt = [t for t, l_, i in zip(next_tokens(tok, sites), lab.tolist(), site_ids)
+           if l_ == 1 and t is not None and i in failed]
     tgt = target_ids(tok, task.gate_targets)
     cnt = Counter(t for t in nxt if t not in tgt)
     top = [t for t, _ in cnt.most_common(8)]
@@ -109,7 +121,7 @@ def fit_gate(task, model, tok, items, base, seed=1):
                 recall_practice=round((sp > theta).float().mean().item(), 3),
                 neg_fire_practice=round((sn > theta).float().mean().item(), 3) if len(sn) else None,
                 content_fire_practice=round((sc > theta).float().mean().item(), 5) if len(sc) else None,
-                n_pos=len(P), n_neg=len(sn), n_content=len(sc), n_items=len(items), fit_seconds=round(time.time() - t0, 1))
+                n_pos=len(P), n_neg=len(sn), n_content=len(sc), n_calib_seqs=len(calib or []), n_items=len(items), fit_seconds=round(time.time() - t0, 1))
     return edit, rnd, meta
 
 
@@ -118,7 +130,9 @@ LORA_TARGETS = r".*(language_model|model)\.layers\.\d+\.(self_attn\.(q|k|v|o)_pr
 
 
 def train_lora(task, model, tok, items, base, out_dir, seed=0, r=16, alpha=32, lr=2e-4, epochs=3, min_steps=30,
-               batch=4, max_len=768):
+               batch=4, max_len=768, replay=None, save_at=()):
+    """replay: optional label-free (chat-formatted prompt, base reply) pairs mixed in to preserve ordinary behaviour
+    (the same generic chat replies the gate uses for calibration)."""
     from peft import LoraConfig, get_peft_model
     t0 = time.time()
     torch.manual_seed(seed)
@@ -135,6 +149,11 @@ def train_lora(task, model, tok, items, base, out_dir, seed=0, r=16, alpha=32, l
         ri = tok(tgt + eot, add_special_tokens=False).input_ids
         ids = (pi + ri)[:max_len]
         data.append((ids, len(pi)))
+    n_task = len(data)
+    for p, rep in replay or []:
+        pi = tok(p, add_special_tokens=False).input_ids
+        ri = tok(rep + eot, add_special_tokens=False).input_ids
+        data.append(((pi + ri)[:max_len], len(pi)))
     cfg = LoraConfig(r=r, lora_alpha=alpha, lora_dropout=0.05, target_modules=LORA_TARGETS, task_type="CAUSAL_LM")
     pm = get_peft_model(model, cfg)
     pm.train()
@@ -168,6 +187,10 @@ def train_lora(task, model, tok, items, base, out_dir, seed=0, r=16, alpha=32, l
         torch.nn.utils.clip_grad_norm_(params, 1.0)
         opt.step(); sched.step(); opt.zero_grad(set_to_none=True)
         losses.append(out.loss.item())
+        if s + 1 in save_at:
+            pm.save_pretrained(Path(out_dir) / f"step{s + 1}")
+            (Path(out_dir) / f"step{s + 1}" / "meta.json").write_text(json.dumps(dict(
+                step=s + 1, trainable_params=sum(p.numel() for p in params), n_items=len(items))))
     pm.eval()
     if hasattr(model, "gradient_checkpointing_disable"):
         model.gradient_checkpointing_disable()
@@ -176,7 +199,7 @@ def train_lora(task, model, tok, items, base, out_dir, seed=0, r=16, alpha=32, l
     Path(out_dir).mkdir(parents=True, exist_ok=True)
     pm.save_pretrained(out_dir)
     n_train = sum(p.numel() for p in params)
-    meta = dict(n_examples=len(data), steps=steps, lr=lr, r=r, epochs=epochs, trainable_params=n_train,
+    meta = dict(n_examples=n_task, n_replay=len(data) - n_task, steps=steps, lr=lr, r=r, epochs=epochs, trainable_params=n_train,
                 loss_first=round(sum(losses[:5]) / max(1, len(losses[:5])), 4),
                 loss_last=round(sum(losses[-5:]) / max(1, len(losses[-5:])), 4),
                 fit_seconds=round(time.time() - t0, 1), n_items=len(items))

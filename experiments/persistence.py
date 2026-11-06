@@ -59,7 +59,9 @@ def encode(tok, pairs, max_len=512):
 
 @torch.no_grad()
 def quick_eval(task, model, tok, items):
-    texts = L.generate(model, tok, [task.render(tok, x) for x in items], max_new=task.max_new, batch=task.gen_batch)
+    with torch.autocast("cuda", dtype=torch.bfloat16):   # the trained layers are fp32 during the run
+        texts = L.generate(model, tok, [task.render(tok, x) for x in items], max_new=task.max_new,
+                           batch=task.gen_batch)
     m = task.score(items, texts)
     return {k: m[k] for k in task.headline}
 

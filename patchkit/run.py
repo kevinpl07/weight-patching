@@ -60,6 +60,36 @@ class Ctx:
     def base(self):
         return {x["id"]: x for x in L.read_jsonl(self.runs / "base_practice.jsonl")}
 
+    def calib(self, pairs=False):
+        """Label-free ordinary text: n_calib generic chat prompts (no_robots *train*; the KL guard uses *test*) with the
+        base model's greedy replies. Cached in runs/<task>/calib.jsonl."""
+        n = getattr(self.task, "n_calib", 100)
+        if not n:
+            return []
+        f = self.runs / "calib.jsonl"
+        if not f.exists():
+            from datasets import load_dataset
+            ds = load_dataset("HuggingFaceH4/no_robots", split="train").shuffle(seed=1)
+            ps = []
+            for r in ds:
+                if r["category"] in ("Generation", "Open QA", "Brainstorm", "Chat") and len(r["prompt"]) < 600:
+                    ps.append(L.chat(self.tok, r["prompt"]))
+                if len(ps) == n:
+                    break
+            reps = L.generate(self.model, self.tok, ps, max_new=128, batch=50, log="calib")
+            L.write_jsonl(f, [dict(prompt=p, reply=r) for p, r in zip(ps, reps)])
+        rows = L.read_jsonl(f)
+        if pairs:
+            return [(r["prompt"], r["reply"]) for r in rows]
+        out = []
+        for r in rows:
+            n_p = len(self.tok(r["prompt"], add_special_tokens=False).input_ids)
+            full = r["prompt"] + r["reply"]
+            n_f = len(self.tok(full, add_special_tokens=False).input_ids)
+            if n_f - 1 > n_p:
+                out.append(dict(seq=full, pos=list(range(n_p, n_f - 1)), label=0, kind="content"))
+        return out
+
     def practice(self, n=None, seed=0):
         return T.subset(self.items("practice"), n, seed, self.task.positive)
 
@@ -103,7 +133,7 @@ def cmd_signal(c, a):
 
 def cmd_fit(c, a):
     items = c.practice(a.n, a.seed)
-    edit, rnd, meta = M.fit_gate(c.task, c.model, c.tok, items, c.base(), seed=a.seed + 1)
+    edit, rnd, meta = M.fit_gate(c.task, c.model, c.tok, items, c.base(), seed=a.seed + 1, calib=c.calib())
     tg = tagname(a)
     L.save_edit(edit, c.runs / "edits" / f"gate{'_' + tg if tg else ''}.safetensors", meta)
     L.save_edit(rnd, c.runs / "edits" / f"random{'_' + tg if tg else ''}.safetensors", meta)
@@ -114,7 +144,8 @@ def cmd_fit(c, a):
 def cmd_lora(c, a):
     items = c.practice(a.n, a.seed)
     tg = tagname(a)
-    meta = M.train_lora(c.task, c.model, c.tok, items, c.base(), c.runs / "lora" / (tg or "full"), seed=a.seed)
+    meta = M.train_lora(c.task, c.model, c.tok, items, c.base(), c.runs / "lora" / (tg or "full"), seed=a.seed,
+                        replay=c.calib(pairs=True))
     print("lora:", json.dumps(meta))
     return meta
 
@@ -146,7 +177,7 @@ class Guards:
 
 
 @torch.no_grad()
-def eval_arm(c, arm, items, guards, write_outputs=True):
+def eval_arm(c, arm, items, guards, write_outputs=True, out_path=None):
     t, tok, model = c.task, c.tok, c.model
     arm.on(model)
     try:
@@ -156,19 +187,20 @@ def eval_arm(c, arm, items, guards, write_outputs=True):
         gen_s = time.time() - t0
         metrics = t.score(items, texts)
         mmlu = L.mmlu(model, tok, guards.mm) if guards.mm is not None and not arm.fix else None
-        kl = M.kl_arm(model, tok, arm, guards.kl_seqs, guards.kl_lens) if arm.modifies_weights else 0.0
+        kl = M.kl_arm(model, tok, arm, guards.kl_seqs, guards.kl_lens) if arm.modifies_weights else (
+            None if arm.fix else 0.0)   # prompt arm: KL vs base isn't defined on the same prompt
     finally:
         arm.off(model)
     h = t.headline
     res = dict(task=t.name, model=t.model, arm=arm.name, split=items[0]["split"], n=len(items),
                headline={h[0]: metrics.get(h[0]), h[1]: metrics.get(h[1])}, metrics=metrics,
-               guards=dict(mmlu200=mmlu, chat_kl=round(kl, 5)),
+               guards=dict(mmlu200=mmlu, chat_kl=None if kl is None else round(kl, 5)),
                cost=dict(entries_changed=arm.meta.get("entries_changed"),
                          trainable_params=arm.meta.get("trainable_params"),
                          fit_seconds=arm.meta.get("fit_seconds"), n_practice_items=arm.meta.get("n_items")),
                fit_meta=arm.meta, eval_seconds=round(gen_s, 1))
-    if write_outputs:
-        L.write_jsonl(c.res / "outputs" / f"{arm.name}.jsonl",
+    if write_outputs or out_path:
+        L.write_jsonl(out_path or c.res / "outputs" / f"{arm.name}.jsonl",
                       [dict(id=x["id"], text=s[:1500]) for x, s in zip(items, texts)])
     return res, texts
 
@@ -204,10 +236,124 @@ def cmd_sweep(c, a):
                 else:
                     cmd_lora(c, a)
                 arm = make_arm(c, meth, a.tag)
-                res, _ = eval_arm(c, arm, items, guards, write_outputs=False)
+                res, _ = eval_arm(c, arm, items, guards, out_path=out_dir / "outputs" / f.with_suffix(".jsonl").name)
                 res.update(n_practice=n or len(c.items("practice")), seed=seed)
                 f.write_text(json.dumps(res, indent=1))
                 print("SWEEP", meth, n, seed, json.dumps(res["headline"]), res["guards"], flush=True)
+
+
+def cmd_bigdata(c, a):
+    """Does MORE data beat the gate? Train gate and LoRA on practice + N extra practice items (task.extra_practice)."""
+    items = c.items("heldout")
+    guards = Guards(c, mmlu=False)
+    out_dir = c.res / "bigdata"
+    out_dir.mkdir(exist_ok=True)
+    for n_extra in [int(x) for x in a.extra.split(",")]:
+        f_items = c.runs / f"extra_{n_extra}.jsonl"
+        if not f_items.exists():
+            ex = c.task.extra_practice(c, n_extra, seed=0)
+            t, tok, model = c.task, c.tok, c.model
+            outs = L.generate(model, tok, [t.render(tok, x) for x in ex], max_new=t.max_new, batch=t.gen_batch,
+                              log="extra base")
+            pos = [i for i, x in enumerate(ex) if t.positive(x)]
+            prefix = t.forced_prefix or t.gate_targets[0]
+            forced = L.generate(model, tok, [t.render(tok, ex[i]) for i in pos], max_new=t.max_new,
+                                batch=t.gen_batch, prefix=prefix, log="extra forced") if prefix != "<eot>" else [""] * len(pos)
+            for x, o in zip(ex, outs):
+                x["_base"] = o
+            for i, fo in zip(pos, forced):
+                ex[i]["_forced"] = fo
+            L.write_jsonl(f_items, ex)
+        ex = L.read_jsonl(f_items)
+        base = c.base()
+        for x in ex:
+            base[x["id"]] = dict(id=x["id"], base=x["_base"], **({"forced": x["_forced"]} if "_forced" in x else {}))
+        prac = c.items("practice") + ex
+        n_lab = sum(c.task.positive(x) is not None for x in prac)
+        for meth in a.methods.split(","):
+            f = out_dir / f"{meth}_x{n_extra}.json"
+            if f.exists():
+                continue
+            tag = f"big_x{n_extra}"
+            if meth == "gate":
+                edit, rnd, meta = M.fit_gate(c.task, c.model, c.tok, prac, base, seed=1, calib=c.calib())
+                L.save_edit(edit, c.runs / "edits" / f"gate_{tag}.safetensors", meta)
+                L.save_edit(rnd, c.runs / "edits" / f"random_{tag}.safetensors", meta)
+            else:
+                M.train_lora(c.task, c.model, c.tok, prac, base, c.runs / "lora" / tag, seed=0,
+                             replay=c.calib(pairs=True))
+            arm = make_arm(c, meth, tag)
+            res, _ = eval_arm(c, arm, items, guards, out_path=out_dir / "outputs" / f.with_suffix(".jsonl").name)
+            res.update(n_practice=n_lab, n_extra=n_extra)
+            f.write_text(json.dumps(res, indent=1))
+            print("BIGDATA", meth, n_extra, n_lab, json.dumps(res["headline"]), res["guards"], flush=True)
+
+
+def cmd_rescore(c, a):
+    """Recompute metrics of every saved result from its saved outputs (after a scorer fix). No GPU."""
+    items = {x["id"]: x for x in c.items()}
+    n = 0
+    for f in (list(c.res.glob("*.json")) + list(c.res.glob("sweep/*.json")) + list(c.res.glob("bigdata/*.json"))
+              + list(c.res.glob("pareto/*.json"))):
+        r = json.loads(f.read_text(encoding="utf-8"))
+        if "arm" not in r:
+            continue
+        op = (c.res / "outputs" / f"{r['arm']}.jsonl") if f.parent == c.res else f.parent / "outputs" / f.with_suffix(".jsonl").name
+        if not op.exists():
+            print("no outputs for", f)
+            continue
+        rows = L.read_jsonl(op)
+        its = [items[x["id"]] for x in rows]
+        m = c.task.score(its, [x["text"] for x in rows])
+        r["metrics"] = m
+        r["headline"] = {k: m.get(k) for k in c.task.headline}
+        f.write_text(json.dumps(r, indent=1, ensure_ascii=False))
+        n += 1
+        print(f.name, json.dumps(r["headline"]))
+    print("rescored", n)
+
+
+def cmd_pareto(c, a):
+    """Fix vs side-effect trade-off: LoRA evaluated at several training checkpoints, gate at several write gains.
+    Same full practice set. -> results/<task>/pareto/{lora_step<k>,gate_gain<g>}.json"""
+    items = c.items("heldout")
+    guards = Guards(c, mmlu=False)
+    out_dir = c.res / "pareto"
+    out_dir.mkdir(exist_ok=True)
+    prac, base = c.practice(), c.base()
+    t = c.task
+    g0 = t.gate_gain
+    for g in [float(x) for x in a.gains.split(",")]:
+        f = out_dir / f"gate_gain{int(g)}.json"
+        if f.exists():
+            continue
+        t.gate_gain = g
+        edit, rnd, meta = M.fit_gate(t, c.model, c.tok, prac, base, seed=1, calib=c.calib())
+        meta["gain"] = g
+        tag = f"par_gain{int(g)}"
+        L.save_edit(edit, c.runs / "edits" / f"gate_{tag}.safetensors", meta)
+        L.save_edit(rnd, c.runs / "edits" / f"random_{tag}.safetensors", meta)
+        res, _ = eval_arm(c, make_arm(c, "gate", tag), items, guards, out_path=out_dir / "outputs" / f"{f.stem}.jsonl")
+        res.update(knob="gain", value=g)
+        f.write_text(json.dumps(res, indent=1))
+        print("PARETO gate", g, json.dumps(res["headline"]), res["guards"], flush=True)
+    t.gate_gain = g0
+    steps = [int(x) for x in a.steps.split(",")]
+    d = c.runs / "lora" / "pareto"
+    if not all((d / f"step{k}").exists() for k in steps):
+        M.train_lora(t, c.model, c.tok, prac, base, d, seed=0, replay=c.calib(pairs=True), save_at=set(steps))
+    for k in steps:
+        f = out_dir / f"lora_step{k}.json"
+        if f.exists():
+            continue
+        p = d / f"step{k}"
+        if not p.exists():
+            continue
+        arm = M.Arm(f"lora_step{k}", lora=str(p), meta=json.loads((p / "meta.json").read_text()))
+        res, _ = eval_arm(c, arm, items, guards, out_path=out_dir / "outputs" / f"{f.stem}.jsonl")
+        res.update(knob="step", value=k)
+        f.write_text(json.dumps(res, indent=1))
+        print("PARETO lora", k, json.dumps(res["headline"]), res["guards"], flush=True)
 
 
 def cmd_all(c, a):
@@ -224,7 +370,7 @@ def cmd_all(c, a):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["data", "base", "signal", "fit", "lora", "eval", "sweep", "all"])
+    ap.add_argument("cmd", choices=["data", "base", "signal", "fit", "lora", "eval", "sweep", "bigdata", "rescore", "pareto", "all"])
     ap.add_argument("task")
     ap.add_argument("--n", type=int)
     ap.add_argument("--seed", type=int, default=0)
@@ -235,6 +381,9 @@ def main():
     ap.add_argument("--ns", default="8,16,32,64,128,all")
     ap.add_argument("--seeds", default="0,1,2")
     ap.add_argument("--methods", default="gate,lora")
+    ap.add_argument("--gains", default="25,50,100,200,400")
+    ap.add_argument("--steps", default="10,25,50,100,200,300")
+    ap.add_argument("--extra", default="1000,3000", help="bigdata: extra practice items to add")
     ap.add_argument("--model", help="run the task on another model; results go to <task>__<model basename>")
     a = ap.parse_args()
     task = T.get(a.task)

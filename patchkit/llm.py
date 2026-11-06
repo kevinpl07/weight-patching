@@ -335,5 +335,10 @@ def read_jsonl(path):
     return [json.loads(x) for x in open(path, encoding="utf-8")]
 
 
+def norm_quotes(s):
+    """Curly quotes/apostrophes -> ASCII. Models emit both; every regex scorer should see one form."""
+    return s.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
+
+
 def norm_text(s):
     return re.sub(r"\s+", " ", s.lower()).strip()

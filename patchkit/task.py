@@ -51,6 +51,7 @@ class Task:
     headline = ("failure", "kept")
     headline_labels = ("failure rate", "good behaviour kept")
     content_sites_per_item = True
+    n_calib = 100               # label-free generic chat replies: gate threshold/bias calibration + LoRA replay
 
     # ------------------------------------------------------------ data
     def build_items(self, ctx):
@@ -87,6 +88,11 @@ class Task:
             if n - 1 > n_p:
                 sites.append(dict(seq=full, pos=list(range(n_p, n - 1)), label=0, kind="content"))
         return sites
+
+    def failed(self, item, base_text):
+        """Does the base reply to a positive item actually show the failure? Used to pick which tokens the gate
+        suppresses. Default: assume it does."""
+        return True
 
     # ------------------------------------------------------------ LoRA baseline
     def sft_target(self, item, base_text, forced_text):

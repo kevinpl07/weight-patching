@@ -120,6 +120,10 @@ class Signoff(Task):
     probe_layers = (17, 21, 23, 24, 25)   # the original run's candidate layers
     gate_layer = -1          # layer 25, as in the original run
     gate_targets = ["<eot>"]
+    # No label-free calibration / LoRA replay for this task: replay targets are 128-token greedy replies cut
+    # mid-answer with <end_of_turn> appended, which would teach LoRA to end turns early -- the very behaviour this
+    # task measures. The original run had no calibration set either. See NOTES.md.
+    n_calib = 0
     headline = ("signoff", "content_kept")
     headline_labels = ("held-out answers ending in a sign-off", "answer content kept vs base (chars)")
 

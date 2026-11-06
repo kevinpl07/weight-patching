@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Neuron, No Training</title>
+<meta name="description" content="What editing an LLM's weights directly is actually good for: a one-neuron patch fixes real failures in frozen models, but doesn't survive training, and data still wins or ties.">
+<meta property="og:title" content="One Neuron, No Training: what editing an LLM's weights is actually good for">
+<meta property="og:description" content="A single rewritten neuron cuts Gemma's invented bios from 98% to 17% with ~26x less side effect than LoRA. Then training erases it. Interactive write-up with code.">
+<meta name="theme-color" content="#f9f9f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='%230b9467'/%3E%3Ccircle cx='16' cy='16' r='4.5' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="col">
+    <div class="kicker">Open research release &middot; weight patching</div>
+    <h1>One Neuron, No Training</h1>
+    <p class="dek">What editing an LLM&rsquo;s weights directly is actually good for &mdash; and where it falls apart.</p>
+    <div class="byline"><span data-k="site.date" data-f="text">November 2026</span> &middot; code and every number: <a data-repo href="#">GitHub repo</a></div>
+  </div>
+  <div class="wide">
+    <div class="tldr" aria-label="Key results">
+      <div>
+        <span class="big"><span data-k="entity.arms.gate.entries" data-f="int"></span></span>
+        <span class="lbl">weights changed, out of <span data-k="entity.meta.params" data-f="billions"></span> in Gemma-3-4B. One neuron.</span>
+      </div>
+      <div>
+        <span class="big"><span data-k="entity.arms.base.fail" data-f="pct0"></span><span class="arrow">&rarr;</span><span class="accent" data-k="entity.arms.gate.fail" data-f="pct0"></span></span>
+        <span class="lbl">of questions about made-up people, films and books answered with an invented bio</span>
+      </div>
+      <div>
+        <span class="big"><span data-k="entity.derived.kl_ratio_lora_gate" data-f="x0"></span> less</span>
+        <span class="lbl">drift on ordinary chat than a LoRA fine-tune trained on the same prompts</span>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <nav class="toc" aria-label="Sections">
+      <a href="#reading">1 Reading is real</a><a href="#writing">2 Writing doesn&rsquo;t survive</a><a href="#patch">3 As a patch it works</a><a href="#data">4 Data still wins</a><a href="#persist">5 Persistence</a><a href="#limits">6 Where it fails</a><a href="#verdict">7 Who&rsquo;s right?</a><a href="#run">Run your own</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="col">
+  <p>In November, <em>Sparks of Weight-Space Programming</em> showed a frontier LLM reading the raw weights of a neural network and writing new values into them: no optimizer, no gradient descent, just reasoning about matrices. The internet split in two within a day.</p>
+
+  <div class="debate">
+    <div class="card"><span class="tag">The doom camp</span><q>This is the beginning of the end.</q><p>Models that can rewrite weights can rewrite themselves; recursive self-improvement just skipped a step.</p></div>
+    <div class="card"><span class="tag">The nothing-burger camp</span><q>This is a nothing burger.</q><p>It&rsquo;s steering and ablation in a sandbox; the headline result fixes a repetition bug that RL would fix anyway.</p></div>
+  </div>
+
+  <p>We spent a week running experiments on exactly this question:</p>
+  <ul>
+    <li><strong><span data-k="site.n_sessions" data-f="int"></span> agent sessions, 11 experiments, 9 models</strong>, from a 37k-parameter toy to Whisper and 4B chat models.</li>
+    <li><strong>The editing agents are Claude Opus.</strong></li>
+    <li><strong>Then we rebuilt the useful part as a small open framework</strong> and reran it against the baseline both camps forget: ordinary fine-tuning.</li>
+  </ul>
+  <p><strong>Our answer: both camps are wrong, in instructive ways.</strong></p>
+  <div class="answer">
+    <p><strong>Weight editing is a patch, not a superpower.</strong> If you can say precisely what is wrong, a direct edit of a single neuron can fix a real failure in a frozen model, with fewer side effects than a prompt and often fewer than fine-tuning. But the edit doesn&rsquo;t survive training that pushes against it, it only works where the model already &ldquo;knows&rdquo; the answer, and given enough examples, training data matches or beats it.</p>
+  </div>
+</div>
+
+<!-- ============================================================ 1 -->
+<section id="reading">
+<div class="col">
+  <h2><span class="num">1</span>Reading is real</h2>
+  <p>Across every experiment, the agent correctly found what the network was doing, without being told where to look.</p>
+</div>
+<div class="wide">
+  <div class="mech-grid" id="mech-grid"></div>
+</div>
+<div class="col">
+  <p>This is the part the &ldquo;nothing burger&rdquo; camp undersells. Blind sessions, given nothing but the weights and a few examples, converged on the same mechanism <strong>3 times out of 3</strong> (Whisper, language mixing, ResNet).</p>
+</div>
+</section>
+
+<!-- ============================================================ 2 -->
+<section id="writing">
+<div class="col">
+  <h2><span class="num">2</span>Writing doesn&rsquo;t survive training</h2>
+  <p>This is the part the doom camp gets wrong. We asked the obvious next question: <strong>if an LLM edits a network and training then continues, what&rsquo;s left of the edit?</strong></p>
+</div>
+<div class="wide">
+  <figure class="fig" id="fig-grok">
+    <p class="takeaway">The edit is a loan: ahead early, behind for good.</p>
+    <p class="sub">Grokking a+b mod 97 (2-layer MLP). Held-out accuracy after the agent&rsquo;s edit, vs plain training and same-size random edits. Seed 0.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Zoom">
+        <button type="button" data-zoom="12000">First 12k steps</button>
+        <button type="button" data-zoom="60000" aria-pressed="true">All 60k steps</button>
+      </div>
+    </div>
+    <div class="legend" id="grok-legend"></div>
+    <div class="chart" id="grok-chart"></div>
+    <p class="howto"><b>How to read this:</b> each line is one training run continuing from the same checkpoint. Higher is better; 95% counts as &ldquo;solved&rdquo; (plain training stops there). Hover or tap for values.</p>
+  </figure>
+</div>
+<div class="col">
+  <div class="tbl-wrap">
+    <table class="t" id="tracka">
+      <thead><tr><th>Experiment</th><th>What the edit gave</th><th>What was left after more training</th><th class="n">Peak lead &rarr; at end</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p>The mechanism is mundane:</p>
+  <div class="rules">
+    <div class="card"><b>Gradient descent rebuilds</b>whatever the loss wants.</div>
+    <div class="card"><b>AdamW moves</b>every weight at full speed.</div>
+    <div class="card"><b>Weight decay erases</b>what no gradient defends.</div>
+    <div class="card"><b>A dead neuron</b>stays dead.</div>
+  </div>
+  <p>The result is a ratchet: <strong>the benefit of an edit fades, the damage stays.</strong> An edit lasts only if it moves the network somewhere the optimizer was going anyway. That makes it, at best, a head start.</p>
+  <p>A model that edits its own weights mid-training would be fighting its own optimizer, and the optimizer wins.</p>
+</div>
+</section>
+
+<!-- ============================================================ 3 -->
+<section id="patch">
+<div class="col">
+  <h2><span class="num">3</span>But as a patch on a frozen model, it works</h2>
+  <p>So we removed the optimizer. Most deployed models are frozen: nobody is training them while you use them. And they have specific, annoying, observable failures.</p>
+  <p><strong>The recipe</strong> (the agents converged on it independently for Whisper; we generalised it):</p>
+</div>
+<div class="wide">
+  <figure class="fig diagram" id="fig-neuron">
+    <p class="takeaway">One neuron reads &ldquo;this name is made up&rdquo; and writes &ldquo;Sorry&rdquo;.</p>
+    <p class="sub">Step through what the patched neuron does on one prompt. Switch the name to see it stay silent.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Prompt">
+        <button type="button" data-case="fake" aria-pressed="true">Made-up name</button>
+        <button type="button" data-case="real">Real name</button>
+      </div>
+      <div class="seg steps" role="group" aria-label="Step">
+        <button type="button" data-step="1">1 Read</button>
+        <button type="button" data-step="2">2 Fire?</button>
+        <button type="button" data-step="3">3 Write</button>
+      </div>
+      <button type="button" class="btn" id="neuron-play">&#9654; Play</button>
+    </div>
+    <div class="chart" id="neuron-chart"></div>
+    <p class="howto"><b>How to read this:</b> the neuron&rsquo;s input weights are the probe direction <i>d</i>; it multiplies them with the model&rsquo;s activations <i>x</i> at the last prompt token. Only if <i>d&middot;x</i> clears the threshold &theta; does it fire, and its output weights then raise the logit of &ldquo;Sorry&rdquo; (and lower &ldquo;Okay&rdquo;). Scores shown are illustrative; the real distribution is in the next figure. Layer <span data-k="entity.gate_meta.layer" data-f="int"></span>, unit <span data-k="entity.gate_meta.unit" data-f="int"></span>.</p>
+  </figure>
+</div>
+<div class="col">
+  <ol class="recipe">
+    <li><strong>Find the signal.</strong> A linear probe on the model&rsquo;s own activations at the decision point (&ldquo;this is the bad case&rdquo;). In every success, the model already knew: probe AUC &asymp; <span data-k="entity.signal.best_auc" data-f="f2floor"></span>.</li>
+    <li><strong>Find the write target.</strong> Force a few candidate first tokens and keep the one after which the model finishes the job by itself. &ldquo;Sorry&rdquo; &rarr; &ldquo;&hellip;there doesn&rsquo;t appear to be a widely known&hellip;&rdquo;.</li>
+    <li><strong>Rewrite one neuron.</strong> The least-used neuron in one MLP layer becomes a detector:
+      <ul>
+        <li>it reads the probe direction;</li>
+        <li>it fires only above a threshold no ordinary token reaches;</li>
+        <li>when it fires, it pushes the logits toward the target.</li>
+      </ul>
+      <strong>About <span data-k="entity.arms.gate.entries" data-f="int"></span> numbers out of <span data-k="entity.meta.params" data-f="billions"></span>.</strong>
+    </li>
+  </ol>
+</div>
+<div class="wide">
+  <figure class="fig" id="fig-anatomy">
+    <p class="takeaway">The model already knows: made-up names score far above anything else it reads.</p>
+    <p class="sub">The gate neuron&rsquo;s score on held-out prompts, relative to its threshold. Made-up entities vs real ones it knows vs ordinary tokens in normal replies.</p>
+    <div class="controls" id="anatomy-tasks"></div>
+    <div class="legend" id="anatomy-legend"></div>
+    <div class="chart" id="anatomy-chart"></div>
+    <p class="howto"><b>How to read this:</b> each curve is a histogram (share of its group per bin). The neuron fires only to the right of the threshold line, so anything left of it is untouched.</p>
+  </figure>
+</div>
+
+<div class="col">
+  <h3 id="scoreboard">The scoreboard</h3>
+  <p>Every fix gets the same practice data and is scored on the same held-out set: new names <em>and</em> new phrasings.</p>
+</div>
+<div class="wide">
+  <figure class="fig" id="fig-score">
+    <p class="takeaway" id="score-takeaway">One neuron fixes most of the failure; the random neuron of the same size fixes nothing.</p>
+    <p class="sub" id="score-sub"></p>
+    <div class="controls"><div class="seg" role="group" aria-label="Task" id="score-tasks"></div></div>
+    <div class="panels" id="score-panels"></div>
+    <p class="howto"><b>How to read this:</b> left, how often the failure still happens (lower is better). Then what else changed: the &ldquo;kept&rdquo; behaviour that must survive (higher is better), drift on ordinary chat (mean per-token KL from the base model on 60 normal replies, log scale, lower is better), and how many weights were touched. Hover a row for details.</p>
+  </figure>
+  <div class="tbl-wrap">
+    <table class="t" id="score-table">
+      <caption class="sr">Failure rate per task and fix (held-out, %)</caption>
+      <thead></thead><tbody></tbody>
+    </table>
+  </div>
+</div>
+<div class="col">
+  <p><strong>What else did each fix break?</strong></p>
+  <ul>
+    <li><strong>The prompt is blunt.</strong> &ldquo;If you don&rsquo;t recognise someone, say so&rdquo; cuts the fabrication to <span data-k="entity.arms.prompt.fail" data-f="pct0"></span>, and also makes Gemma deny knowing Chance the Rapper. Real-entity facts kept drop from <span data-k="entity.arms.base.kept" data-f="pct0"></span> to <span data-k="entity.arms.prompt.kept" data-f="pct0"></span>.</li>
+    <li><strong>The gate is surgical.</strong> It fires on <span data-k="entity.derived.fired_fail" data-f="int"></span> of <span data-k="entity.derived.n_fail" data-f="int"></span> made-up names. Its KL on ordinary chat is <span data-k="entity.arms.gate.kl" data-f="kl"></span>, about <span data-k="entity.derived.kl_ratio_lora_gate" data-f="x0"></span> less than the LoRA fine-tune trained on the same prompts (<span data-k="entity.arms.lora.kl" data-f="kl2"></span>).</li>
+    <li><strong>The random neuron does nothing useful.</strong> It&rsquo;s the same size of change in random directions (<span data-k="entity.arms.random.fail" data-f="pct0"></span> still fabricated), so the effect isn&rsquo;t &ldquo;any perturbation&rdquo;.</li>
+  </ul>
+</div>
+<div class="wide">
+  <figure class="fig" id="fig-examples">
+    <p class="takeaway">Same prompt, four fixes: read the actual replies.</p>
+    <p class="sub">Held-out items, picked automatically: cases the gate fixes, one where the prompt breaks a real answer, and one the gate misses. Replies are verbatim (greedy decoding, cut at the generation limit).</p>
+    <div class="controls"><div class="seg" role="group" aria-label="Task" id="ex-tasks"></div></div>
+    <div class="ex-grid" id="ex-grid"></div>
+    <p class="howto"><b>How to read this:</b> tabs switch between the unmodified model, the system-prompt fix, the one-neuron gate and the LoRA fine-tune. &#10003; / &#10007; is the task&rsquo;s own scorer (regex), applied to that reply.</p>
+  </figure>
+</div>
+</section>
+
+<!-- ============================================================ 4 -->
+<section id="data">
+<div class="col">
+  <h2><span class="num">4</span>Training data still wins (or ties)</h2>
+  <p>The fair competitor to an edit isn&rsquo;t a prompt; it&rsquo;s a small fine-tune on the same examples. So every task also gets a LoRA trained on exactly the practice prompts the gate saw, with targets the model wrote itself.</p>
+</div>
+<div class="wide">
+  <figure class="fig" id="fig-sweep">
+    <p class="takeaway" id="sweep-takeaway">How many examples does it take for fine-tuning to catch the edit?</p>
+    <p class="sub">Gate vs LoRA refit on stratified subsets of the practice data. Lines are the mean over 3 seeds; bands span min&ndash;max.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Task" id="sweep-tasks"></div>
+      <div class="seg" role="group" aria-label="Metric" id="sweep-metric">
+        <button type="button" data-m="fail" aria-pressed="true">Failure</button>
+        <button type="button" data-m="kept">Kept</button>
+        <button type="button" data-m="kl">Chat KL</button>
+      </div>
+    </div>
+    <div class="legend" id="sweep-legend"></div>
+    <div class="chart" id="sweep-chart"></div>
+    <p class="howto"><b>How to read this:</b> x is the number of practice examples each fix was built from (log scale). For failure and KL lower is better; for kept higher is better. Grey lines are the unmodified model and the system prompt, which use no examples.</p>
+  </figure>
+</div>
+<div class="col">
+  <p id="sweep-text">On <span data-k="calc.sw.task_short" data-f="text"></span>: at n &asymp; <span data-k="calc.sw.match_n" data-f="int"></span> practice examples LoRA matches the gate; with all the data it reaches <span data-k="calc.sw.all_lora" data-f="pct0"></span> vs the gate&rsquo;s <span data-k="calc.sw.all_gate" data-f="pct0"></span>. The gate&rsquo;s side effects stay <span data-k="calc.sw.kl_ratio" data-f="x0"></span> lower across the sweep, and it gets within 5 points of its full-data result from n &asymp; <span data-k="calc.sw.gate_enough_n" data-f="int"></span>.</p>
+  <p>This matches the earlier ResNet experiment: there, the agents&rsquo; edit beat naive fine-tuning, but a standard method (DFR, balanced last-layer retraining with ~40 labelled photos per class) passed the bar where the edit didn&rsquo;t.</p>
+</div>
+</section>
+
+<!-- ============================================================ 5 -->
+<section id="persist">
+<div class="col">
+  <h2><span class="num">5</span>Does the patch survive more training?</h2>
+</div>
+<div class="wide">
+  <figure class="fig" id="fig-persist">
+    <p class="takeaway" id="persist-takeaway">Does more training erase the patch?</p>
+    <p class="sub">Keep fine-tuning the last layers (which hold the gate) after patching. Failure rate on held-out prompts as training goes on.</p>
+    <div class="controls"><div class="seg" role="group" aria-label="Task" id="persist-tasks"></div></div>
+    <div class="legend" id="persist-legend"></div>
+    <div class="chart" id="persist-chart"></div>
+    <p class="howto"><b>How to read this:</b> &ldquo;chat&rdquo; = ordinary instruction data that says nothing about the failure; &ldquo;conflict&rdquo; = the same data mixed 1:1 with the model&rsquo;s own failing replies. Lower is better.</p>
+  </figure>
+</div>
+<div class="col">
+  <p>Unrelated fine-tuning <span data-k="calc.pe.chat_verdict" data-f="text"></span> the patch (<span data-k="calc.pe.chat_start" data-f="pct0"></span> &rarr; <span data-k="calc.pe.chat_end" data-f="pct0"></span> after <span data-k="calc.pe.steps" data-f="int"></span> steps); training that rewards the failure erases it within <span data-k="calc.pe.conflict_steps" data-f="int"></span> steps. Same lesson as section 2, from the other side.</p>
+</div>
+</section>
+
+<!-- ============================================================ 6 -->
+<section id="limits">
+<div class="col">
+  <h2><span class="num">6</span>Where it doesn&rsquo;t work</h2>
+  <div class="fails">
+    <div class="card"><h4>No signal, no gate.</h4><p>Gemma caves 80% of the time when asked &ldquo;Are you sure?&rdquo;. But every reply, caving or not, starts with the same ritual apology, and its sense of &ldquo;I was right&rdquo; is weak (probe AUC &le; 0.70). There&rsquo;s nothing to route.</p></div>
+    <div class="card"><h4>No failure, no gate.</h4><p>Gemma-3-4B obeys injected <em>words</em> but almost never injected <em>tool calls</em> (1.7%). Nothing to fix.</p></div>
+    <div class="card"><h4>Entangled behaviour.</h4><p>Phi-3&rsquo;s over-refusal is the same refusal direction firing more weakly. Small edits halve false refusals but cost 5&ndash;10 points of legitimate refusals. They&rsquo;re still far more selective than abliteration (+16 to +33 points at matched false-refusal), but they don&rsquo;t meet the bar.</p></div>
+    <div class="card"><h4>Generalisation follows variety.</h4><p>An injection gate fit on 3 attack goals learned &ldquo;about to say BANANA42&rdquo;; fit on 15 goals it blocked 43% of unseen ones.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================ 7 -->
+<section id="verdict">
+<div class="col">
+  <h2><span class="num">7</span>So who&rsquo;s right?</h2>
+  <div class="verdict">
+    <div class="card">
+      <h4>Doom camp</h4>
+      <p class="row right"><b>Right:</b> models really can read weights. They found every mechanism we planted or stumbled on.</p>
+      <p class="row wrong"><b>Wrong:</b> writing is a loan the optimizer collects, and a patch only works where the model already computes the right answer. That isn&rsquo;t self-improvement; it&rsquo;s rerouting.</p>
+    </div>
+    <div class="card">
+      <h4>Nothing-burger camp</h4>
+      <p class="row right"><b>Right:</b> much of it is classic interpretability, steering and ablation.</p>
+      <p class="row wrong"><b>Wrong:</b> &ldquo;classic&rdquo; doesn&rsquo;t mean useless. A single-neuron patch, found with an afternoon&rsquo;s work or a blind agent session, fixed four real failures with near-zero collateral damage. It&rsquo;s auditable: you can say exactly when it fires and what it writes. And it ships as <span data-k="entity.arms.gate.entries" data-f="int"></span> numbers in a checkpoint, not a prompt that can get dropped or diluted.</p>
+    </div>
+  </div>
+  <h3>What we&rsquo;d actually do</h3>
+  <ul class="decide">
+    <li><b>A narrow, visible failure, a frozen model, little data:</b> try the gate. Check the signal first; it takes minutes.</li>
+    <li><b>Plenty of examples and the ability to fine-tune:</b> use them. Data generalises further.</li>
+    <li><b>Never</b> expect a hand-written edit to survive training that disagrees with it.</li>
+  </ul>
+</div>
+</section>
+
+<!-- ============================================================ run -->
+<section id="run">
+<div class="col">
+  <h2>Run your own</h2>
+  <p>A task is one file: a model, an observable failure, the data to see it, and a scorer. Everything else (base outputs, probe, gate, matched random edit, LoRA baseline, guards, report) is shared.</p>
+<pre class="code"><span class="c"># one 24 GB GPU, about an hour per task</span>
+pip install -r requirements.txt
+python -m patchkit.run all entity     <span class="c"># data → base → signal → gate + random → LoRA → eval</span>
+python -m patchkit.run sweep entity   <span class="c"># gate vs LoRA as practice data grows</span>
+python -m patchkit.report             <span class="c"># results/SUMMARY.md + site/data/results.json</span>
+
+<span class="c"># any task on another model</span>
+python -m patchkit.run all entity --model Qwen/Qwen3-4B-Instruct-2507</pre>
+  <p>Add a failure of your own: <a data-repo-path="docs/ADDING_A_TASK.md" href="#">docs/ADDING_A_TASK.md</a> (one file per failure) &middot; the rules every task follows: <a data-repo-path="docs/PROTOCOL.md" href="#">docs/PROTOCOL.md</a>.</p>
+  <details class="more"><summary>The gate in 30 seconds</summary>
+<pre class="code">read   : the probe direction d at layer L's MLP input      (gate_proj row of the least-used neuron)
+fire   : only above a threshold no ordinary token reaches   (set on practice data)
+write  : push the logits toward an opener after which the model finishes the job itself, e.g. "Sorry"
+                                                            (down_proj column)</pre>
+  <p>That&rsquo;s about 3 &times; d_model numbers. Nothing is trained; the probe is fit on a few hundred practice prompts. Hyper-parameters (gain, g, k, margin) and the LoRA recipe are fixed across tasks and never tuned on held-out data.</p>
+  </details>
+</div>
+</section>
+
+<section id="caveats">
+<div class="col">
+  <h2>Caveats</h2>
+  <ul class="caveats">
+    <li><strong>Thin statistics.</strong> Greedy decoding, one sample per prompt, held-out sets of a few hundred items. Effects of a few points are noise.</li>
+    <li><strong>Rough scoring.</strong> It&rsquo;s regex-based and spot-checked by reading, with no human or LLM judge.</li>
+    <li><strong>Small models.</strong> 1B&ndash;4B models, one per task, plus one transfer run.</li>
+    <li><strong>No adaptive attacker</strong> against the injection gate.</li>
+    <li><strong>One agent model</strong> for the editing sessions.</li>
+  </ul>
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="col">
+    <div class="links">
+      <a data-repo href="#">Code &amp; data (GitHub)</a>
+      <a data-repo-path="results/SUMMARY.md" href="#">Results summary</a>
+      <a data-repo-path="docs/PROTOCOL.md" href="#">Protocol</a>
+      <a data-repo-path="archive" href="#">Archive: earlier experiments, transcripts, reports</a>
+      <a href="data/blog.json">Page data (JSON)</a>
+    </div>
+    <div>Every number on this page is read from <code>data/blog.json</code>, built from <code>results/</code> by <code>site/build_data.py</code>. Data built <span data-k="generated" data-f="text"></span>.</div>
+  </div>
+</footer>
+
+<div class="tip" id="tip" role="tooltip"></div>
+<script src="app.js"></script>
+</body>
+</html>

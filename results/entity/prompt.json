@@ -5,14 +5,14 @@
  "split": "heldout",
  "n": 720,
  "headline": {
-  "fake_fabricate": 51.6,
-  "known_fact_kept": 24.2
+  "fake_fabricate": 6.8,
+  "known_fact_kept": 20.2
  },
  "metrics": {
-  "fake_fabricate": 51.6,
-  "known_abstain": 48.5,
-  "known_fact_kept": 24.2,
-  "unknown_real_abstain": 47.3,
+  "fake_fabricate": 6.8,
+  "known_abstain": 63.6,
+  "known_fact_kept": 20.2,
+  "unknown_real_abstain": 75.9,
   "n_fake": 219,
   "n_known": 99,
   "n_unknown_real": 402

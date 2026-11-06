@@ -466,7 +466,9 @@ def _gpu(kind, n_passes, edited):
     from gpu_lock import gpu
     m = _model()
     _check(n_passes, kind)
+    t_wait = time.time()
     with gpu(f"agent {SESSION.name} {kind}"):
+        _S["wait_s"] = round(time.time() - t_wait, 1)
         _spend(n_passes, kind)
         orig = {}
         try:
@@ -514,7 +516,7 @@ def generate(inputs, max_new=None, edited=True, prefix=None):
                           prefix=prefix)
     res = [dict(input=x["key"], reply=o) for x, o in zip(xs, outs)]
     _log("generate", n_inputs=len(xs), inputs=[x["key"] for x in xs][:64], max_new=max_new, edited=edited,
-         prefix=prefix, passes=n, seconds=round(time.time() - t0, 1), edit_entries=_count(_load_sparse()))
+         prefix=prefix, passes=n, seconds=round(time.time() - t0, 1), gpu_wait_s=_S.get("wait_s"), edit_entries=_count(_load_sparse()))
     return res
 
 
@@ -636,7 +638,7 @@ def activations(inputs, layers, positions="last_prompt", kinds=("resid",), edite
     out["rows"], out["prompt_len"] = rows, plens
     _log("activations", n_inputs=len(xs), inputs=[x["key"] for x in xs][:64], layers=layers, kinds=kinds,
          positions=positions if isinstance(positions, str) else "custom", rows=n_rows, edited=edited, passes=n,
-         seconds=round(time.time() - t0, 1))
+         seconds=round(time.time() - t0, 1), gpu_wait_s=_S.get("wait_s"))
     return out
 
 
@@ -693,7 +695,7 @@ def logit_lens(inputs, layers=None, position="last_prompt", k=10, watch=(), edit
             for h in hs:
                 h.remove()
     _log("logit_lens", n_inputs=len(xs), inputs=[x["key"] for x in xs][:64], layers=layers, watch=list(watch),
-         edited=edited, passes=n, seconds=round(time.time() - t0, 1))
+         edited=edited, passes=n, seconds=round(time.time() - t0, 1), gpu_wait_s=_S.get("wait_s"))
     return res
 
 

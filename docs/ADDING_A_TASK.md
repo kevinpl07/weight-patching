@@ -35,6 +35,9 @@ Rules of thumb that held across all our experiments:
 - `probe_sites(tok, item, base_text)` if the decision isn't at the reply's first token. The sign-off task, for
   example, reads at every reply position. Return `dict(seq, pos=[...], label, kind="decision"|"content")`.
   "content" sites are ordinary positions the gate must stay silent on; the threshold is set above all of them.
+- `failed(item, base_text)`: does the base reply to a positive item actually show the failure? The gate suppresses
+  only what the model says when it fails. Without this, a model that already handles most cases correctly gets its
+  own correct openers suppressed (we hit exactly this on Qwen3-4B, which mostly abstains already).
 - `sft_target(item, base_text, forced_text)` if the LoRA baseline needs other targets. The default gives the same
   information the gate gets: the label plus the target opener.
 

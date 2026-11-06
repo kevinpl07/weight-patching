@@ -1,0 +1,32 @@
+{
+ "task": "entity__Qwen3-4B-Instruct-2507",
+ "model": "Qwen/Qwen3-4B-Instruct-2507",
+ "arm": "base",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 13.7,
+  "known_fact_kept": 55.9
+ },
+ "metrics": {
+  "fake_fabricate": 13.7,
+  "known_abstain": 28.0,
+  "known_fact_kept": 55.9,
+  "unknown_real_abstain": 50.9,
+  "n_fake": 219,
+  "n_known": 118,
+  "n_unknown_real": 383
+ },
+ "guards": {
+  "mmlu200": 72.5,
+  "chat_kl": 0.0
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": null,
+  "fit_seconds": null,
+  "n_practice_items": null
+ },
+ "fit_meta": {},
+ "eval_seconds": 96.3
+}

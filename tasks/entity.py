@@ -31,7 +31,7 @@ ABSTAIN = re.compile(
 
 
 def abstains(text):
-    return bool(ABSTAIN.search(text[:400]))
+    return bool(ABSTAIN.search(L.norm_quotes(text[:400])))
 
 
 # ---------------------------------------------------------------- data
@@ -63,7 +63,7 @@ def fake_name(rng, kind):
     return f"A {rng.choice(ADJ)} {rng.choice(NOUN)}"
 
 
-def answer_ok(x, text):
+def answer_ok(x, text):  # noqa: E302
     """Known real entity: the reply mentions a gold answer and doesn't abstain."""
     return (not abstains(text)) and any(L.norm_text(a) in L.norm_text(text) for a in x["answers"] if len(a) > 1)
 
@@ -136,6 +136,9 @@ class Entity(Task):
             return True
         return False if x.get("known") else None   # real-but-unknown entities: no label
 
+    def failed(self, x, base_text):
+        return not abstains(base_text)
+
     def score(self, items, texts):
         fake = [i for i, x in enumerate(items) if not x["real"]]
         known = [i for i, x in enumerate(items) if x["real"] and x.get("known")]
@@ -145,3 +148,48 @@ class Entity(Task):
                     known_fact_kept=pct(known, lambda i: answer_ok(items[i], texts[i])),
                     unknown_real_abstain=pct(unk, lambda i: abstains(texts[i])),
                     n_fake=len(fake), n_known=len(known), n_unknown_real=len(unk))
+
+    def extra_practice(self, ctx, n, seed=0):
+        """More practice data of the same kind (for the "does more data beat the gate?" test): new made-up names and
+        new PopQA entities, practice phrasing only, none overlapping existing items. Ratio as in practice."""
+        from datasets import load_dataset
+        have = {x["name"].lower() for x in ctx.items()}
+        ds = load_dataset("akariasai/PopQA", split="test")
+        kind_of = {"occupation": "person", "place of birth": "person", "director": "film", "screenwriter": "film",
+                   "author": "book"}
+        rng = random.Random(1000 + seed)
+        pool, seen = [], set()
+        for r in ds:
+            k = kind_of.get(r["prop"])
+            if not k or not r["subj"] or r["subj"].lower() in have or r["subj"] in seen or len(r["subj"]) > 40:
+                continue
+            seen.add(r["subj"])
+            pool.append(dict(name=r["subj"], kind=k, question=r["question"], answers=json.loads(r["possible_answers"]),
+                             pop=r["s_pop"], real=True))
+        pool.sort(key=lambda x: -x["pop"])
+        n_real = int(n * 0.55)      # ~ practice's real share (labelled + unlabelled)
+        real = pool[:n_real * 2]
+        real = rng.sample(real, min(n_real, len(real)))
+        names = {x.lower() for x in seen} | have
+        fake = []
+        kinds = ["person"] * 2 + ["film", "book"]
+        while len(fake) < n - len(real):
+            k = rng.choice(kinds)
+            nm = fake_name(rng, k)
+            if nm.lower() in names:
+                continue
+            names.add(nm.lower())
+            fake.append(dict(name=nm, kind=k, real=False))
+        items = real + fake
+        rng.shuffle(items)
+        for i, x in enumerate(items):
+            x["id"] = 100000 + i
+            x["split"] = "practice"
+            x["prompt"] = PRACTICE_T[x["kind"]].format(n=x["name"])
+        tok, model = ctx.tok, ctx.model
+        rl = [x for x in items if x["real"]]
+        outs = L.generate(model, tok, [L.chat(tok, x["question"] + " Answer in a few words.") for x in rl],
+                          max_new=24, batch=64, log="label extra")
+        for x, o in zip(rl, outs):
+            x["known"] = any(L.norm_text(a) in L.norm_text(o) for a in x["answers"] if len(a) > 1)
+        return items
