@@ -1,0 +1,35 @@
+{
+  "args": {
+    "out": "runs/pretrain_agent/code_d512_s0_step1000/arm_agent",
+    "data_dir": "pretrain/data_code",
+    "seed": 0,
+    "data_seed": 0,
+    "layers": 4,
+    "d": 256,
+    "heads": 8,
+    "ctx": 256,
+    "attn_only": false,
+    "batch": 64,
+    "steps": 15000,
+    "lr": 0.001,
+    "min_lr_frac": 0.1,
+    "warmup": 100,
+    "wd": 0.1,
+    "probe_every": 25,
+    "ckpt_every": 1000,
+    "ckpt_steps": "",
+    "init": "runs/pretrain_agent/code_d512_s0_step1000/edited_step_01000.pt",
+    "compile": true,
+    "mem_frac": 0.85
+  },
+  "cfg": {
+    "vocab_size": 8192,
+    "ctx": 512,
+    "n_layer": 2,
+    "n_head": 8,
+    "d_model": 512,
+    "attn_only": true,
+    "mlp_mult": 4
+  },
+  "params": 10750976
+}

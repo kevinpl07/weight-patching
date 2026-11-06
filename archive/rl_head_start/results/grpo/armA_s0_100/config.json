@@ -1,0 +1,22 @@
+{
+  "name": "armA_s0_100",
+  "steps": 100,
+  "prompts": 8,
+  "group": 8,
+  "max_new": 512,
+  "temperature": 1.0,
+  "lr": 1e-06,
+  "clip": 1.0,
+  "micro": 8,
+  "fmt_bonus": 0.1,
+  "trunc_zero": true,
+  "save_every": 100,
+  "eval_every": 100,
+  "eval_at": "15,30,50,100",
+  "sym_n": 500,
+  "ifeval_n": 200,
+  "resume": null,
+  "init": null,
+  "seed": 0,
+  "mem_frac": 0.8
+}

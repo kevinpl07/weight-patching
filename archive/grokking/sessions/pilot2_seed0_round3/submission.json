@@ -1,0 +1,15 @@
+{
+ "note": "Projected each of the 54 live Fourier neurons' fc1 rows and fc2 columns onto {const,k,2k,3k}; fully-projected model (with fc2.bias fold of train-mean logit offset) still gets 97.4% train acc, so the residual is mostly memorization hurting held-out. Set the 652 highest-impact residual entries (|resid|^2 x activation-weighted fan-out; 265 fc1, 387 fc2) to their projected values and refolded the train-mean logit offset into all 97 fc2.bias entries. Train acc 100->99.2%, loss 0.067->0.141. 749 entries.",
+ "changed": 749,
+ "per_tensor": {
+  "fc1.weight": 265,
+  "fc1.bias": 0,
+  "fc2.weight": 387,
+  "fc2.bias": 97
+ },
+ "train": {
+  "train_loss": 0.141019,
+  "train_acc": 0.9923
+ },
+ "time": "2026-11-03 12:38:30"
+}

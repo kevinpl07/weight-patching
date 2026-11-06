@@ -1,0 +1,23 @@
+{
+ "note": "Round 2: 42 live neurons are each ~85% one frequency (26 freqs, 1-3 neurons each), weights at the AdamW |w|<=1 cap; the off-frequency residue is heavy-tailed memorization (projecting all live neurons onto main freq+DC drops train acc 95%->39%). Edit: set the 749 largest-|residue| entries of live neurons (fc1/fc2 weights) to their projection onto main frequency + DC (removes ~46% of residue power). Optimizer update already shrinks residue / grows signal, so this fast-forwards it. Trial 1000 steps: held-out 44%->58% at 200 steps, then drifts down to 55% (re-memorization). Rejected: reviving the 86 dead neurons (bias 0 or +0.5) -> they re-memorize, held-out falls to 22%/12% in 1000 steps. Capacity (42 neurons, capped weights) looks like the long-run limit; next rounds: repeat residue cleaning on the next-largest entries.",
+ "changed": 749,
+ "per_tensor": {
+  "fc1.weight": 475,
+  "fc1.bias": 0,
+  "fc2.weight": 274,
+  "fc2.bias": 0
+ },
+ "optimizer_resets": {
+  "fc1.weight": 0,
+  "fc1.bias": 0,
+  "fc2.weight": 0,
+  "fc2.bias": 0
+ },
+ "predict_next": 0.52,
+ "predict_end": 0.62,
+ "train": {
+  "train_loss": 1.056136,
+  "train_acc": 0.7475
+ },
+ "time": "2026-11-03 15:12:06"
+}

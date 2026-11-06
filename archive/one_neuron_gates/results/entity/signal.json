@@ -1,0 +1,51 @@
+{
+ "12": {
+  "cv_auc": 0.946,
+  "pos_p10": 2.85,
+  "known_p90": 2.64,
+  "content_p999": 1.51,
+  "content_max": 1.67
+ },
+ "18": {
+  "cv_auc": 0.882,
+  "pos_p10": 4.04,
+  "known_p90": 3.49,
+  "content_p999": 2.25,
+  "content_max": 2.61
+ },
+ "22": {
+  "cv_auc": 0.997,
+  "pos_p10": 5.58,
+  "known_p90": 4.43,
+  "content_p999": 3.01,
+  "content_max": 3.52
+ },
+ "26": {
+  "cv_auc": 0.995,
+  "pos_p10": 7.06,
+  "known_p90": 5.13,
+  "content_p999": 3.78,
+  "content_max": 4.35
+ },
+ "29": {
+  "cv_auc": 0.995,
+  "pos_p10": 3.63,
+  "known_p90": 2.54,
+  "content_p999": 1.92,
+  "content_max": 2.22
+ },
+ "31": {
+  "cv_auc": 0.995,
+  "pos_p10": 7.39,
+  "known_p90": 4.97,
+  "content_p999": 3.58,
+  "content_max": 4.25
+ },
+ "33": {
+  "cv_auc": 0.993,
+  "pos_p10": 11.43,
+  "known_p90": 7.69,
+  "content_p999": 5.49,
+  "content_max": 6.83
+ }
+}

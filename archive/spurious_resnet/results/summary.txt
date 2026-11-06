@@ -1,0 +1,37 @@
+| arm | entries | dev hit | dev AP | dev AUC | top-1 | Δ top-1 (paired SE) | top-1 dev cls | unseen hit | unseen AP | top-1 unseen cls |
+|---|---|---|---|---|---|---|---|---|---|---|
+| none | 0 | 0.502 | 0.476 | 0.621 | 62.91 | +0.00 (0.00) | 62.3 | 0.451 | 0.554 | 67.7 |
+| agent_s1 | 3,169 | 0.218 | 0.570 | 0.717 | 62.79 | -0.13 (0.07) | 57.1 | 0.471 | 0.548 | 68.3 |
+| agent_s2 | 5,000 | 0.157 | 0.670 | 0.801 | 62.34 | -0.57 (0.13) | 59.7 | 0.469 | 0.538 | 67.4 |
+| agent_s3 | 29,912 | 0.172 | 0.594 | 0.742 | 62.77 | -0.14 (0.09) | 58.9 | 0.475 | 0.545 | 68.0 |
+| random_same_s1 | 3,169 | 0.484 | 0.477 | 0.628 | 62.94 | +0.03 (0.04) | 62.6 | 0.454 | 0.554 | 67.4 |
+| random_same_s2 | 5,000 | 0.483 | 0.476 | 0.618 | 62.80 | -0.11 (0.07) | 60.6 | 0.448 | 0.553 | 67.7 |
+| random_same_s3 | 29,912 | 0.485 | 0.473 | 0.621 | 62.81 | -0.10 (0.10) | 62.9 | 0.436 | 0.557 | 68.0 |
+| random_count_s1 | 3,169 | 0.499 | 0.474 | 0.622 | 62.87 | -0.04 (0.07) | 61.7 | 0.446 | 0.554 | 67.4 |
+| random_count_s2 | 5,000 | 0.497 | 0.472 | 0.621 | 63.03 | +0.13 (0.11) | 61.7 | 0.442 | 0.553 | 67.4 |
+| random_count_s3 | 29,912 | 0.496 | 0.475 | 0.623 | 62.79 | -0.11 (0.13) | 62.9 | 0.433 | 0.554 | 66.6 |
+| proj | 102,450 | 0.002 | 0.772 | 0.889 | 61.49 | -1.43 (0.18) | 24.6 | 0.481 | 0.553 | 68.9 |
+| spufix_like | 0 | 0.001 | 0.644 | 0.768 | 60.99 | -1.93 (0.20) | 13.7 | 0.481 | 0.553 | 68.9 |
+| llr | 2,049,000 | 0.054 | 0.498 | 0.648 | 61.04 | -1.89 (0.38) | 38.6 | 0.437 | 0.554 | 67.1 |
+| ft_l4 | 17,013,698 | 0.046 | 0.619 | 0.759 | 61.94 | -0.99 (0.34) | 50.3 | 0.359 | 0.570 | 66.6 |
+
+pass bar: 1 = hit <= 0.251 and AP >= 0.576; 2 = top-1 >= 0.6241 and dev-class top-1 >= 0.5929
+none: cond1 False  cond2 True
+agent_s1: cond1 False  cond2 False  cond3 True  PASS False
+agent_s2: cond1 True  cond2 False  cond3 True  PASS False
+agent_s3: cond1 True  cond2 False  cond3 True  PASS False
+random_same_s1: cond1 False  cond2 True
+random_same_s2: cond1 False  cond2 True
+random_same_s3: cond1 False  cond2 True
+random_count_s1: cond1 False  cond2 True
+random_count_s2: cond1 False  cond2 True
+random_count_s3: cond1 False  cond2 True
+proj: cond1 True  cond2 False
+spufix_like: cond1 True  cond2 False
+llr: cond1 False  cond2 False
+ft_l4: cond1 True  cond2 False
+agent_s1: AP up in 45/50 classes, down in 0; clean top-1 of class k down in 15/50, up in 0
+agent_s2: AP up in 48/50 classes, down in 0; clean top-1 of class k down in 14/50, up in 13
+agent_s3: AP up in 48/50 classes, down in 1; clean top-1 of class k down in 13/50, up in 6
+proj: AP up in 48/50 classes, down in 2; clean top-1 of class k down in 45/50, up in 0
+ft_l4: AP up in 45/50 classes, down in 3; clean top-1 of class k down in 31/50, up in 3

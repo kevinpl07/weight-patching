@@ -1,0 +1,15 @@
+{
+ "note": "Analysis: clean Fourier part of each alive neuron (dominant freq, plus per-class DC kept consistent) scores ~91% on train pairs, while held-out is 55%, so held-out is limited by memorization residue, not circuit quality. Mean-ablated 9 mostly non-Fourier, high-residual neurons (3,8,56,68,69,98,77,79,96): fc1.bias=-10, and their train-mean contribution W2[:,i]*mean(h_i) folded into fc2.bias, so per-class offsets that b2 was balancing stay intact (zero-ablation would wreck them). Fully cleaned neurons 37 and 65 (freq 48, 36): fc1 rows and fc2 column projected onto the dominant frequency, with the DC change also moved into fc2.bias. 688 entries. Train acc 96.3%, loss 0.227; clean proxy 89%.",
+ "changed": 688,
+ "per_tensor": {
+  "fc1.weight": 388,
+  "fc1.bias": 9,
+  "fc2.weight": 194,
+  "fc2.bias": 97
+ },
+ "train": {
+  "train_loss": 0.227344,
+  "train_acc": 0.9631
+ },
+ "time": "2026-11-03 12:32:57"
+}

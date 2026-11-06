@@ -1,0 +1,6 @@
+[budget] pass 3/25 (generate)
+A mix base all {'mix': 0.25, 'han_run': 0.188, 'han_answer': 0.104, 'correct': 0.354, 'zh_reply': 0.0, 'reply_target': 0.812, 'truncated': 0.146} {'ru': {'mix': 0.2, 'correct': 0.52}, 'th': {'mix': 0.357, 'correct': 0.0}, 'de': {'mix': 0.222, 'correct': 0.444}}
+A mix edited all {'mix': 0.062, 'han_run': 0.062, 'han_answer': 0.042, 'correct': 0.438, 'zh_reply': 0.0, 'reply_target': 0.854, 'truncated': 0.146} {'ru': {'mix': 0.08, 'correct': 0.56}, 'th': {'mix': 0.071, 'correct': 0.071}, 'de': {'mix': 0.0, 'correct': 0.667}}
+[budget] pass 4/25 (generate)
+A zhen base zh {'mix': 0.0, 'han_run': 1.0, 'han_answer': 0.833, 'correct': 0.778, 'zh_reply': 0.833, 'reply_target': 0.833, 'truncated': 0.167} en {'mix': 0.0, 'han_run': 0.0, 'han_answer': 0.0, 'correct': 0.5, 'zh_reply': 0.0, 'reply_target': 0.667, 'truncated': 0.333}
+A zhen edited zh {'mix': 0.0, 'han_run': 1.0, 'han_answer': 0.667, 'correct': 0.611, 'zh_reply': 0.667, 'reply_target': 0.667, 'truncated': 0.389} en {'mix': 0.0, 'han_run': 0.0, 'han_answer': 0.0, 'correct': 0.5, 'zh_reply': 0.0, 'reply_target': 0.667, 'truncated': 0.333}

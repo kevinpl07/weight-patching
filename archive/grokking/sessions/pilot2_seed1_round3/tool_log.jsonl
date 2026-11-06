@@ -1,0 +1,10 @@
+{"t": "12:42:56", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "12:42:58", "argv": ["edit", "<project>/runs/seed1/loop/round3/agent/scratch/edit_lam0.50.json"], "result": "applied 2 ops, budget 686, after {'train_loss': 0.154535, 'train_acc': 0.9774}", "ok": true}
+{"t": "12:43:01", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "12:43:04", "argv": ["edit", "<project>/runs/seed1/loop/round3/agent/scratch/edit_lam0.60.json"], "result": "applied 2 ops, budget 686, after {'train_loss': 0.199755, 'train_acc': 0.9644}", "ok": true}
+{"t": "12:43:07", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "12:43:10", "argv": ["edit", "<project>/runs/seed1/loop/round3/agent/scratch/edit_lam0.75.json"], "result": "applied 2 ops, budget 686, after {'train_loss': 0.287988, 'train_acc': 0.9338}", "ok": true}
+{"t": "12:43:19", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "12:43:22", "argv": ["edit", "<project>/runs/seed1/loop/round3/agent/scratch/edit_lam0.60.json"], "result": "applied 2 ops, budget 686, after {'train_loss': 0.199755, 'train_acc': 0.9644}", "ok": true}
+{"t": "12:43:25", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "12:43:35", "argv": ["submit", "--note", "Finding: AdamW (wd=1) caps every param near |1| (max |W|~1.02; fc2.bias saturated at +-1 for most classes). The Fourier neurons come in ReLU(x)/ReLU(-x) pairs sharing output phase, so E[h]*cos(wc+psi) leaves a large per-class logit offset (std 2.9, range -5..9 from clean Fourier outputs). b2 can only cancel +-1, so the net cancels the rest with noisy non-Fourier fc2 residue + memorization. Clean-Fourier proxy on train: 55% with current b2, 93% with offset cancelled. Edit: revived 7 dead neurons (0,9,10,12,13,15,17) as constant bias neurons (fc1.bias=1, fc1 rows ~0, h=1) and set their fc2 columns to equal shares of a per-class correction = -(0.4*current mean logit offset + 0.6*clean-Fourier offset) - b2, centered (|v|<=0.61). Adds +-7 of noise-free offset capacity; 0.6 overshoot pushes fc2 residue to shed its offset-cancelling part. Train 96.4%, loss 0.20; clean proxy ~92%."], "result": "submitted, changed 686", "ok": true}

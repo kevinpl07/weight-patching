@@ -1,0 +1,25 @@
+{
+ "source_ckpt": "runs\\vision_vit\\base\\s1\\ckpt\\step_00200.pt",
+ "step": 200,
+ "total_steps": 4000,
+ "cfg": {
+  "img": 32,
+  "patch": 4,
+  "d_model": 192,
+  "n_layer": 6,
+  "n_head": 3,
+  "mlp_mult": 4,
+  "n_classes": 10,
+  "local_sigma": []
+ },
+ "train_npz": "<project>\\vision\\data_cifar\\cifar10_train_only.npz",
+ "max_changed": 900000,
+ "recipe": {
+  "optimizer": "AdamW betas (0.9, 0.999), weight decay 0.05 on weight matrices and the patch-embedding kernel (not on biases, LayerNorms or pos_embed), grad-norm clip 1.0, bf16 autocast",
+  "lr": "peak 0.001, linear warmup 200 steps, cosine decay to 0.01 x peak at step 4000",
+  "batch": "512 images per step (97 steps per epoch, the last partial batch of each epoch dropped)",
+  "data": "CIFAR-10 training set (50,000 images, 10 classes), per-channel mean/std normalization, random crop 32x32 from the 4-pixel zero-padded image and random horizontal flip; no other augmentation, no label smoothing, no dropout",
+  "loss": "cross-entropy on the logits",
+  "note": "after your edit, training resumes from this step with the same optimizer state and the same sequence of batches (including the same augmentation draws), until total_steps"
+ }
+}

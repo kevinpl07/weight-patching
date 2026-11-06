@@ -1,0 +1,13 @@
+{"t": "14:59:01", "argv": ["optim", "--neurons", "--save", "scratch/optim0.npz"], "result": "optimizer view, saved scratch/optim0.npz", "ok": true}
+{"t": "15:00:11", "argv": ["edit", "scratch/kill15.json"], "result": "applied 2 ops, budget 61, after {'train_loss': 3.069299, 'train_acc': 0.3051}", "ok": true}
+{"t": "15:00:18", "argv": ["trial", "--steps", "1000"], "result": "trial 1: 1000 steps, end train 0.9944 held-out 0.1922", "ok": true}
+{"t": "15:00:31", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:00:34", "argv": ["edit", "scratch/kill20.json"], "result": "applied 2 ops, budget 75, after {'train_loss': 3.5948, 'train_acc': 0.2389}", "ok": true}
+{"t": "15:00:38", "argv": ["trial", "--steps", "1000"], "result": "trial 2: 1000 steps, end train 0.9187 held-out 0.2490", "ok": true}
+{"t": "15:00:56", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:00:59", "argv": ["edit", "scratch/kill30.json"], "result": "applied 2 ops, budget 90, after {'train_loss': 3.894009, 'train_acc': 0.1608}", "ok": true}
+{"t": "15:01:03", "argv": ["trial", "--steps", "1000"], "result": "trial 3: 1000 steps, end train 0.6955 held-out 0.2572", "ok": true}
+{"t": "15:01:16", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:01:19", "argv": ["edit", "scratch/kill20.json"], "result": "applied 2 ops, budget 75, after {'train_loss': 3.5948, 'train_acc': 0.2389}", "ok": true}
+{"t": "15:01:22", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "15:01:25", "argv": ["submit", "--note", "Killed 75 memorization-like neurons (top-frequency energy fraction <0.2 across fc1-a, fc1-b, fc2 rfft) by setting their fc1.bias to -10 (+optimizer reset on those biases); kept 53 neurons that are mostly single-frequency Fourier features. Trials (1000 steps): kill<0.15 -> held-out 19%, kill<0.2 -> 25% (train 92%), kill<0.3 -> 26% but train only 70% (capacity-limited). Chose <0.2. Killed neurons are permanently dead; later rounds should not expect them back.", "--predict-next", "0.85", "--predict-end", "0.97"], "result": "submitted, changed 75", "ok": true}

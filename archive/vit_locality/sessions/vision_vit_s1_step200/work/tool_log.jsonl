@@ -1,0 +1,61 @@
+{"t": "19:10:23", "kind": "metrics", "edited": false, "loss": 1.6761, "acc": 0.3701}
+{"t": "19:10:24", "kind": "run", "B": 1024, "edited": false, "attn": false, "resid": true}
+{"t": "19:11:38", "kind": "run", "B": 1024, "edited": false, "attn": false, "resid": true}
+{"t": "19:11:58", "kind": "run", "B": 1024, "edited": false, "attn": false, "resid": true}
+{"t": "19:12:17", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 8.5305}, "note": "pos only A=1.0"}
+{"t": "19:12:18", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:12:18", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "pos_embed"], "changed": 19236, "delta_norms": {"pos_embed": 8.5305, "blocks.0.attn.qkv.weight": 14.4836, "blocks.0.attn.qkv.bias": 5.8233, "blocks.1.attn.qkv.weight": 16.6721, "blocks.1.attn.qkv.bias": 7.1542}, "note": "{\"A\": 1.0, \"sigma\": 1.0, \"layers\": [0, 1]}"}
+{"t": "19:12:19", "kind": "metrics", "edited": true, "loss": 1.892, "acc": 0.3081}
+{"t": "19:12:19", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:12:19", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:12:20", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "pos_embed"], "changed": 19236, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 10.8301, "blocks.0.attn.qkv.bias": 3.2697, "blocks.1.attn.qkv.weight": 11.4035, "blocks.1.attn.qkv.bias": 3.735}, "note": "{\"A\": 2.0, \"sigma\": 1.0, \"layers\": [0, 1]}"}
+{"t": "19:12:21", "kind": "metrics", "edited": true, "loss": 1.8541, "acc": 0.321}
+{"t": "19:12:42", "kind": "run", "B": 1024, "edited": false, "attn": false, "resid": false}
+{"t": "19:12:42", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:12:42", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:12:42", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "pos_embed"], "changed": 15762, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 10.8301, "blocks.0.attn.qkv.bias": 3.2697}, "note": "{\"A\": 2.0, \"sigma\": 1.0, \"layers\": [0]}"}
+{"t": "19:12:43", "kind": "metrics", "edited": true, "loss": 1.7541, "acc": 0.3616}
+{"t": "19:12:43", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:12:44", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:12:44", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "pos_embed"], "changed": 19236, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 5.5095, "blocks.0.attn.qkv.bias": 1.6342, "blocks.1.attn.qkv.weight": 5.7942, "blocks.1.attn.qkv.bias": 1.8721}, "note": "{\"A\": 2.0, \"sigma\": 2.0, \"layers\": [0, 1]}"}
+{"t": "19:12:45", "kind": "metrics", "edited": true, "loss": 1.7126, "acc": 0.3618}
+{"t": "19:12:45", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:12:46", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:12:46", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "pos_embed"], "changed": 14604, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 6.2433, "blocks.0.attn.qkv.bias": 1.8898, "blocks.1.attn.qkv.weight": 6.6007, "blocks.1.attn.qkv.bias": 2.16}, "note": "{\"A\": 2.0, \"sigma\": 1.0, \"layers\": [0, 1], \"heads\": {\"0\": [0], \"1\": [0]}}"}
+{"t": "19:12:47", "kind": "metrics", "edited": true, "loss": 1.7167, "acc": 0.3542}
+{"t": "19:12:47", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:12:47", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:12:48", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "{\"A\": 2.0, \"sigma\": 1.0, \"layers\": []}"}
+{"t": "19:12:49", "kind": "metrics", "edited": true, "loss": 1.6675, "acc": 0.3782}
+{"t": "19:13:09", "kind": "run", "B": 1024, "edited": false, "attn": false, "resid": false}
+{"t": "19:13:09", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:13:09", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:13:09", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "blocks.2.attn.qkv.bias", "blocks.2.attn.qkv.weight", "pos_embed"], "changed": 22710, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 7.955, "blocks.0.attn.qkv.bias": 2.3951, "blocks.1.attn.qkv.weight": 8.384, "blocks.1.attn.qkv.bias": 2.7358, "blocks.2.attn.qkv.weight": 9.7897, "blocks.2.attn.qkv.bias": 3.7288}, "note": "{\"A\": 2.0, \"sigma\": {\"0\": [1, 1.5, 2.5], \"1\": [1, 1.5, 2.5], \"2\": [1, 1.5, 2.5]}, \"layers\": [0, 1, 2], \"save\": \"C1\"}"}
+{"t": "19:13:10", "kind": "metrics", "edited": true, "loss": 1.8161, "acc": 0.3298}
+{"t": "19:13:10", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:13:11", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:13:11", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "pos_embed"], "changed": 19236, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 10.8301, "blocks.0.attn.qkv.bias": 3.2697, "blocks.1.attn.qkv.weight": 6.0, "blocks.1.attn.qkv.bias": 1.9415}, "note": "{\"A\": 2.0, \"sigma\": {\"0\": [1, 1, 1], \"1\": [1.5, 2, 3]}, \"offsets\": {\"0\": [[0, 0], [0, -1], [-1, 0]]}, \"layers\": [0, 1], \"save\": \"C2\"}"}
+{"t": "19:13:12", "kind": "metrics", "edited": true, "loss": 1.786, "acc": 0.3477}
+{"t": "19:13:12", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:13:13", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:13:13", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "blocks.2.attn.qkv.bias", "blocks.2.attn.qkv.weight", "pos_embed"], "changed": 22710, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 5.2052, "blocks.0.attn.qkv.bias": 1.5451, "blocks.1.attn.qkv.weight": 5.4846, "blocks.1.attn.qkv.bias": 1.7678, "blocks.2.attn.qkv.weight": 6.3742, "blocks.2.attn.qkv.bias": 2.4077}, "note": "{\"A\": 2.0, \"sigma\": {\"0\": [1.5, 2.5, 4], \"1\": [1.5, 2.5, 4], \"2\": [1.5, 2.5, 4]}, \"layers\": [0, 1, 2], \"save\": \"C1w\"}"}
+{"t": "19:13:14", "kind": "metrics", "edited": true, "loss": 1.7173, "acc": 0.3569}
+{"t": "19:13:29", "kind": "run", "B": 1024, "edited": false, "attn": false, "resid": false}
+{"t": "19:13:29", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:13:30", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:13:30", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "blocks.2.attn.qkv.bias", "blocks.2.attn.qkv.weight", "pos_embed"], "changed": 22710, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 2.7958, "blocks.0.attn.qkv.bias": 0.7745, "blocks.1.attn.qkv.weight": 2.9343, "blocks.1.attn.qkv.bias": 0.8897, "blocks.2.attn.qkv.weight": 3.3474, "blocks.2.attn.qkv.bias": 1.2088}, "note": "{\"A\": 2.0, \"sigma\": {\"0\": [3, 5, 8], \"1\": [3, 5, 8], \"2\": [3, 5, 8]}, \"layers\": [0, 1, 2], \"save\": \"C1x2\"}"}
+{"t": "19:13:31", "kind": "metrics", "edited": true, "loss": 1.6662, "acc": 0.3789}
+{"t": "19:13:31", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:13:31", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:13:31", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "blocks.2.attn.qkv.bias", "blocks.2.attn.qkv.weight", "pos_embed"], "changed": 22710, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 9.048, "blocks.0.attn.qkv.bias": 4.2852, "blocks.1.attn.qkv.weight": 5.4846, "blocks.1.attn.qkv.bias": 1.7678, "blocks.2.attn.qkv.weight": 6.3742, "blocks.2.attn.qkv.bias": 2.4077}, "note": "{\"A\": 2.0, \"sigma\": {\"0\": [1.2, 1.2, 1.2], \"1\": [1.5, 2.5, 4], \"2\": [1.5, 2.5, 4]}, \"offsets\": {\"0\": [[0, 0], [0, -1], [-1, 0]]}, \"layers\": [0, 1, 2], \"save\": \"C3\"}"}
+{"t": "19:13:33", "kind": "metrics", "edited": true, "loss": 1.7795, "acc": 0.3452}
+{"t": "19:13:45", "kind": "run", "B": 1024, "edited": false, "attn": false, "resid": false}
+{"t": "19:13:45", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:13:45", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:13:45", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "blocks.2.attn.qkv.bias", "blocks.2.attn.qkv.weight", "pos_embed"], "changed": 22710, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 4.3858, "blocks.0.attn.qkv.bias": 1.2881, "blocks.1.attn.qkv.weight": 4.6189, "blocks.1.attn.qkv.bias": 1.475, "blocks.2.attn.qkv.weight": 5.3515, "blocks.2.attn.qkv.bias": 2.0081}, "note": "{\"A\": 2.0, \"sigma\": {\"0\": [1.8, 3, 4.8], \"1\": [1.8, 3, 4.8], \"2\": [1.8, 3, 4.8]}, \"layers\": [0, 1, 2], \"save\": \"C1x12\"}"}
+{"t": "19:13:46", "kind": "metrics", "edited": true, "loss": 1.6929, "acc": 0.3638}
+{"t": "19:13:46", "kind": "save_edit", "tensors": ["pos_embed"], "changed": 12288, "delta_norms": {"pos_embed": 17.061}, "note": "pos only A=2.0"}
+{"t": "19:13:47", "kind": "run", "B": 1024, "edited": true, "attn": false, "resid": true}
+{"t": "19:13:47", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "blocks.2.attn.qkv.bias", "blocks.2.attn.qkv.weight", "pos_embed"], "changed": 22710, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 3.8078, "blocks.0.attn.qkv.bias": 1.1046, "blocks.1.attn.qkv.weight": 4.0075, "blocks.1.attn.qkv.bias": 1.266, "blocks.2.attn.qkv.weight": 4.627, "blocks.2.attn.qkv.bias": 1.7226}, "note": "{\"A\": 2.0, \"sigma\": {\"0\": [2.1, 3.5, 5.6], \"1\": [2.1, 3.5, 5.6], \"2\": [2.1, 3.5, 5.6]}, \"layers\": [0, 1, 2], \"save\": \"C1x14\"}"}
+{"t": "19:13:48", "kind": "metrics", "edited": true, "loss": 1.6789, "acc": 0.3696}
+{"t": "19:14:06", "kind": "save_edit", "tensors": ["blocks.0.attn.qkv.bias", "blocks.0.attn.qkv.weight", "blocks.1.attn.qkv.bias", "blocks.1.attn.qkv.weight", "blocks.2.attn.qkv.bias", "blocks.2.attn.qkv.weight", "pos_embed"], "changed": 22710, "delta_norms": {"pos_embed": 17.061, "blocks.0.attn.qkv.weight": 3.8078, "blocks.0.attn.qkv.bias": 1.1046, "blocks.1.attn.qkv.weight": 4.0075, "blocks.1.attn.qkv.bias": 1.266, "blocks.2.attn.qkv.weight": 4.627, "blocks.2.attn.qkv.bias": 1.7226}, "note": "FINAL C1x14: clean (row,col,r^2+c^2) code in pos_embed along content-null dirs (A=2) + 3 Q/K dims per head in blocks 0-2 giving Gaussian locality, sigma per head [2.1,3.5,5.6]"}

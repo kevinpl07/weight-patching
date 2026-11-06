@@ -1,0 +1,6 @@
+{
+ "name": "agent_session_5",
+ "model": "microsoft/Phi-3-mini-4k-instruct",
+ "edit": "<project>/runs/refusal/sessions/Phi-3-mini-4k-instruct/session_5/submitted_edit.safetensors",
+ "system": null
+}

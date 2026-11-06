@@ -1,0 +1,23 @@
+{
+ "note": "Killed 75 memorization-like neurons (top-frequency energy fraction <0.2 across fc1-a, fc1-b, fc2 rfft) by setting their fc1.bias to -10 (+optimizer reset on those biases); kept 53 neurons that are mostly single-frequency Fourier features. Trials (1000 steps): kill<0.15 -> held-out 19%, kill<0.2 -> 25% (train 92%), kill<0.3 -> 26% but train only 70% (capacity-limited). Chose <0.2. Killed neurons are permanently dead; later rounds should not expect them back.",
+ "changed": 75,
+ "per_tensor": {
+  "fc1.weight": 0,
+  "fc1.bias": 75,
+  "fc2.weight": 0,
+  "fc2.bias": 0
+ },
+ "optimizer_resets": {
+  "fc1.weight": 0,
+  "fc1.bias": 75,
+  "fc2.weight": 0,
+  "fc2.bias": 0
+ },
+ "predict_next": 0.85,
+ "predict_end": 0.97,
+ "train": {
+  "train_loss": 3.5948,
+  "train_acc": 0.2389
+ },
+ "time": "2026-11-03 15:01:25"
+}

@@ -1,0 +1,15 @@
+{
+ "note": "Weights: 54 live Fourier neurons over 26 freqs (mostly |z| pairs), 74 dead zero neurons that gradient cannot revive. Pure-Fourier projection gets only 94.5% train acc; capacity (neurons per freq) is the bottleneck, singleton freqs (unpaired ReLU, uncancelled odd harmonics) are the weakest. Edit: revived dead neurons 1 and 5 as clean sign-negated |z| partners of singletons n18 (k=15) and n22 (k=35): fc1 row = means - k-component, same bias, fc2 col = parent's clean k-component (584 entries). Set 68 highest-impact residual entries (16 fc1, 52 fc2) to their {const,k,2k,3k} projection and folded the train-mean logit change into all 97 fc2.bias. Train acc 100%, loss 0.0613->0.0593. 749 entries.",
+ "changed": 749,
+ "per_tensor": {
+  "fc1.weight": 404,
+  "fc1.bias": 2,
+  "fc2.weight": 246,
+  "fc2.bias": 97
+ },
+ "train": {
+  "train_loss": 0.059348,
+  "train_acc": 1.0
+ },
+ "time": "2026-11-03 12:49:19"
+}

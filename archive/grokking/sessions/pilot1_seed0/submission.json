@@ -1,0 +1,15 @@
+{
+ "note": "Killed 59 least Fourier-aligned memorizing neurons via fc1 bias=-3; repurposed 5 low-alignment neurons as sign-negated partners (|x| units) of the 5 cleanest Fourier neurons (freqs 46,30,17,18,7) by flipping only mismatched-sign entries. 681 entries.",
+ "changed": 681,
+ "per_tensor": {
+  "fc1.weight": 411,
+  "fc1.bias": 64,
+  "fc2.weight": 206,
+  "fc2.bias": 0
+ },
+ "train": {
+  "train_loss": 3.744629,
+  "train_acc": 0.2336
+ },
+ "time": "2026-11-03 12:04:21"
+}

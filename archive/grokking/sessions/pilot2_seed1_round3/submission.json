@@ -1,0 +1,15 @@
+{
+ "note": "Finding: AdamW (wd=1) caps every param near |1| (max |W|~1.02; fc2.bias saturated at +-1 for most classes). The Fourier neurons come in ReLU(x)/ReLU(-x) pairs sharing output phase, so E[h]*cos(wc+psi) leaves a large per-class logit offset (std 2.9, range -5..9 from clean Fourier outputs). b2 can only cancel +-1, so the net cancels the rest with noisy non-Fourier fc2 residue + memorization. Clean-Fourier proxy on train: 55% with current b2, 93% with offset cancelled. Edit: revived 7 dead neurons (0,9,10,12,13,15,17) as constant bias neurons (fc1.bias=1, fc1 rows ~0, h=1) and set their fc2 columns to equal shares of a per-class correction = -(0.4*current mean logit offset + 0.6*clean-Fourier offset) - b2, centered (|v|<=0.61). Adds +-7 of noise-free offset capacity; 0.6 overshoot pushes fc2 residue to shed its offset-cancelling part. Train 96.4%, loss 0.20; clean proxy ~92%.",
+ "changed": 686,
+ "per_tensor": {
+  "fc1.weight": 0,
+  "fc1.bias": 7,
+  "fc2.weight": 679,
+  "fc2.bias": 0
+ },
+ "train": {
+  "train_loss": 0.199755,
+  "train_acc": 0.9644
+ },
+ "time": "2026-11-03 12:43:35"
+}

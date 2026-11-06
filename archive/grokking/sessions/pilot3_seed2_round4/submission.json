@@ -1,0 +1,23 @@
+{
+ "note": "Found: 70 live neurons, ~30 freqs, mostly 2-neuron twin pairs (phases (pa,pb) and (pa+pi,pb+pi), same output) = |x| units that cancel linear terms but NOT the a-b-c, a-b+c, a+b+c cross terms; freq 27 (n91) and 34 (n96) were lone ReLU neurons with uncancelled linear terms (biggest harm per neuron); 3-neuron groups (9,16) self-organized to 120deg a-b spacing; n30 is a dense always-on linear-correction neuron for freqs 17/29/38/46 (left alone). Edit (726 entries, all optimizer-reset, on dead neurons 37..55): twins of 91 and 96 (fc1 -proj, 53 sparse entries, fc2 = copy of ref output projected, 45 entries); for twin groups k23,44,10,13,20 a rotated twin pair (a,b phases +pi/2 and its negation, 53 entries, fc2 left 0) which with the existing pair forms a 4-set cancelling linear and a-b terms. Trials 1000 steps: 14 fc2-less seeds 88.2% rising; 6 seeds all with fc2 89.1% but plateaued by step 400; this hybrid 88.5% rising ~0.3%/100. Key lesson: fc2=0 seeds grow slowly at low train loss because wd shrinks fc1 seeds before fc2 grows; seeding fc2 gives an immediate jump.",
+ "changed": 726,
+ "per_tensor": {
+  "fc1.weight": 636,
+  "fc1.bias": 0,
+  "fc2.weight": 90,
+  "fc2.bias": 0
+ },
+ "optimizer_resets": {
+  "fc1.weight": 636,
+  "fc1.bias": 0,
+  "fc2.weight": 90,
+  "fc2.bias": 0
+ },
+ "predict_next": 0.91,
+ "predict_end": 0.93,
+ "train": {
+  "train_loss": 0.004229,
+  "train_acc": 1.0
+ },
+ "time": "2026-11-03 15:21:29"
+}

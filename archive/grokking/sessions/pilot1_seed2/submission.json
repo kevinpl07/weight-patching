@@ -1,0 +1,15 @@
+{
+ "note": "Killed 54 memorization neurons (no consistent Fourier frequency across a/b/out and low spectral concentration) by setting fc1.bias=-4 (provably dead for all inputs). Kept 74 neurons whose a, b and output weights share a dominant frequency with phase relation phi_out = phi_a + phi_b.",
+ "changed": 54,
+ "per_tensor": {
+  "fc1.weight": 0,
+  "fc1.bias": 54,
+  "fc2.weight": 0,
+  "fc2.bias": 0
+ },
+ "train": {
+  "train_loss": 2.754013,
+  "train_acc": 0.3537
+ },
+ "time": "2026-11-03 11:57:34"
+}

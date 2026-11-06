@@ -1,0 +1,24 @@
+{
+ "layer": 33,
+ "unit": 3830,
+ "theta": 8.20268497467041,
+ "gain": 200.0,
+ "g": 4.0,
+ "k": 4.0,
+ "target": "Sorry",
+ "suppress": [
+  "Okay",
+  "\"",
+  "Y",
+  "X",
+  "Z",
+  "Kal",
+  "Fa",
+  "J"
+ ],
+ "changed": 7677,
+ "recall_at_theta": 1.0,
+ "known_fire": 0.04494382068514824,
+ "content_fire": 0.0,
+ "m_std": 0.020583927631378174
+}

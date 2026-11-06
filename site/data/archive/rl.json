@@ -1,0 +1,3585 @@
+{
+ "head_start": {
+  "description": "Qwen3.5-0.8B, non-thinking, full-weight GRPO on GSM8K for 100 steps. A = base, B = base + Opus agent's anti-hedging edit (4,089 weights), C = same-size random edit. Quick evals at steps 0/15/30/50/100: GSM-Symbolic sampled at T=1 (symT1_acc, primary), greedy (sym_acc), IFEval prompt-level strict (200 prompts). Values in %.",
+  "source": [
+   "runs/grpo/armA_s0_100/evals.jsonl",
+   "runs/grpo/armA_s1_100/evals.jsonl",
+   "runs/grpo/armB_s0_100/evals.jsonl",
+   "runs/grpo/armB_s1_100/evals.jsonl",
+   "runs/grpo/armC_s0_100/evals.jsonl",
+   "runs/grpo/armA_s0_100/log.jsonl",
+   "runs/grpo/armA_s1_100/log.jsonl",
+   "runs/grpo/armB_s0_100/log.jsonl",
+   "runs/grpo/armB_s1_100/log.jsonl",
+   "runs/grpo/armC_s0_100/log.jsonl"
+  ],
+  "labels": {
+   "armA_s0_100": "Base (A), seed 0",
+   "armA_s1_100": "Base (A), seed 1",
+   "armB_s0_100": "Opus edit (B), seed 0",
+   "armB_s1_100": "Opus edit (B), seed 1",
+   "armC_s0_100": "Random edit (C), seed 0"
+  },
+  "evals": {
+   "armA_s0_100": [
+    {
+     "step": 0,
+     "symT1_acc": 26.8,
+     "symT1_trunc": 57.0,
+     "sym_acc": 47.2,
+     "ifeval_strict": 50.0,
+     "symT1_len": 446.2
+    },
+    {
+     "step": 15,
+     "symT1_acc": 42.6,
+     "symT1_trunc": 3.8,
+     "sym_acc": 49.4,
+     "ifeval_strict": 52.0,
+     "symT1_len": 213.1
+    },
+    {
+     "step": 30,
+     "symT1_acc": 49.4,
+     "symT1_trunc": 2.2,
+     "sym_acc": 53.8,
+     "ifeval_strict": 54.0,
+     "symT1_len": 218.7
+    },
+    {
+     "step": 50,
+     "symT1_acc": 51.8,
+     "symT1_trunc": 1.4,
+     "sym_acc": 54.6,
+     "ifeval_strict": 55.5,
+     "symT1_len": 179.8
+    },
+    {
+     "step": 100,
+     "symT1_acc": 54.4,
+     "symT1_trunc": 3.4,
+     "sym_acc": 57.6,
+     "ifeval_strict": 55.5,
+     "symT1_len": 240.7
+    }
+   ],
+   "armA_s1_100": [
+    {
+     "step": 0,
+     "symT1_acc": 26.8,
+     "symT1_trunc": 57.0,
+     "sym_acc": 47.2,
+     "ifeval_strict": 50.0,
+     "symT1_len": 446.2
+    },
+    {
+     "step": 15,
+     "symT1_acc": 44.2,
+     "symT1_trunc": 2.6,
+     "sym_acc": 54.4,
+     "ifeval_strict": 53.0,
+     "symT1_len": 211.5
+    },
+    {
+     "step": 30,
+     "symT1_acc": 51.2,
+     "symT1_trunc": 12.6,
+     "sym_acc": 57.8,
+     "ifeval_strict": 47.5,
+     "symT1_len": 298.1
+    },
+    {
+     "step": 50,
+     "symT1_acc": 60.4,
+     "symT1_trunc": 10.8,
+     "sym_acc": 60.2,
+     "ifeval_strict": 53.0,
+     "symT1_len": 280.2
+    },
+    {
+     "step": 100,
+     "symT1_acc": 58.6,
+     "symT1_trunc": 11.2,
+     "sym_acc": 65.2,
+     "ifeval_strict": 49.0,
+     "symT1_len": 301.1
+    }
+   ],
+   "armB_s0_100": [
+    {
+     "step": 0,
+     "symT1_acc": 34.0,
+     "symT1_trunc": 43.2,
+     "sym_acc": 43.4,
+     "ifeval_strict": 55.0,
+     "symT1_len": 431.3
+    },
+    {
+     "step": 15,
+     "symT1_acc": 42.2,
+     "symT1_trunc": 4.4,
+     "sym_acc": 52.6,
+     "ifeval_strict": 54.0,
+     "symT1_len": 278.6
+    },
+    {
+     "step": 30,
+     "symT1_acc": 44.4,
+     "symT1_trunc": 1.2,
+     "sym_acc": 50.4,
+     "ifeval_strict": 49.5,
+     "symT1_len": 219.3
+    },
+    {
+     "step": 50,
+     "symT1_acc": 53.6,
+     "symT1_trunc": 3.0,
+     "sym_acc": 58.2,
+     "ifeval_strict": 49.0,
+     "symT1_len": 281.3
+    },
+    {
+     "step": 100,
+     "symT1_acc": 55.6,
+     "symT1_trunc": 1.8,
+     "sym_acc": 55.0,
+     "ifeval_strict": 54.0,
+     "symT1_len": 220.5
+    }
+   ],
+   "armB_s1_100": [
+    {
+     "step": 0,
+     "symT1_acc": 34.0,
+     "symT1_trunc": 43.2,
+     "sym_acc": 43.4,
+     "ifeval_strict": 54.5,
+     "symT1_len": 431.3
+    },
+    {
+     "step": 15,
+     "symT1_acc": 44.4,
+     "symT1_trunc": 11.8,
+     "sym_acc": 48.6,
+     "ifeval_strict": 50.0,
+     "symT1_len": 348.6
+    },
+    {
+     "step": 30,
+     "symT1_acc": 53.4,
+     "symT1_trunc": 5.0,
+     "sym_acc": 57.4,
+     "ifeval_strict": 48.5,
+     "symT1_len": 309.2
+    },
+    {
+     "step": 50,
+     "symT1_acc": 51.8,
+     "symT1_trunc": 4.6,
+     "sym_acc": 61.2,
+     "ifeval_strict": 48.0,
+     "symT1_len": 188.0
+    },
+    {
+     "step": 100,
+     "symT1_acc": 56.8,
+     "symT1_trunc": 11.4,
+     "sym_acc": 60.4,
+     "ifeval_strict": 49.5,
+     "symT1_len": 313.0
+    }
+   ],
+   "armC_s0_100": [
+    {
+     "step": 0,
+     "symT1_acc": 26.0,
+     "symT1_trunc": 58.8,
+     "sym_acc": 45.4,
+     "ifeval_strict": 51.0,
+     "symT1_len": 450.2
+    },
+    {
+     "step": 15,
+     "symT1_acc": 37.4,
+     "symT1_trunc": 3.8,
+     "sym_acc": 42.6,
+     "ifeval_strict": 52.0,
+     "symT1_len": 255.0
+    },
+    {
+     "step": 30,
+     "symT1_acc": 50.0,
+     "symT1_trunc": 2.4,
+     "sym_acc": 54.0,
+     "ifeval_strict": 56.5,
+     "symT1_len": 241.6
+    },
+    {
+     "step": 50,
+     "symT1_acc": 56.0,
+     "symT1_trunc": 7.0,
+     "sym_acc": 58.2,
+     "ifeval_strict": 57.5,
+     "symT1_len": 239.1
+    },
+    {
+     "step": 100,
+     "symT1_acc": 55.6,
+     "symT1_trunc": 13.4,
+     "sym_acc": 60.2,
+     "ifeval_strict": 52.0,
+     "symT1_len": 324.4
+    }
+   ]
+  },
+  "b_minus_a_mean_over_seeds": {
+   "derived": "mean over seeds 0,1 of (B - A) at each eval step, points",
+   "symT1_acc": [
+    {
+     "step": 0,
+     "diff": 7.2
+    },
+    {
+     "step": 15,
+     "diff": -0.1
+    },
+    {
+     "step": 30,
+     "diff": -1.4
+    },
+    {
+     "step": 50,
+     "diff": -3.4
+    },
+    {
+     "step": 100,
+     "diff": -0.3
+    }
+   ],
+   "sym_acc": [
+    {
+     "step": 0,
+     "diff": -3.8
+    },
+    {
+     "step": 15,
+     "diff": -1.3
+    },
+    {
+     "step": 30,
+     "diff": -1.9
+    },
+    {
+     "step": 50,
+     "diff": 2.3
+    },
+    {
+     "step": 100,
+     "diff": -3.7
+    }
+   ],
+   "ifeval_strict": [
+    {
+     "step": 0,
+     "diff": 4.75
+    },
+    {
+     "step": 15,
+     "diff": -0.5
+    },
+    {
+     "step": 30,
+     "diff": -1.75
+    },
+    {
+     "step": 50,
+     "diff": -5.75
+    },
+    {
+     "step": 100,
+     "diff": -0.5
+    }
+   ]
+  },
+  "train_per_step": {
+   "note": "training-batch accuracy/truncation (%) and mean length per GRPO step",
+   "armA_s0_100": [
+    {
+     "step": 1,
+     "acc": 45.31,
+     "trunc": 37.5,
+     "len": 402.5
+    },
+    {
+     "step": 2,
+     "acc": 29.69,
+     "trunc": 53.12,
+     "len": 415.1
+    },
+    {
+     "step": 3,
+     "acc": 42.19,
+     "trunc": 34.38,
+     "len": 389.8
+    },
+    {
+     "step": 4,
+     "acc": 50.0,
+     "trunc": 31.25,
+     "len": 329.8
+    },
+    {
+     "step": 5,
+     "acc": 23.44,
+     "trunc": 10.94,
+     "len": 328.8
+    },
+    {
+     "step": 6,
+     "acc": 48.44,
+     "trunc": 10.94,
+     "len": 285.9
+    },
+    {
+     "step": 7,
+     "acc": 35.94,
+     "trunc": 9.38,
+     "len": 306.0
+    },
+    {
+     "step": 8,
+     "acc": 45.31,
+     "trunc": 18.75,
+     "len": 298.8
+    },
+    {
+     "step": 9,
+     "acc": 15.62,
+     "trunc": 7.81,
+     "len": 312.6
+    },
+    {
+     "step": 10,
+     "acc": 54.69,
+     "trunc": 10.94,
+     "len": 242.1
+    },
+    {
+     "step": 11,
+     "acc": 18.75,
+     "trunc": 10.94,
+     "len": 283.2
+    },
+    {
+     "step": 12,
+     "acc": 43.75,
+     "trunc": 4.69,
+     "len": 259.0
+    },
+    {
+     "step": 13,
+     "acc": 46.88,
+     "trunc": 4.69,
+     "len": 244.7
+    },
+    {
+     "step": 14,
+     "acc": 40.62,
+     "trunc": 1.56,
+     "len": 194.1
+    },
+    {
+     "step": 15,
+     "acc": 56.25,
+     "trunc": 3.12,
+     "len": 230.0
+    },
+    {
+     "step": 16,
+     "acc": 35.94,
+     "trunc": 3.12,
+     "len": 198.8
+    },
+    {
+     "step": 17,
+     "acc": 60.94,
+     "trunc": 0.0,
+     "len": 181.3
+    },
+    {
+     "step": 18,
+     "acc": 42.19,
+     "trunc": 0.0,
+     "len": 206.7
+    },
+    {
+     "step": 19,
+     "acc": 60.94,
+     "trunc": 0.0,
+     "len": 168.2
+    },
+    {
+     "step": 20,
+     "acc": 57.81,
+     "trunc": 6.25,
+     "len": 208.2
+    },
+    {
+     "step": 21,
+     "acc": 71.88,
+     "trunc": 6.25,
+     "len": 219.0
+    },
+    {
+     "step": 22,
+     "acc": 65.62,
+     "trunc": 1.56,
+     "len": 194.4
+    },
+    {
+     "step": 23,
+     "acc": 53.12,
+     "trunc": 6.25,
+     "len": 224.0
+    },
+    {
+     "step": 24,
+     "acc": 32.81,
+     "trunc": 1.56,
+     "len": 219.1
+    },
+    {
+     "step": 25,
+     "acc": 46.88,
+     "trunc": 4.69,
+     "len": 225.5
+    },
+    {
+     "step": 26,
+     "acc": 32.81,
+     "trunc": 9.38,
+     "len": 231.6
+    },
+    {
+     "step": 27,
+     "acc": 56.25,
+     "trunc": 6.25,
+     "len": 234.0
+    },
+    {
+     "step": 28,
+     "acc": 35.94,
+     "trunc": 14.06,
+     "len": 280.3
+    },
+    {
+     "step": 29,
+     "acc": 70.31,
+     "trunc": 3.12,
+     "len": 204.7
+    },
+    {
+     "step": 30,
+     "acc": 35.94,
+     "trunc": 0.0,
+     "len": 208.2
+    },
+    {
+     "step": 31,
+     "acc": 67.19,
+     "trunc": 3.12,
+     "len": 216.1
+    },
+    {
+     "step": 32,
+     "acc": 56.25,
+     "trunc": 0.0,
+     "len": 199.4
+    },
+    {
+     "step": 33,
+     "acc": 57.81,
+     "trunc": 0.0,
+     "len": 177.3
+    },
+    {
+     "step": 34,
+     "acc": 46.88,
+     "trunc": 1.56,
+     "len": 195.5
+    },
+    {
+     "step": 35,
+     "acc": 51.56,
+     "trunc": 1.56,
+     "len": 190.9
+    },
+    {
+     "step": 36,
+     "acc": 46.88,
+     "trunc": 12.5,
+     "len": 248.8
+    },
+    {
+     "step": 37,
+     "acc": 31.25,
+     "trunc": 6.25,
+     "len": 235.9
+    },
+    {
+     "step": 38,
+     "acc": 35.94,
+     "trunc": 0.0,
+     "len": 230.7
+    },
+    {
+     "step": 39,
+     "acc": 54.69,
+     "trunc": 0.0,
+     "len": 182.5
+    },
+    {
+     "step": 40,
+     "acc": 53.12,
+     "trunc": 0.0,
+     "len": 197.1
+    },
+    {
+     "step": 41,
+     "acc": 54.69,
+     "trunc": 0.0,
+     "len": 177.7
+    },
+    {
+     "step": 42,
+     "acc": 64.06,
+     "trunc": 0.0,
+     "len": 210.3
+    },
+    {
+     "step": 43,
+     "acc": 67.19,
+     "trunc": 0.0,
+     "len": 193.6
+    },
+    {
+     "step": 44,
+     "acc": 57.81,
+     "trunc": 0.0,
+     "len": 178.7
+    },
+    {
+     "step": 45,
+     "acc": 64.06,
+     "trunc": 0.0,
+     "len": 169.9
+    },
+    {
+     "step": 46,
+     "acc": 73.44,
+     "trunc": 0.0,
+     "len": 156.4
+    },
+    {
+     "step": 47,
+     "acc": 42.19,
+     "trunc": 0.0,
+     "len": 195.3
+    },
+    {
+     "step": 48,
+     "acc": 79.69,
+     "trunc": 0.0,
+     "len": 159.5
+    },
+    {
+     "step": 49,
+     "acc": 53.12,
+     "trunc": 3.12,
+     "len": 187.3
+    },
+    {
+     "step": 50,
+     "acc": 73.44,
+     "trunc": 0.0,
+     "len": 145.7
+    },
+    {
+     "step": 51,
+     "acc": 67.19,
+     "trunc": 0.0,
+     "len": 164.7
+    },
+    {
+     "step": 52,
+     "acc": 42.19,
+     "trunc": 1.56,
+     "len": 181.2
+    },
+    {
+     "step": 53,
+     "acc": 35.94,
+     "trunc": 1.56,
+     "len": 178.9
+    },
+    {
+     "step": 54,
+     "acc": 65.62,
+     "trunc": 0.0,
+     "len": 117.8
+    },
+    {
+     "step": 55,
+     "acc": 65.62,
+     "trunc": 1.56,
+     "len": 167.1
+    },
+    {
+     "step": 56,
+     "acc": 67.19,
+     "trunc": 0.0,
+     "len": 155.9
+    },
+    {
+     "step": 57,
+     "acc": 57.81,
+     "trunc": 0.0,
+     "len": 149.0
+    },
+    {
+     "step": 58,
+     "acc": 39.06,
+     "trunc": 6.25,
+     "len": 227.6
+    },
+    {
+     "step": 59,
+     "acc": 79.69,
+     "trunc": 0.0,
+     "len": 140.2
+    },
+    {
+     "step": 60,
+     "acc": 53.12,
+     "trunc": 0.0,
+     "len": 154.5
+    },
+    {
+     "step": 61,
+     "acc": 76.56,
+     "trunc": 0.0,
+     "len": 132.9
+    },
+    {
+     "step": 62,
+     "acc": 48.44,
+     "trunc": 0.0,
+     "len": 160.2
+    },
+    {
+     "step": 63,
+     "acc": 45.31,
+     "trunc": 3.12,
+     "len": 172.4
+    },
+    {
+     "step": 64,
+     "acc": 59.38,
+     "trunc": 0.0,
+     "len": 158.0
+    },
+    {
+     "step": 65,
+     "acc": 53.12,
+     "trunc": 0.0,
+     "len": 166.9
+    },
+    {
+     "step": 66,
+     "acc": 57.81,
+     "trunc": 1.56,
+     "len": 180.2
+    },
+    {
+     "step": 67,
+     "acc": 75.0,
+     "trunc": 4.69,
+     "len": 179.5
+    },
+    {
+     "step": 68,
+     "acc": 56.25,
+     "trunc": 1.56,
+     "len": 182.4
+    },
+    {
+     "step": 69,
+     "acc": 70.31,
+     "trunc": 1.56,
+     "len": 165.9
+    },
+    {
+     "step": 70,
+     "acc": 50.0,
+     "trunc": 0.0,
+     "len": 189.6
+    },
+    {
+     "step": 71,
+     "acc": 71.88,
+     "trunc": 0.0,
+     "len": 135.0
+    },
+    {
+     "step": 72,
+     "acc": 70.31,
+     "trunc": 7.81,
+     "len": 208.4
+    },
+    {
+     "step": 73,
+     "acc": 40.62,
+     "trunc": 3.12,
+     "len": 196.4
+    },
+    {
+     "step": 74,
+     "acc": 71.88,
+     "trunc": 0.0,
+     "len": 193.8
+    },
+    {
+     "step": 75,
+     "acc": 48.44,
+     "trunc": 4.69,
+     "len": 217.0
+    },
+    {
+     "step": 76,
+     "acc": 70.31,
+     "trunc": 0.0,
+     "len": 180.6
+    },
+    {
+     "step": 77,
+     "acc": 43.75,
+     "trunc": 3.12,
+     "len": 219.0
+    },
+    {
+     "step": 78,
+     "acc": 79.69,
+     "trunc": 0.0,
+     "len": 170.7
+    },
+    {
+     "step": 79,
+     "acc": 53.12,
+     "trunc": 1.56,
+     "len": 215.3
+    },
+    {
+     "step": 80,
+     "acc": 68.75,
+     "trunc": 0.0,
+     "len": 206.9
+    },
+    {
+     "step": 81,
+     "acc": 48.44,
+     "trunc": 10.94,
+     "len": 240.3
+    },
+    {
+     "step": 82,
+     "acc": 68.75,
+     "trunc": 4.69,
+     "len": 219.2
+    },
+    {
+     "step": 83,
+     "acc": 71.88,
+     "trunc": 4.69,
+     "len": 239.3
+    },
+    {
+     "step": 84,
+     "acc": 65.62,
+     "trunc": 1.56,
+     "len": 224.3
+    },
+    {
+     "step": 85,
+     "acc": 32.81,
+     "trunc": 4.69,
+     "len": 249.5
+    },
+    {
+     "step": 86,
+     "acc": 57.81,
+     "trunc": 1.56,
+     "len": 217.3
+    },
+    {
+     "step": 87,
+     "acc": 51.56,
+     "trunc": 1.56,
+     "len": 240.9
+    },
+    {
+     "step": 88,
+     "acc": 65.62,
+     "trunc": 1.56,
+     "len": 231.8
+    },
+    {
+     "step": 89,
+     "acc": 57.81,
+     "trunc": 3.12,
+     "len": 243.7
+    },
+    {
+     "step": 90,
+     "acc": 81.25,
+     "trunc": 0.0,
+     "len": 215.2
+    },
+    {
+     "step": 91,
+     "acc": 62.5,
+     "trunc": 4.69,
+     "len": 216.1
+    },
+    {
+     "step": 92,
+     "acc": 67.19,
+     "trunc": 1.56,
+     "len": 256.4
+    },
+    {
+     "step": 93,
+     "acc": 43.75,
+     "trunc": 10.94,
+     "len": 288.0
+    },
+    {
+     "step": 94,
+     "acc": 56.25,
+     "trunc": 7.81,
+     "len": 259.9
+    },
+    {
+     "step": 95,
+     "acc": 75.0,
+     "trunc": 4.69,
+     "len": 240.4
+    },
+    {
+     "step": 96,
+     "acc": 62.5,
+     "trunc": 4.69,
+     "len": 201.2
+    },
+    {
+     "step": 97,
+     "acc": 54.69,
+     "trunc": 0.0,
+     "len": 212.9
+    },
+    {
+     "step": 98,
+     "acc": 51.56,
+     "trunc": 15.62,
+     "len": 279.1
+    },
+    {
+     "step": 99,
+     "acc": 56.25,
+     "trunc": 1.56,
+     "len": 218.5
+    },
+    {
+     "step": 100,
+     "acc": 48.44,
+     "trunc": 0.0,
+     "len": 203.7
+    }
+   ],
+   "armA_s1_100": [
+    {
+     "step": 1,
+     "acc": 20.31,
+     "trunc": 62.5,
+     "len": 449.0
+    },
+    {
+     "step": 2,
+     "acc": 18.75,
+     "trunc": 45.31,
+     "len": 421.4
+    },
+    {
+     "step": 3,
+     "acc": 51.56,
+     "trunc": 28.12,
+     "len": 367.0
+    },
+    {
+     "step": 4,
+     "acc": 53.12,
+     "trunc": 31.25,
+     "len": 377.6
+    },
+    {
+     "step": 5,
+     "acc": 62.5,
+     "trunc": 12.5,
+     "len": 278.9
+    },
+    {
+     "step": 6,
+     "acc": 60.94,
+     "trunc": 20.31,
+     "len": 332.3
+    },
+    {
+     "step": 7,
+     "acc": 56.25,
+     "trunc": 26.56,
+     "len": 319.4
+    },
+    {
+     "step": 8,
+     "acc": 50.0,
+     "trunc": 6.25,
+     "len": 274.4
+    },
+    {
+     "step": 9,
+     "acc": 48.44,
+     "trunc": 4.69,
+     "len": 249.0
+    },
+    {
+     "step": 10,
+     "acc": 50.0,
+     "trunc": 3.12,
+     "len": 216.8
+    },
+    {
+     "step": 11,
+     "acc": 60.94,
+     "trunc": 12.5,
+     "len": 255.3
+    },
+    {
+     "step": 12,
+     "acc": 45.31,
+     "trunc": 3.12,
+     "len": 233.1
+    },
+    {
+     "step": 13,
+     "acc": 46.88,
+     "trunc": 6.25,
+     "len": 243.1
+    },
+    {
+     "step": 14,
+     "acc": 59.38,
+     "trunc": 9.38,
+     "len": 253.0
+    },
+    {
+     "step": 15,
+     "acc": 46.88,
+     "trunc": 6.25,
+     "len": 233.1
+    },
+    {
+     "step": 16,
+     "acc": 46.88,
+     "trunc": 0.0,
+     "len": 170.3
+    },
+    {
+     "step": 17,
+     "acc": 50.0,
+     "trunc": 6.25,
+     "len": 183.9
+    },
+    {
+     "step": 18,
+     "acc": 57.81,
+     "trunc": 6.25,
+     "len": 181.6
+    },
+    {
+     "step": 19,
+     "acc": 64.06,
+     "trunc": 0.0,
+     "len": 158.3
+    },
+    {
+     "step": 20,
+     "acc": 70.31,
+     "trunc": 0.0,
+     "len": 142.0
+    },
+    {
+     "step": 21,
+     "acc": 12.5,
+     "trunc": 18.75,
+     "len": 248.5
+    },
+    {
+     "step": 22,
+     "acc": 42.19,
+     "trunc": 1.56,
+     "len": 229.0
+    },
+    {
+     "step": 23,
+     "acc": 73.44,
+     "trunc": 0.0,
+     "len": 174.6
+    },
+    {
+     "step": 24,
+     "acc": 62.5,
+     "trunc": 6.25,
+     "len": 233.4
+    },
+    {
+     "step": 25,
+     "acc": 56.25,
+     "trunc": 6.25,
+     "len": 241.9
+    },
+    {
+     "step": 26,
+     "acc": 56.25,
+     "trunc": 10.94,
+     "len": 244.0
+    },
+    {
+     "step": 27,
+     "acc": 50.0,
+     "trunc": 3.12,
+     "len": 217.9
+    },
+    {
+     "step": 28,
+     "acc": 37.5,
+     "trunc": 12.5,
+     "len": 277.2
+    },
+    {
+     "step": 29,
+     "acc": 51.56,
+     "trunc": 14.06,
+     "len": 285.3
+    },
+    {
+     "step": 30,
+     "acc": 46.88,
+     "trunc": 26.56,
+     "len": 309.6
+    },
+    {
+     "step": 31,
+     "acc": 62.5,
+     "trunc": 9.38,
+     "len": 268.9
+    },
+    {
+     "step": 32,
+     "acc": 43.75,
+     "trunc": 17.19,
+     "len": 287.0
+    },
+    {
+     "step": 33,
+     "acc": 62.5,
+     "trunc": 12.5,
+     "len": 277.3
+    },
+    {
+     "step": 34,
+     "acc": 68.75,
+     "trunc": 15.62,
+     "len": 268.0
+    },
+    {
+     "step": 35,
+     "acc": 51.56,
+     "trunc": 12.5,
+     "len": 268.4
+    },
+    {
+     "step": 36,
+     "acc": 70.31,
+     "trunc": 9.38,
+     "len": 227.7
+    },
+    {
+     "step": 37,
+     "acc": 57.81,
+     "trunc": 9.38,
+     "len": 210.8
+    },
+    {
+     "step": 38,
+     "acc": 51.56,
+     "trunc": 6.25,
+     "len": 217.7
+    },
+    {
+     "step": 39,
+     "acc": 65.62,
+     "trunc": 3.12,
+     "len": 192.6
+    },
+    {
+     "step": 40,
+     "acc": 65.62,
+     "trunc": 6.25,
+     "len": 243.6
+    },
+    {
+     "step": 41,
+     "acc": 73.44,
+     "trunc": 9.38,
+     "len": 229.1
+    },
+    {
+     "step": 42,
+     "acc": 70.31,
+     "trunc": 0.0,
+     "len": 191.1
+    },
+    {
+     "step": 43,
+     "acc": 70.31,
+     "trunc": 3.12,
+     "len": 260.0
+    },
+    {
+     "step": 44,
+     "acc": 53.12,
+     "trunc": 7.81,
+     "len": 235.9
+    },
+    {
+     "step": 45,
+     "acc": 68.75,
+     "trunc": 0.0,
+     "len": 183.8
+    },
+    {
+     "step": 46,
+     "acc": 50.0,
+     "trunc": 7.81,
+     "len": 258.5
+    },
+    {
+     "step": 47,
+     "acc": 46.88,
+     "trunc": 12.5,
+     "len": 272.2
+    },
+    {
+     "step": 48,
+     "acc": 85.94,
+     "trunc": 1.56,
+     "len": 195.7
+    },
+    {
+     "step": 49,
+     "acc": 75.0,
+     "trunc": 0.0,
+     "len": 177.6
+    },
+    {
+     "step": 50,
+     "acc": 71.88,
+     "trunc": 3.12,
+     "len": 208.5
+    },
+    {
+     "step": 51,
+     "acc": 57.81,
+     "trunc": 3.12,
+     "len": 255.9
+    },
+    {
+     "step": 52,
+     "acc": 51.56,
+     "trunc": 14.06,
+     "len": 310.5
+    },
+    {
+     "step": 53,
+     "acc": 73.44,
+     "trunc": 9.38,
+     "len": 243.0
+    },
+    {
+     "step": 54,
+     "acc": 85.94,
+     "trunc": 9.38,
+     "len": 211.9
+    },
+    {
+     "step": 55,
+     "acc": 45.31,
+     "trunc": 6.25,
+     "len": 269.3
+    },
+    {
+     "step": 56,
+     "acc": 50.0,
+     "trunc": 14.06,
+     "len": 282.5
+    },
+    {
+     "step": 57,
+     "acc": 64.06,
+     "trunc": 0.0,
+     "len": 236.3
+    },
+    {
+     "step": 58,
+     "acc": 62.5,
+     "trunc": 0.0,
+     "len": 236.5
+    },
+    {
+     "step": 59,
+     "acc": 37.5,
+     "trunc": 14.06,
+     "len": 296.8
+    },
+    {
+     "step": 60,
+     "acc": 56.25,
+     "trunc": 3.12,
+     "len": 215.7
+    },
+    {
+     "step": 61,
+     "acc": 68.75,
+     "trunc": 0.0,
+     "len": 235.0
+    },
+    {
+     "step": 62,
+     "acc": 79.69,
+     "trunc": 1.56,
+     "len": 177.6
+    },
+    {
+     "step": 63,
+     "acc": 57.81,
+     "trunc": 0.0,
+     "len": 207.8
+    },
+    {
+     "step": 64,
+     "acc": 75.0,
+     "trunc": 14.06,
+     "len": 233.4
+    },
+    {
+     "step": 65,
+     "acc": 62.5,
+     "trunc": 12.5,
+     "len": 280.1
+    },
+    {
+     "step": 66,
+     "acc": 46.88,
+     "trunc": 10.94,
+     "len": 287.4
+    },
+    {
+     "step": 67,
+     "acc": 60.94,
+     "trunc": 14.06,
+     "len": 309.3
+    },
+    {
+     "step": 68,
+     "acc": 73.44,
+     "trunc": 0.0,
+     "len": 203.2
+    },
+    {
+     "step": 69,
+     "acc": 59.38,
+     "trunc": 14.06,
+     "len": 275.3
+    },
+    {
+     "step": 70,
+     "acc": 70.31,
+     "trunc": 0.0,
+     "len": 244.3
+    },
+    {
+     "step": 71,
+     "acc": 57.81,
+     "trunc": 12.5,
+     "len": 272.5
+    },
+    {
+     "step": 72,
+     "acc": 82.81,
+     "trunc": 6.25,
+     "len": 212.8
+    },
+    {
+     "step": 73,
+     "acc": 79.69,
+     "trunc": 4.69,
+     "len": 209.3
+    },
+    {
+     "step": 74,
+     "acc": 56.25,
+     "trunc": 3.12,
+     "len": 268.2
+    },
+    {
+     "step": 75,
+     "acc": 51.56,
+     "trunc": 10.94,
+     "len": 310.3
+    },
+    {
+     "step": 76,
+     "acc": 71.88,
+     "trunc": 0.0,
+     "len": 241.5
+    },
+    {
+     "step": 77,
+     "acc": 81.25,
+     "trunc": 1.56,
+     "len": 225.3
+    },
+    {
+     "step": 78,
+     "acc": 78.12,
+     "trunc": 0.0,
+     "len": 240.0
+    },
+    {
+     "step": 79,
+     "acc": 70.31,
+     "trunc": 4.69,
+     "len": 281.2
+    },
+    {
+     "step": 80,
+     "acc": 46.88,
+     "trunc": 0.0,
+     "len": 264.7
+    },
+    {
+     "step": 81,
+     "acc": 70.31,
+     "trunc": 6.25,
+     "len": 245.9
+    },
+    {
+     "step": 82,
+     "acc": 68.75,
+     "trunc": 4.69,
+     "len": 251.9
+    },
+    {
+     "step": 83,
+     "acc": 53.12,
+     "trunc": 3.12,
+     "len": 311.8
+    },
+    {
+     "step": 84,
+     "acc": 76.56,
+     "trunc": 7.81,
+     "len": 285.8
+    },
+    {
+     "step": 85,
+     "acc": 84.38,
+     "trunc": 1.56,
+     "len": 309.2
+    },
+    {
+     "step": 86,
+     "acc": 60.94,
+     "trunc": 0.0,
+     "len": 272.6
+    },
+    {
+     "step": 87,
+     "acc": 57.81,
+     "trunc": 12.5,
+     "len": 305.9
+    },
+    {
+     "step": 88,
+     "acc": 73.44,
+     "trunc": 3.12,
+     "len": 288.8
+    },
+    {
+     "step": 89,
+     "acc": 51.56,
+     "trunc": 6.25,
+     "len": 274.2
+    },
+    {
+     "step": 90,
+     "acc": 43.75,
+     "trunc": 9.38,
+     "len": 292.7
+    },
+    {
+     "step": 91,
+     "acc": 56.25,
+     "trunc": 0.0,
+     "len": 245.5
+    },
+    {
+     "step": 92,
+     "acc": 75.0,
+     "trunc": 0.0,
+     "len": 262.2
+    },
+    {
+     "step": 93,
+     "acc": 84.38,
+     "trunc": 1.56,
+     "len": 277.6
+    },
+    {
+     "step": 94,
+     "acc": 70.31,
+     "trunc": 10.94,
+     "len": 296.3
+    },
+    {
+     "step": 95,
+     "acc": 64.06,
+     "trunc": 20.31,
+     "len": 321.5
+    },
+    {
+     "step": 96,
+     "acc": 59.38,
+     "trunc": 6.25,
+     "len": 277.0
+    },
+    {
+     "step": 97,
+     "acc": 78.12,
+     "trunc": 9.38,
+     "len": 282.8
+    },
+    {
+     "step": 98,
+     "acc": 82.81,
+     "trunc": 3.12,
+     "len": 274.7
+    },
+    {
+     "step": 99,
+     "acc": 84.38,
+     "trunc": 3.12,
+     "len": 264.6
+    },
+    {
+     "step": 100,
+     "acc": 64.06,
+     "trunc": 10.94,
+     "len": 332.3
+    }
+   ],
+   "armB_s0_100": [
+    {
+     "step": 1,
+     "acc": 54.69,
+     "trunc": 20.31,
+     "len": 374.8
+    },
+    {
+     "step": 2,
+     "acc": 37.5,
+     "trunc": 34.38,
+     "len": 394.1
+    },
+    {
+     "step": 3,
+     "acc": 45.31,
+     "trunc": 31.25,
+     "len": 409.0
+    },
+    {
+     "step": 4,
+     "acc": 51.56,
+     "trunc": 15.62,
+     "len": 358.0
+    },
+    {
+     "step": 5,
+     "acc": 26.56,
+     "trunc": 25.0,
+     "len": 404.3
+    },
+    {
+     "step": 6,
+     "acc": 39.06,
+     "trunc": 28.12,
+     "len": 375.7
+    },
+    {
+     "step": 7,
+     "acc": 34.38,
+     "trunc": 18.75,
+     "len": 387.6
+    },
+    {
+     "step": 8,
+     "acc": 48.44,
+     "trunc": 20.31,
+     "len": 357.5
+    },
+    {
+     "step": 9,
+     "acc": 21.88,
+     "trunc": 34.38,
+     "len": 413.4
+    },
+    {
+     "step": 10,
+     "acc": 59.38,
+     "trunc": 9.38,
+     "len": 294.5
+    },
+    {
+     "step": 11,
+     "acc": 21.88,
+     "trunc": 4.69,
+     "len": 335.8
+    },
+    {
+     "step": 12,
+     "acc": 37.5,
+     "trunc": 14.06,
+     "len": 338.3
+    },
+    {
+     "step": 13,
+     "acc": 45.31,
+     "trunc": 9.38,
+     "len": 290.8
+    },
+    {
+     "step": 14,
+     "acc": 43.75,
+     "trunc": 1.56,
+     "len": 241.8
+    },
+    {
+     "step": 15,
+     "acc": 48.44,
+     "trunc": 6.25,
+     "len": 290.8
+    },
+    {
+     "step": 16,
+     "acc": 37.5,
+     "trunc": 9.38,
+     "len": 265.9
+    },
+    {
+     "step": 17,
+     "acc": 51.56,
+     "trunc": 0.0,
+     "len": 228.8
+    },
+    {
+     "step": 18,
+     "acc": 35.94,
+     "trunc": 0.0,
+     "len": 234.7
+    },
+    {
+     "step": 19,
+     "acc": 51.56,
+     "trunc": 0.0,
+     "len": 186.1
+    },
+    {
+     "step": 20,
+     "acc": 56.25,
+     "trunc": 4.69,
+     "len": 243.9
+    },
+    {
+     "step": 21,
+     "acc": 54.69,
+     "trunc": 1.56,
+     "len": 204.5
+    },
+    {
+     "step": 22,
+     "acc": 39.06,
+     "trunc": 4.69,
+     "len": 216.4
+    },
+    {
+     "step": 23,
+     "acc": 56.25,
+     "trunc": 0.0,
+     "len": 181.5
+    },
+    {
+     "step": 24,
+     "acc": 26.56,
+     "trunc": 0.0,
+     "len": 190.6
+    },
+    {
+     "step": 25,
+     "acc": 35.94,
+     "trunc": 0.0,
+     "len": 183.5
+    },
+    {
+     "step": 26,
+     "acc": 35.94,
+     "trunc": 0.0,
+     "len": 166.0
+    },
+    {
+     "step": 27,
+     "acc": 57.81,
+     "trunc": 0.0,
+     "len": 190.2
+    },
+    {
+     "step": 28,
+     "acc": 15.62,
+     "trunc": 4.69,
+     "len": 247.7
+    },
+    {
+     "step": 29,
+     "acc": 62.5,
+     "trunc": 0.0,
+     "len": 204.1
+    },
+    {
+     "step": 30,
+     "acc": 26.56,
+     "trunc": 0.0,
+     "len": 208.2
+    },
+    {
+     "step": 31,
+     "acc": 39.06,
+     "trunc": 1.56,
+     "len": 223.1
+    },
+    {
+     "step": 32,
+     "acc": 46.88,
+     "trunc": 0.0,
+     "len": 214.4
+    },
+    {
+     "step": 33,
+     "acc": 57.81,
+     "trunc": 4.69,
+     "len": 229.7
+    },
+    {
+     "step": 34,
+     "acc": 46.88,
+     "trunc": 0.0,
+     "len": 219.6
+    },
+    {
+     "step": 35,
+     "acc": 56.25,
+     "trunc": 1.56,
+     "len": 239.0
+    },
+    {
+     "step": 36,
+     "acc": 35.94,
+     "trunc": 9.38,
+     "len": 284.3
+    },
+    {
+     "step": 37,
+     "acc": 31.25,
+     "trunc": 10.94,
+     "len": 307.8
+    },
+    {
+     "step": 38,
+     "acc": 40.62,
+     "trunc": 0.0,
+     "len": 271.5
+    },
+    {
+     "step": 39,
+     "acc": 62.5,
+     "trunc": 0.0,
+     "len": 225.1
+    },
+    {
+     "step": 40,
+     "acc": 54.69,
+     "trunc": 0.0,
+     "len": 230.0
+    },
+    {
+     "step": 41,
+     "acc": 59.38,
+     "trunc": 0.0,
+     "len": 229.5
+    },
+    {
+     "step": 42,
+     "acc": 59.38,
+     "trunc": 1.56,
+     "len": 263.5
+    },
+    {
+     "step": 43,
+     "acc": 65.62,
+     "trunc": 0.0,
+     "len": 255.0
+    },
+    {
+     "step": 44,
+     "acc": 62.5,
+     "trunc": 0.0,
+     "len": 221.7
+    },
+    {
+     "step": 45,
+     "acc": 59.38,
+     "trunc": 0.0,
+     "len": 261.4
+    },
+    {
+     "step": 46,
+     "acc": 67.19,
+     "trunc": 1.56,
+     "len": 250.8
+    },
+    {
+     "step": 47,
+     "acc": 54.69,
+     "trunc": 6.25,
+     "len": 291.5
+    },
+    {
+     "step": 48,
+     "acc": 59.38,
+     "trunc": 3.12,
+     "len": 261.2
+    },
+    {
+     "step": 49,
+     "acc": 71.88,
+     "trunc": 1.56,
+     "len": 272.7
+    },
+    {
+     "step": 50,
+     "acc": 81.25,
+     "trunc": 0.0,
+     "len": 230.6
+    },
+    {
+     "step": 51,
+     "acc": 79.69,
+     "trunc": 1.56,
+     "len": 262.3
+    },
+    {
+     "step": 52,
+     "acc": 39.06,
+     "trunc": 3.12,
+     "len": 278.7
+    },
+    {
+     "step": 53,
+     "acc": 43.75,
+     "trunc": 9.38,
+     "len": 270.4
+    },
+    {
+     "step": 54,
+     "acc": 60.94,
+     "trunc": 0.0,
+     "len": 215.5
+    },
+    {
+     "step": 55,
+     "acc": 68.75,
+     "trunc": 1.56,
+     "len": 244.8
+    },
+    {
+     "step": 56,
+     "acc": 60.94,
+     "trunc": 0.0,
+     "len": 245.0
+    },
+    {
+     "step": 57,
+     "acc": 51.56,
+     "trunc": 0.0,
+     "len": 214.8
+    },
+    {
+     "step": 58,
+     "acc": 46.88,
+     "trunc": 15.62,
+     "len": 316.7
+    },
+    {
+     "step": 59,
+     "acc": 70.31,
+     "trunc": 1.56,
+     "len": 214.4
+    },
+    {
+     "step": 60,
+     "acc": 68.75,
+     "trunc": 0.0,
+     "len": 217.0
+    },
+    {
+     "step": 61,
+     "acc": 78.12,
+     "trunc": 1.56,
+     "len": 190.0
+    },
+    {
+     "step": 62,
+     "acc": 59.38,
+     "trunc": 1.56,
+     "len": 222.0
+    },
+    {
+     "step": 63,
+     "acc": 59.38,
+     "trunc": 6.25,
+     "len": 234.5
+    },
+    {
+     "step": 64,
+     "acc": 56.25,
+     "trunc": 1.56,
+     "len": 221.1
+    },
+    {
+     "step": 65,
+     "acc": 51.56,
+     "trunc": 3.12,
+     "len": 245.2
+    },
+    {
+     "step": 66,
+     "acc": 60.94,
+     "trunc": 0.0,
+     "len": 251.0
+    },
+    {
+     "step": 67,
+     "acc": 73.44,
+     "trunc": 1.56,
+     "len": 242.2
+    },
+    {
+     "step": 68,
+     "acc": 50.0,
+     "trunc": 7.81,
+     "len": 272.2
+    },
+    {
+     "step": 69,
+     "acc": 76.56,
+     "trunc": 0.0,
+     "len": 230.3
+    },
+    {
+     "step": 70,
+     "acc": 39.06,
+     "trunc": 10.94,
+     "len": 268.2
+    },
+    {
+     "step": 71,
+     "acc": 82.81,
+     "trunc": 0.0,
+     "len": 180.4
+    },
+    {
+     "step": 72,
+     "acc": 82.81,
+     "trunc": 0.0,
+     "len": 255.1
+    },
+    {
+     "step": 73,
+     "acc": 56.25,
+     "trunc": 4.69,
+     "len": 263.0
+    },
+    {
+     "step": 74,
+     "acc": 64.06,
+     "trunc": 0.0,
+     "len": 245.0
+    },
+    {
+     "step": 75,
+     "acc": 53.12,
+     "trunc": 9.38,
+     "len": 283.9
+    },
+    {
+     "step": 76,
+     "acc": 75.0,
+     "trunc": 3.12,
+     "len": 254.8
+    },
+    {
+     "step": 77,
+     "acc": 40.62,
+     "trunc": 6.25,
+     "len": 287.9
+    },
+    {
+     "step": 78,
+     "acc": 89.06,
+     "trunc": 4.69,
+     "len": 221.2
+    },
+    {
+     "step": 79,
+     "acc": 45.31,
+     "trunc": 3.12,
+     "len": 286.8
+    },
+    {
+     "step": 80,
+     "acc": 71.88,
+     "trunc": 6.25,
+     "len": 258.3
+    },
+    {
+     "step": 81,
+     "acc": 54.69,
+     "trunc": 0.0,
+     "len": 275.0
+    },
+    {
+     "step": 82,
+     "acc": 75.0,
+     "trunc": 3.12,
+     "len": 240.6
+    },
+    {
+     "step": 83,
+     "acc": 75.0,
+     "trunc": 4.69,
+     "len": 266.3
+    },
+    {
+     "step": 84,
+     "acc": 79.69,
+     "trunc": 1.56,
+     "len": 251.9
+    },
+    {
+     "step": 85,
+     "acc": 39.06,
+     "trunc": 6.25,
+     "len": 298.1
+    },
+    {
+     "step": 86,
+     "acc": 73.44,
+     "trunc": 1.56,
+     "len": 234.2
+    },
+    {
+     "step": 87,
+     "acc": 50.0,
+     "trunc": 3.12,
+     "len": 227.5
+    },
+    {
+     "step": 88,
+     "acc": 56.25,
+     "trunc": 0.0,
+     "len": 210.9
+    },
+    {
+     "step": 89,
+     "acc": 53.12,
+     "trunc": 1.56,
+     "len": 239.7
+    },
+    {
+     "step": 90,
+     "acc": 70.31,
+     "trunc": 1.56,
+     "len": 215.8
+    },
+    {
+     "step": 91,
+     "acc": 62.5,
+     "trunc": 0.0,
+     "len": 207.9
+    },
+    {
+     "step": 92,
+     "acc": 68.75,
+     "trunc": 1.56,
+     "len": 250.2
+    },
+    {
+     "step": 93,
+     "acc": 51.56,
+     "trunc": 7.81,
+     "len": 267.4
+    },
+    {
+     "step": 94,
+     "acc": 54.69,
+     "trunc": 7.81,
+     "len": 242.0
+    },
+    {
+     "step": 95,
+     "acc": 82.81,
+     "trunc": 0.0,
+     "len": 236.0
+    },
+    {
+     "step": 96,
+     "acc": 70.31,
+     "trunc": 0.0,
+     "len": 218.0
+    },
+    {
+     "step": 97,
+     "acc": 57.81,
+     "trunc": 0.0,
+     "len": 230.7
+    },
+    {
+     "step": 98,
+     "acc": 51.56,
+     "trunc": 0.0,
+     "len": 266.5
+    },
+    {
+     "step": 99,
+     "acc": 46.88,
+     "trunc": 0.0,
+     "len": 230.0
+    },
+    {
+     "step": 100,
+     "acc": 65.62,
+     "trunc": 0.0,
+     "len": 194.5
+    }
+   ],
+   "armB_s1_100": [
+    {
+     "step": 1,
+     "acc": 29.69,
+     "trunc": 45.31,
+     "len": 426.6
+    },
+    {
+     "step": 2,
+     "acc": 26.56,
+     "trunc": 28.12,
+     "len": 396.8
+    },
+    {
+     "step": 3,
+     "acc": 50.0,
+     "trunc": 18.75,
+     "len": 358.5
+    },
+    {
+     "step": 4,
+     "acc": 56.25,
+     "trunc": 9.38,
+     "len": 367.4
+    },
+    {
+     "step": 5,
+     "acc": 67.19,
+     "trunc": 7.81,
+     "len": 303.9
+    },
+    {
+     "step": 6,
+     "acc": 45.31,
+     "trunc": 14.06,
+     "len": 375.1
+    },
+    {
+     "step": 7,
+     "acc": 53.12,
+     "trunc": 15.62,
+     "len": 345.6
+    },
+    {
+     "step": 8,
+     "acc": 37.5,
+     "trunc": 4.69,
+     "len": 342.4
+    },
+    {
+     "step": 9,
+     "acc": 35.94,
+     "trunc": 12.5,
+     "len": 352.1
+    },
+    {
+     "step": 10,
+     "acc": 51.56,
+     "trunc": 1.56,
+     "len": 315.5
+    },
+    {
+     "step": 11,
+     "acc": 60.94,
+     "trunc": 18.75,
+     "len": 342.0
+    },
+    {
+     "step": 12,
+     "acc": 43.75,
+     "trunc": 1.56,
+     "len": 332.3
+    },
+    {
+     "step": 13,
+     "acc": 46.88,
+     "trunc": 14.06,
+     "len": 369.1
+    },
+    {
+     "step": 14,
+     "acc": 48.44,
+     "trunc": 18.75,
+     "len": 366.1
+    },
+    {
+     "step": 15,
+     "acc": 45.31,
+     "trunc": 15.62,
+     "len": 363.1
+    },
+    {
+     "step": 16,
+     "acc": 45.31,
+     "trunc": 7.81,
+     "len": 322.2
+    },
+    {
+     "step": 17,
+     "acc": 43.75,
+     "trunc": 7.81,
+     "len": 309.5
+    },
+    {
+     "step": 18,
+     "acc": 53.12,
+     "trunc": 9.38,
+     "len": 336.6
+    },
+    {
+     "step": 19,
+     "acc": 53.12,
+     "trunc": 3.12,
+     "len": 313.4
+    },
+    {
+     "step": 20,
+     "acc": 60.94,
+     "trunc": 0.0,
+     "len": 253.6
+    },
+    {
+     "step": 21,
+     "acc": 18.75,
+     "trunc": 20.31,
+     "len": 327.0
+    },
+    {
+     "step": 22,
+     "acc": 43.75,
+     "trunc": 1.56,
+     "len": 317.0
+    },
+    {
+     "step": 23,
+     "acc": 65.62,
+     "trunc": 1.56,
+     "len": 263.7
+    },
+    {
+     "step": 24,
+     "acc": 65.62,
+     "trunc": 3.12,
+     "len": 293.0
+    },
+    {
+     "step": 25,
+     "acc": 56.25,
+     "trunc": 10.94,
+     "len": 323.4
+    },
+    {
+     "step": 26,
+     "acc": 53.12,
+     "trunc": 7.81,
+     "len": 295.3
+    },
+    {
+     "step": 27,
+     "acc": 59.38,
+     "trunc": 9.38,
+     "len": 267.2
+    },
+    {
+     "step": 28,
+     "acc": 42.19,
+     "trunc": 4.69,
+     "len": 276.6
+    },
+    {
+     "step": 29,
+     "acc": 48.44,
+     "trunc": 4.69,
+     "len": 298.4
+    },
+    {
+     "step": 30,
+     "acc": 51.56,
+     "trunc": 15.62,
+     "len": 323.9
+    },
+    {
+     "step": 31,
+     "acc": 54.69,
+     "trunc": 3.12,
+     "len": 295.2
+    },
+    {
+     "step": 32,
+     "acc": 43.75,
+     "trunc": 9.38,
+     "len": 282.7
+    },
+    {
+     "step": 33,
+     "acc": 59.38,
+     "trunc": 10.94,
+     "len": 304.7
+    },
+    {
+     "step": 34,
+     "acc": 64.06,
+     "trunc": 7.81,
+     "len": 295.5
+    },
+    {
+     "step": 35,
+     "acc": 60.94,
+     "trunc": 1.56,
+     "len": 274.8
+    },
+    {
+     "step": 36,
+     "acc": 71.88,
+     "trunc": 7.81,
+     "len": 254.4
+    },
+    {
+     "step": 37,
+     "acc": 73.44,
+     "trunc": 0.0,
+     "len": 245.7
+    },
+    {
+     "step": 38,
+     "acc": 60.94,
+     "trunc": 3.12,
+     "len": 269.6
+    },
+    {
+     "step": 39,
+     "acc": 51.56,
+     "trunc": 3.12,
+     "len": 250.6
+    },
+    {
+     "step": 40,
+     "acc": 59.38,
+     "trunc": 3.12,
+     "len": 276.8
+    },
+    {
+     "step": 41,
+     "acc": 71.88,
+     "trunc": 4.69,
+     "len": 269.5
+    },
+    {
+     "step": 42,
+     "acc": 48.44,
+     "trunc": 3.12,
+     "len": 246.8
+    },
+    {
+     "step": 43,
+     "acc": 67.19,
+     "trunc": 4.69,
+     "len": 304.5
+    },
+    {
+     "step": 44,
+     "acc": 48.44,
+     "trunc": 1.56,
+     "len": 229.5
+    },
+    {
+     "step": 45,
+     "acc": 60.94,
+     "trunc": 0.0,
+     "len": 179.7
+    },
+    {
+     "step": 46,
+     "acc": 46.88,
+     "trunc": 9.38,
+     "len": 230.6
+    },
+    {
+     "step": 47,
+     "acc": 42.19,
+     "trunc": 0.0,
+     "len": 186.7
+    },
+    {
+     "step": 48,
+     "acc": 84.38,
+     "trunc": 0.0,
+     "len": 157.5
+    },
+    {
+     "step": 49,
+     "acc": 67.19,
+     "trunc": 0.0,
+     "len": 125.3
+    },
+    {
+     "step": 50,
+     "acc": 71.88,
+     "trunc": 0.0,
+     "len": 139.4
+    },
+    {
+     "step": 51,
+     "acc": 53.12,
+     "trunc": 1.56,
+     "len": 174.3
+    },
+    {
+     "step": 52,
+     "acc": 48.44,
+     "trunc": 9.38,
+     "len": 216.6
+    },
+    {
+     "step": 53,
+     "acc": 76.56,
+     "trunc": 6.25,
+     "len": 163.6
+    },
+    {
+     "step": 54,
+     "acc": 82.81,
+     "trunc": 3.12,
+     "len": 161.6
+    },
+    {
+     "step": 55,
+     "acc": 34.38,
+     "trunc": 0.0,
+     "len": 184.0
+    },
+    {
+     "step": 56,
+     "acc": 48.44,
+     "trunc": 3.12,
+     "len": 209.9
+    },
+    {
+     "step": 57,
+     "acc": 60.94,
+     "trunc": 3.12,
+     "len": 206.9
+    },
+    {
+     "step": 58,
+     "acc": 57.81,
+     "trunc": 3.12,
+     "len": 198.0
+    },
+    {
+     "step": 59,
+     "acc": 42.19,
+     "trunc": 9.38,
+     "len": 267.4
+    },
+    {
+     "step": 60,
+     "acc": 59.38,
+     "trunc": 6.25,
+     "len": 203.7
+    },
+    {
+     "step": 61,
+     "acc": 67.19,
+     "trunc": 3.12,
+     "len": 224.8
+    },
+    {
+     "step": 62,
+     "acc": 79.69,
+     "trunc": 3.12,
+     "len": 163.6
+    },
+    {
+     "step": 63,
+     "acc": 39.06,
+     "trunc": 0.0,
+     "len": 195.0
+    },
+    {
+     "step": 64,
+     "acc": 64.06,
+     "trunc": 12.5,
+     "len": 234.1
+    },
+    {
+     "step": 65,
+     "acc": 54.69,
+     "trunc": 15.62,
+     "len": 260.5
+    },
+    {
+     "step": 66,
+     "acc": 48.44,
+     "trunc": 14.06,
+     "len": 305.6
+    },
+    {
+     "step": 67,
+     "acc": 57.81,
+     "trunc": 15.62,
+     "len": 299.7
+    },
+    {
+     "step": 68,
+     "acc": 71.88,
+     "trunc": 0.0,
+     "len": 191.3
+    },
+    {
+     "step": 69,
+     "acc": 42.19,
+     "trunc": 15.62,
+     "len": 305.6
+    },
+    {
+     "step": 70,
+     "acc": 53.12,
+     "trunc": 4.69,
+     "len": 277.3
+    },
+    {
+     "step": 71,
+     "acc": 42.19,
+     "trunc": 20.31,
+     "len": 314.9
+    },
+    {
+     "step": 72,
+     "acc": 85.94,
+     "trunc": 3.12,
+     "len": 207.5
+    },
+    {
+     "step": 73,
+     "acc": 62.5,
+     "trunc": 4.69,
+     "len": 234.1
+    },
+    {
+     "step": 74,
+     "acc": 39.06,
+     "trunc": 10.94,
+     "len": 294.1
+    },
+    {
+     "step": 75,
+     "acc": 45.31,
+     "trunc": 28.12,
+     "len": 351.4
+    },
+    {
+     "step": 76,
+     "acc": 64.06,
+     "trunc": 1.56,
+     "len": 246.4
+    },
+    {
+     "step": 77,
+     "acc": 73.44,
+     "trunc": 3.12,
+     "len": 244.2
+    },
+    {
+     "step": 78,
+     "acc": 64.06,
+     "trunc": 1.56,
+     "len": 271.2
+    },
+    {
+     "step": 79,
+     "acc": 57.81,
+     "trunc": 15.62,
+     "len": 329.6
+    },
+    {
+     "step": 80,
+     "acc": 42.19,
+     "trunc": 14.06,
+     "len": 327.4
+    },
+    {
+     "step": 81,
+     "acc": 79.69,
+     "trunc": 4.69,
+     "len": 231.2
+    },
+    {
+     "step": 82,
+     "acc": 71.88,
+     "trunc": 1.56,
+     "len": 232.3
+    },
+    {
+     "step": 83,
+     "acc": 48.44,
+     "trunc": 3.12,
+     "len": 291.0
+    },
+    {
+     "step": 84,
+     "acc": 64.06,
+     "trunc": 14.06,
+     "len": 288.2
+    },
+    {
+     "step": 85,
+     "acc": 60.94,
+     "trunc": 0.0,
+     "len": 285.3
+    },
+    {
+     "step": 86,
+     "acc": 46.88,
+     "trunc": 3.12,
+     "len": 283.0
+    },
+    {
+     "step": 87,
+     "acc": 57.81,
+     "trunc": 3.12,
+     "len": 276.0
+    },
+    {
+     "step": 88,
+     "acc": 67.19,
+     "trunc": 1.56,
+     "len": 274.6
+    },
+    {
+     "step": 89,
+     "acc": 62.5,
+     "trunc": 0.0,
+     "len": 264.1
+    },
+    {
+     "step": 90,
+     "acc": 57.81,
+     "trunc": 4.69,
+     "len": 287.2
+    },
+    {
+     "step": 91,
+     "acc": 67.19,
+     "trunc": 1.56,
+     "len": 259.8
+    },
+    {
+     "step": 92,
+     "acc": 53.12,
+     "trunc": 7.81,
+     "len": 280.6
+    },
+    {
+     "step": 93,
+     "acc": 78.12,
+     "trunc": 1.56,
+     "len": 260.5
+    },
+    {
+     "step": 94,
+     "acc": 71.88,
+     "trunc": 4.69,
+     "len": 292.8
+    },
+    {
+     "step": 95,
+     "acc": 70.31,
+     "trunc": 17.19,
+     "len": 312.0
+    },
+    {
+     "step": 96,
+     "acc": 53.12,
+     "trunc": 15.62,
+     "len": 321.7
+    },
+    {
+     "step": 97,
+     "acc": 64.06,
+     "trunc": 9.38,
+     "len": 271.7
+    },
+    {
+     "step": 98,
+     "acc": 78.12,
+     "trunc": 7.81,
+     "len": 291.1
+    },
+    {
+     "step": 99,
+     "acc": 75.0,
+     "trunc": 0.0,
+     "len": 279.8
+    },
+    {
+     "step": 100,
+     "acc": 64.06,
+     "trunc": 15.62,
+     "len": 371.7
+    }
+   ],
+   "armC_s0_100": [
+    {
+     "step": 1,
+     "acc": 34.38,
+     "trunc": 48.44,
+     "len": 421.2
+    },
+    {
+     "step": 2,
+     "acc": 28.12,
+     "trunc": 43.75,
+     "len": 404.9
+    },
+    {
+     "step": 3,
+     "acc": 48.44,
+     "trunc": 31.25,
+     "len": 386.3
+    },
+    {
+     "step": 4,
+     "acc": 43.75,
+     "trunc": 20.31,
+     "len": 316.0
+    },
+    {
+     "step": 5,
+     "acc": 29.69,
+     "trunc": 7.81,
+     "len": 328.8
+    },
+    {
+     "step": 6,
+     "acc": 46.88,
+     "trunc": 9.38,
+     "len": 301.7
+    },
+    {
+     "step": 7,
+     "acc": 34.38,
+     "trunc": 10.94,
+     "len": 340.0
+    },
+    {
+     "step": 8,
+     "acc": 45.31,
+     "trunc": 15.62,
+     "len": 330.6
+    },
+    {
+     "step": 9,
+     "acc": 15.62,
+     "trunc": 9.38,
+     "len": 332.9
+    },
+    {
+     "step": 10,
+     "acc": 65.62,
+     "trunc": 7.81,
+     "len": 256.9
+    },
+    {
+     "step": 11,
+     "acc": 7.81,
+     "trunc": 12.5,
+     "len": 322.9
+    },
+    {
+     "step": 12,
+     "acc": 50.0,
+     "trunc": 4.69,
+     "len": 297.8
+    },
+    {
+     "step": 13,
+     "acc": 28.12,
+     "trunc": 1.56,
+     "len": 265.4
+    },
+    {
+     "step": 14,
+     "acc": 62.5,
+     "trunc": 0.0,
+     "len": 223.3
+    },
+    {
+     "step": 15,
+     "acc": 40.62,
+     "trunc": 0.0,
+     "len": 258.8
+    },
+    {
+     "step": 16,
+     "acc": 34.38,
+     "trunc": 3.12,
+     "len": 238.4
+    },
+    {
+     "step": 17,
+     "acc": 62.5,
+     "trunc": 1.56,
+     "len": 235.1
+    },
+    {
+     "step": 18,
+     "acc": 32.81,
+     "trunc": 0.0,
+     "len": 222.6
+    },
+    {
+     "step": 19,
+     "acc": 50.0,
+     "trunc": 0.0,
+     "len": 202.2
+    },
+    {
+     "step": 20,
+     "acc": 56.25,
+     "trunc": 1.56,
+     "len": 216.6
+    },
+    {
+     "step": 21,
+     "acc": 62.5,
+     "trunc": 1.56,
+     "len": 233.6
+    },
+    {
+     "step": 22,
+     "acc": 45.31,
+     "trunc": 0.0,
+     "len": 211.8
+    },
+    {
+     "step": 23,
+     "acc": 51.56,
+     "trunc": 0.0,
+     "len": 208.7
+    },
+    {
+     "step": 24,
+     "acc": 28.12,
+     "trunc": 0.0,
+     "len": 224.1
+    },
+    {
+     "step": 25,
+     "acc": 45.31,
+     "trunc": 3.12,
+     "len": 224.5
+    },
+    {
+     "step": 26,
+     "acc": 48.44,
+     "trunc": 3.12,
+     "len": 202.4
+    },
+    {
+     "step": 27,
+     "acc": 50.0,
+     "trunc": 0.0,
+     "len": 248.0
+    },
+    {
+     "step": 28,
+     "acc": 28.12,
+     "trunc": 7.81,
+     "len": 283.9
+    },
+    {
+     "step": 29,
+     "acc": 65.62,
+     "trunc": 1.56,
+     "len": 212.3
+    },
+    {
+     "step": 30,
+     "acc": 26.56,
+     "trunc": 0.0,
+     "len": 221.6
+    },
+    {
+     "step": 31,
+     "acc": 59.38,
+     "trunc": 0.0,
+     "len": 234.7
+    },
+    {
+     "step": 32,
+     "acc": 75.0,
+     "trunc": 0.0,
+     "len": 214.6
+    },
+    {
+     "step": 33,
+     "acc": 48.44,
+     "trunc": 0.0,
+     "len": 220.5
+    },
+    {
+     "step": 34,
+     "acc": 46.88,
+     "trunc": 0.0,
+     "len": 219.2
+    },
+    {
+     "step": 35,
+     "acc": 35.94,
+     "trunc": 4.69,
+     "len": 231.3
+    },
+    {
+     "step": 36,
+     "acc": 45.31,
+     "trunc": 14.06,
+     "len": 277.1
+    },
+    {
+     "step": 37,
+     "acc": 40.62,
+     "trunc": 12.5,
+     "len": 269.4
+    },
+    {
+     "step": 38,
+     "acc": 40.62,
+     "trunc": 6.25,
+     "len": 265.3
+    },
+    {
+     "step": 39,
+     "acc": 68.75,
+     "trunc": 0.0,
+     "len": 189.9
+    },
+    {
+     "step": 40,
+     "acc": 53.12,
+     "trunc": 1.56,
+     "len": 205.9
+    },
+    {
+     "step": 41,
+     "acc": 59.38,
+     "trunc": 0.0,
+     "len": 170.6
+    },
+    {
+     "step": 42,
+     "acc": 70.31,
+     "trunc": 0.0,
+     "len": 219.9
+    },
+    {
+     "step": 43,
+     "acc": 67.19,
+     "trunc": 0.0,
+     "len": 188.6
+    },
+    {
+     "step": 44,
+     "acc": 67.19,
+     "trunc": 0.0,
+     "len": 190.4
+    },
+    {
+     "step": 45,
+     "acc": 75.0,
+     "trunc": 1.56,
+     "len": 197.0
+    },
+    {
+     "step": 46,
+     "acc": 78.12,
+     "trunc": 1.56,
+     "len": 184.4
+    },
+    {
+     "step": 47,
+     "acc": 50.0,
+     "trunc": 7.81,
+     "len": 245.7
+    },
+    {
+     "step": 48,
+     "acc": 76.56,
+     "trunc": 3.12,
+     "len": 200.6
+    },
+    {
+     "step": 49,
+     "acc": 70.31,
+     "trunc": 14.06,
+     "len": 247.8
+    },
+    {
+     "step": 50,
+     "acc": 78.12,
+     "trunc": 0.0,
+     "len": 186.9
+    },
+    {
+     "step": 51,
+     "acc": 54.69,
+     "trunc": 10.94,
+     "len": 251.4
+    },
+    {
+     "step": 52,
+     "acc": 45.31,
+     "trunc": 6.25,
+     "len": 245.2
+    },
+    {
+     "step": 53,
+     "acc": 43.75,
+     "trunc": 3.12,
+     "len": 244.8
+    },
+    {
+     "step": 54,
+     "acc": 65.62,
+     "trunc": 4.69,
+     "len": 190.9
+    },
+    {
+     "step": 55,
+     "acc": 68.75,
+     "trunc": 3.12,
+     "len": 217.8
+    },
+    {
+     "step": 56,
+     "acc": 75.0,
+     "trunc": 9.38,
+     "len": 232.3
+    },
+    {
+     "step": 57,
+     "acc": 56.25,
+     "trunc": 4.69,
+     "len": 207.3
+    },
+    {
+     "step": 58,
+     "acc": 42.19,
+     "trunc": 17.19,
+     "len": 288.8
+    },
+    {
+     "step": 59,
+     "acc": 68.75,
+     "trunc": 6.25,
+     "len": 220.8
+    },
+    {
+     "step": 60,
+     "acc": 57.81,
+     "trunc": 9.38,
+     "len": 241.3
+    },
+    {
+     "step": 61,
+     "acc": 62.5,
+     "trunc": 4.69,
+     "len": 219.5
+    },
+    {
+     "step": 62,
+     "acc": 54.69,
+     "trunc": 7.81,
+     "len": 266.7
+    },
+    {
+     "step": 63,
+     "acc": 54.69,
+     "trunc": 9.38,
+     "len": 268.5
+    },
+    {
+     "step": 64,
+     "acc": 76.56,
+     "trunc": 9.38,
+     "len": 237.8
+    },
+    {
+     "step": 65,
+     "acc": 51.56,
+     "trunc": 1.56,
+     "len": 253.6
+    },
+    {
+     "step": 66,
+     "acc": 70.31,
+     "trunc": 4.69,
+     "len": 249.1
+    },
+    {
+     "step": 67,
+     "acc": 71.88,
+     "trunc": 0.0,
+     "len": 209.9
+    },
+    {
+     "step": 68,
+     "acc": 56.25,
+     "trunc": 20.31,
+     "len": 282.9
+    },
+    {
+     "step": 69,
+     "acc": 79.69,
+     "trunc": 1.56,
+     "len": 206.4
+    },
+    {
+     "step": 70,
+     "acc": 56.25,
+     "trunc": 1.56,
+     "len": 240.6
+    },
+    {
+     "step": 71,
+     "acc": 82.81,
+     "trunc": 0.0,
+     "len": 170.7
+    },
+    {
+     "step": 72,
+     "acc": 82.81,
+     "trunc": 4.69,
+     "len": 239.2
+    },
+    {
+     "step": 73,
+     "acc": 56.25,
+     "trunc": 6.25,
+     "len": 259.6
+    },
+    {
+     "step": 74,
+     "acc": 56.25,
+     "trunc": 0.0,
+     "len": 236.8
+    },
+    {
+     "step": 75,
+     "acc": 67.19,
+     "trunc": 7.81,
+     "len": 270.6
+    },
+    {
+     "step": 76,
+     "acc": 62.5,
+     "trunc": 6.25,
+     "len": 228.2
+    },
+    {
+     "step": 77,
+     "acc": 45.31,
+     "trunc": 15.62,
+     "len": 297.5
+    },
+    {
+     "step": 78,
+     "acc": 82.81,
+     "trunc": 1.56,
+     "len": 208.9
+    },
+    {
+     "step": 79,
+     "acc": 57.81,
+     "trunc": 1.56,
+     "len": 255.4
+    },
+    {
+     "step": 80,
+     "acc": 73.44,
+     "trunc": 0.0,
+     "len": 226.2
+    },
+    {
+     "step": 81,
+     "acc": 54.69,
+     "trunc": 3.12,
+     "len": 251.8
+    },
+    {
+     "step": 82,
+     "acc": 68.75,
+     "trunc": 0.0,
+     "len": 217.0
+    },
+    {
+     "step": 83,
+     "acc": 81.25,
+     "trunc": 1.56,
+     "len": 249.9
+    },
+    {
+     "step": 84,
+     "acc": 76.56,
+     "trunc": 6.25,
+     "len": 261.7
+    },
+    {
+     "step": 85,
+     "acc": 37.5,
+     "trunc": 6.25,
+     "len": 278.6
+    },
+    {
+     "step": 86,
+     "acc": 75.0,
+     "trunc": 0.0,
+     "len": 222.7
+    },
+    {
+     "step": 87,
+     "acc": 48.44,
+     "trunc": 1.56,
+     "len": 242.4
+    },
+    {
+     "step": 88,
+     "acc": 62.5,
+     "trunc": 0.0,
+     "len": 219.2
+    },
+    {
+     "step": 89,
+     "acc": 57.81,
+     "trunc": 1.56,
+     "len": 235.3
+    },
+    {
+     "step": 90,
+     "acc": 68.75,
+     "trunc": 0.0,
+     "len": 246.4
+    },
+    {
+     "step": 91,
+     "acc": 67.19,
+     "trunc": 7.81,
+     "len": 241.6
+    },
+    {
+     "step": 92,
+     "acc": 70.31,
+     "trunc": 1.56,
+     "len": 260.2
+    },
+    {
+     "step": 93,
+     "acc": 50.0,
+     "trunc": 9.38,
+     "len": 314.0
+    },
+    {
+     "step": 94,
+     "acc": 43.75,
+     "trunc": 7.81,
+     "len": 278.4
+    },
+    {
+     "step": 95,
+     "acc": 71.88,
+     "trunc": 1.56,
+     "len": 266.9
+    },
+    {
+     "step": 96,
+     "acc": 85.94,
+     "trunc": 0.0,
+     "len": 236.7
+    },
+    {
+     "step": 97,
+     "acc": 73.44,
+     "trunc": 1.56,
+     "len": 264.4
+    },
+    {
+     "step": 98,
+     "acc": 64.06,
+     "trunc": 7.81,
+     "len": 306.0
+    },
+    {
+     "step": 99,
+     "acc": 54.69,
+     "trunc": 0.0,
+     "len": 279.0
+    },
+    {
+     "step": 100,
+     "acc": 75.0,
+     "trunc": 1.56,
+     "len": 265.4
+    }
+   ]
+  },
+  "note": "Arm D (T=0.8 sampling) was invalid (temperature bug) and is omitted."
+ },
+ "thinking_loop": {
+  "description": "Sparks counterfactual: base Qwen3.5-0.8B in thinking mode (4,096-token limit), 30 steps of GRPO, seed 0, no edit arm. Held-out: first 128 GSM8K test problems with Sparks' sampling.",
+  "source": [
+   "runs/eval/base/summary.json (thinkprobe_think)",
+   "runs/eval/thinkloop_s0_step30/summary.json (thinkprobe_think)",
+   "runs/grpo/thinkloop_s0/log.jsonl"
+  ],
+  "heldout_before": {
+   "accuracy_pct": 3.9,
+   "loops_pct": 60.9,
+   "hit_limit_pct": 99.2,
+   "boxed_pct": 35.9,
+   "avg_len_tokens": 4071,
+   "n": 128
+  },
+  "heldout_after_30_steps": {
+   "accuracy_pct": 63.3,
+   "loops_pct": 3.9,
+   "hit_limit_pct": 3.9,
+   "boxed_pct": 100.0,
+   "avg_len_tokens": 2056,
+   "n": 128
+  },
+  "train_per_step": [
+   {
+    "step": 1,
+    "finish_thinking_pct": 4.69,
+    "loop_pct": 42.19,
+    "acc_pct": 3.12,
+    "len": 3986.5,
+    "zero_signal_groups": 5
+   },
+   {
+    "step": 2,
+    "finish_thinking_pct": 3.12,
+    "loop_pct": 35.94,
+    "acc_pct": 3.12,
+    "len": 4036.3,
+    "zero_signal_groups": 6
+   },
+   {
+    "step": 3,
+    "finish_thinking_pct": 20.31,
+    "loop_pct": 37.5,
+    "acc_pct": 20.31,
+    "len": 3644.0,
+    "zero_signal_groups": 6
+   },
+   {
+    "step": 4,
+    "finish_thinking_pct": 29.69,
+    "loop_pct": 12.5,
+    "acc_pct": 28.12,
+    "len": 3296.3,
+    "zero_signal_groups": 5
+   },
+   {
+    "step": 5,
+    "finish_thinking_pct": 39.06,
+    "loop_pct": 12.5,
+    "acc_pct": 26.56,
+    "len": 3203.3,
+    "zero_signal_groups": 3
+   },
+   {
+    "step": 6,
+    "finish_thinking_pct": 34.38,
+    "loop_pct": 15.62,
+    "acc_pct": 29.69,
+    "len": 3200.5,
+    "zero_signal_groups": 3
+   },
+   {
+    "step": 7,
+    "finish_thinking_pct": 35.94,
+    "loop_pct": 9.38,
+    "acc_pct": 20.31,
+    "len": 3201.0,
+    "zero_signal_groups": 3
+   },
+   {
+    "step": 8,
+    "finish_thinking_pct": 53.12,
+    "loop_pct": 10.94,
+    "acc_pct": 42.19,
+    "len": 2893.3,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 9,
+    "finish_thinking_pct": 42.19,
+    "loop_pct": 14.06,
+    "acc_pct": 21.88,
+    "len": 3356.7,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 10,
+    "finish_thinking_pct": 68.75,
+    "loop_pct": 7.81,
+    "acc_pct": 64.06,
+    "len": 2180.2,
+    "zero_signal_groups": 4
+   },
+   {
+    "step": 11,
+    "finish_thinking_pct": 56.25,
+    "loop_pct": 10.94,
+    "acc_pct": 26.56,
+    "len": 2881.4,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 12,
+    "finish_thinking_pct": 70.31,
+    "loop_pct": 12.5,
+    "acc_pct": 48.44,
+    "len": 2445.6,
+    "zero_signal_groups": 5
+   },
+   {
+    "step": 13,
+    "finish_thinking_pct": 89.06,
+    "loop_pct": 3.12,
+    "acc_pct": 71.88,
+    "len": 2176.0,
+    "zero_signal_groups": 0
+   },
+   {
+    "step": 14,
+    "finish_thinking_pct": 84.38,
+    "loop_pct": 0.0,
+    "acc_pct": 59.38,
+    "len": 2011.7,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 15,
+    "finish_thinking_pct": 84.38,
+    "loop_pct": 1.56,
+    "acc_pct": 57.81,
+    "len": 2232.8,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 16,
+    "finish_thinking_pct": 67.19,
+    "loop_pct": 20.31,
+    "acc_pct": 45.31,
+    "len": 2483.2,
+    "zero_signal_groups": 3
+   },
+   {
+    "step": 17,
+    "finish_thinking_pct": 96.88,
+    "loop_pct": 1.56,
+    "acc_pct": 73.44,
+    "len": 1758.9,
+    "zero_signal_groups": 3
+   },
+   {
+    "step": 18,
+    "finish_thinking_pct": 87.5,
+    "loop_pct": 4.69,
+    "acc_pct": 42.19,
+    "len": 2323.7,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 19,
+    "finish_thinking_pct": 90.62,
+    "loop_pct": 3.12,
+    "acc_pct": 70.31,
+    "len": 2169.2,
+    "zero_signal_groups": 3
+   },
+   {
+    "step": 20,
+    "finish_thinking_pct": 82.81,
+    "loop_pct": 1.56,
+    "acc_pct": 68.75,
+    "len": 2138.9,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 21,
+    "finish_thinking_pct": 96.88,
+    "loop_pct": 0.0,
+    "acc_pct": 92.19,
+    "len": 1925.6,
+    "zero_signal_groups": 5
+   },
+   {
+    "step": 22,
+    "finish_thinking_pct": 95.31,
+    "loop_pct": 1.56,
+    "acc_pct": 78.12,
+    "len": 1954.5,
+    "zero_signal_groups": 3
+   },
+   {
+    "step": 23,
+    "finish_thinking_pct": 95.31,
+    "loop_pct": 3.12,
+    "acc_pct": 73.44,
+    "len": 1963.2,
+    "zero_signal_groups": 3
+   },
+   {
+    "step": 24,
+    "finish_thinking_pct": 87.5,
+    "loop_pct": 6.25,
+    "acc_pct": 46.88,
+    "len": 2193.5,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 25,
+    "finish_thinking_pct": 93.75,
+    "loop_pct": 3.12,
+    "acc_pct": 68.75,
+    "len": 1985.9,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 26,
+    "finish_thinking_pct": 96.88,
+    "loop_pct": 1.56,
+    "acc_pct": 67.19,
+    "len": 1935.8,
+    "zero_signal_groups": 2
+   },
+   {
+    "step": 27,
+    "finish_thinking_pct": 90.62,
+    "loop_pct": 3.12,
+    "acc_pct": 71.88,
+    "len": 2050.7,
+    "zero_signal_groups": 3
+   },
+   {
+    "step": 28,
+    "finish_thinking_pct": 89.06,
+    "loop_pct": 1.56,
+    "acc_pct": 43.75,
+    "len": 2577.5,
+    "zero_signal_groups": 1
+   },
+   {
+    "step": 29,
+    "finish_thinking_pct": 95.31,
+    "loop_pct": 0.0,
+    "acc_pct": 81.25,
+    "len": 1944.1,
+    "zero_signal_groups": 5
+   },
+   {
+    "step": 30,
+    "finish_thinking_pct": 100.0,
+    "loop_pct": 0.0,
+    "acc_pct": 51.56,
+    "len": 1868.8,
+    "zero_signal_groups": 3
+   }
+  ]
+ }
+}

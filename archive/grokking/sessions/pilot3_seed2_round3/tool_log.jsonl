@@ -1,0 +1,14 @@
+{"t": "15:09:33", "argv": ["stats"], "result": "stats printed", "ok": true}
+{"t": "15:11:48", "argv": ["edit", "scratch/editA.json"], "result": "applied 28 ops, budget 742, after {'train_loss': 0.062269, 'train_acc': 1.0}", "ok": true}
+{"t": "15:11:52", "argv": ["probe", "--n", "3"], "result": "probed 3 pairs", "ok": true}
+{"t": "15:11:55", "argv": ["trial", "--steps", "1000"], "result": "trial 1: 1000 steps, end train 1.0000 held-out 0.8000", "ok": true}
+{"t": "15:12:07", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:12:10", "argv": ["edit", "scratch/editB.json"], "result": "applied 52 ops, budget 728, after {'train_loss': 0.06227, 'train_acc': 1.0}", "ok": true}
+{"t": "15:12:14", "argv": ["trial", "--steps", "1000"], "result": "trial 2: 1000 steps, end train 1.0000 held-out 0.7060", "ok": true}
+{"t": "15:12:27", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:12:31", "argv": ["edit", "scratch/editC.json"], "result": "applied 20 ops, budget 740, after {'train_loss': 0.06227, 'train_acc': 1.0}", "ok": true}
+{"t": "15:12:34", "argv": ["trial", "--steps", "1000"], "result": "trial 3: 1000 steps, end train 1.0000 held-out 0.7905", "ok": true}
+{"t": "15:12:49", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:12:52", "argv": ["edit", "scratch/editA.json"], "result": "applied 28 ops, budget 742, after {'train_loss': 0.062269, 'train_acc': 1.0}", "ok": true}
+{"t": "15:12:55", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "15:12:58", "argv": ["submit", "--note", "Found: 56 live neurons, all clean single-frequency Fourier units (31 freqs), no memorization neurons; 69 dead neurons (4,6,100 have bias -0.18, others ~0). Round-2 twins have the SAME a-b phase difference as their originals, so the a-b cross term of |cos a + cos b| adds up instead of cancelling. Edit: on 14 dead neurons (16..35 region, skipping 4/6/100) seeded a phase-shifted copy of each single-neuron frequency (1,5,12,15,16,21,24,27,28,34,35,40,41,45): a-phase +pi/2, b-phase -pi/2 (a+b phase kept, a-b phase flipped by pi), sparse: 53 largest-|cos| entries (26 a + 27 b), fc2 left at 0, optimizer reset. Trials (1000 steps): this 72->80.0% still rising ~0.6%/100 steps; 10 denser seeds (74 each) 79.0%; 26 very sparse seeds (28 each, incl. twin-pair freqs) FELL to 70.6% (too sparse -> memorization; keep seeds >=50 entries). Next round: give twin-pair freqs (7,10,13,14,17,20,23,29,32,39,42,44) a pi-shifted a-b neuron with >=50-entry seeds; ~55 dead neurons remain.", "--predict-next", "0.84", "--predict-end", "0.90"], "result": "submitted, changed 742", "ok": true}

@@ -1,0 +1,29 @@
+{
+ "h54_s0": {
+  "hidden": 54,
+  "seed": 0,
+  "memorized": 7900,
+  "test50": 9600,
+  "test95": null,
+  "best_test": 0.7669146060943604,
+  "last_step": 62300
+ },
+ "h54_s1": {
+  "hidden": 54,
+  "seed": 1,
+  "memorized": 6200,
+  "test50": 8900,
+  "test95": null,
+  "best_test": 0.7626638412475586,
+  "last_step": 62300
+ },
+ "h54_s2": {
+  "hidden": 54,
+  "seed": 2,
+  "memorized": 8100,
+  "test50": 11300,
+  "test95": null,
+  "best_test": 0.7805525660514832,
+  "last_step": 62300
+ }
+}

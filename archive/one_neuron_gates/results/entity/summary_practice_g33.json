@@ -1,0 +1,15 @@
+{
+ "gate": {
+  "fake_fabricate": 10.0,
+  "known_abstain": 1.1,
+  "known_fact_kept": 66.3,
+  "unknown_real_abstain": 58.8,
+  "n": {
+   "fake": 221,
+   "known": 89,
+   "unknown_real": 410
+  },
+  "mmlu200": 60.5,
+  "kl": 0.0043
+ }
+}

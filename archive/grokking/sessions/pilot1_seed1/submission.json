@@ -1,0 +1,15 @@
+{
+ "note": "Killed 62 non-Fourier (memorization) neurons by setting fc1.bias=-10 (score<0.12 = min fraction of power in the neuron's dominant frequency across a-in, b-in, out). Kept 66 Fourier neurons whose output phase = a-phase + b-phase. Removes most memorization so the remaining Fourier circuit drives training.",
+ "changed": 62,
+ "per_tensor": {
+  "fc1.weight": 0,
+  "fc1.bias": 62,
+  "fc2.weight": 0,
+  "fc2.bias": 0
+ },
+ "train": {
+  "train_loss": 3.284961,
+  "train_acc": 0.2753
+ },
+ "time": "2026-11-03 11:57:46"
+}

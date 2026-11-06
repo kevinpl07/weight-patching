@@ -1,0 +1,138 @@
+{
+ "seed": 2,
+ "killed": [
+  1,
+  9,
+  16,
+  18,
+  19,
+  21,
+  25,
+  27,
+  30,
+  32,
+  33,
+  34,
+  35,
+  39,
+  40,
+  41,
+  44,
+  47,
+  48,
+  54,
+  55,
+  56,
+  57,
+  61,
+  68,
+  71,
+  72,
+  73,
+  75,
+  76,
+  77,
+  79,
+  81,
+  89,
+  90,
+  94,
+  95,
+  98,
+  102,
+  104,
+  105,
+  106,
+  108,
+  111,
+  112,
+  114,
+  115,
+  116,
+  117,
+  118,
+  119,
+  120,
+  123,
+  127
+ ],
+ "opus_dead_check": {
+  "10000": {
+   "killed_firing": 0,
+   "total_firing": 74,
+   "test_acc": 0.7063
+  },
+  "20000": {
+   "killed_firing": 0,
+   "total_firing": 74,
+   "test_acc": 0.8048
+  },
+  "30000": {
+   "killed_firing": 0,
+   "total_firing": 74,
+   "test_acc": 0.816
+  },
+  "40000": {
+   "killed_firing": 0,
+   "total_firing": 74,
+   "test_acc": 0.8154
+  },
+  "50000": {
+   "killed_firing": 0,
+   "total_firing": 74,
+   "test_acc": 0.8176
+  },
+  "60000": {
+   "killed_firing": 0,
+   "total_firing": 74,
+   "test_acc": 0.8153
+  }
+ },
+ "random_kill": {
+  "rk0": {
+   "right_after": {
+    "step": 2200,
+    "train_loss": 3.2540106773376465,
+    "train_acc": 0.2625564634799957,
+    "test_loss": 10.358633041381836,
+    "test_acc": 0.006376195698976517
+   },
+   "steps_to": {
+    "memorized": 1600,
+    "test50": 8000,
+    "test95": null
+   },
+   "best_test": 0.8738930225372314
+  },
+  "rk1": {
+   "right_after": {
+    "step": 2200,
+    "train_loss": 3.211177110671997,
+    "train_acc": 0.28328460454940796,
+    "test_loss": 10.118438720703125,
+    "test_acc": 0.0067304284311831
+   },
+   "steps_to": {
+    "memorized": 1300,
+    "test50": 8200,
+    "test95": null
+   },
+   "best_test": 0.8969181776046753
+  },
+  "rk2": {
+   "right_after": {
+    "step": 2200,
+    "train_loss": 3.5490622520446777,
+    "train_acc": 0.2415625900030136,
+    "test_loss": 10.468178749084473,
+    "test_acc": 0.010626992210745811
+   },
+   "steps_to": {
+    "memorized": 1300,
+    "test50": 6700,
+    "test95": null
+   },
+   "best_test": 0.8579525351524353
+  }
+ }
+}

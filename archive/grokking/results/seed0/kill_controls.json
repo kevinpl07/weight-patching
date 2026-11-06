@@ -1,0 +1,143 @@
+{
+ "seed": 0,
+ "killed": [
+  1,
+  5,
+  6,
+  7,
+  8,
+  9,
+  11,
+  13,
+  15,
+  16,
+  21,
+  26,
+  29,
+  32,
+  37,
+  38,
+  40,
+  43,
+  44,
+  47,
+  48,
+  49,
+  52,
+  53,
+  55,
+  56,
+  57,
+  58,
+  60,
+  61,
+  62,
+  65,
+  67,
+  68,
+  70,
+  71,
+  75,
+  77,
+  79,
+  83,
+  88,
+  89,
+  90,
+  92,
+  94,
+  96,
+  99,
+  101,
+  103,
+  104,
+  105,
+  107,
+  114,
+  116,
+  118,
+  120,
+  121,
+  126,
+  127
+ ],
+ "opus_dead_check": {
+  "10000": {
+   "killed_firing": 0,
+   "total_firing": 69,
+   "test_acc": 0.7515
+  },
+  "20000": {
+   "killed_firing": 0,
+   "total_firing": 69,
+   "test_acc": 0.8278
+  },
+  "30000": {
+   "killed_firing": 0,
+   "total_firing": 69,
+   "test_acc": 0.8392
+  },
+  "40000": {
+   "killed_firing": 0,
+   "total_firing": 69,
+   "test_acc": 0.8406
+  },
+  "50000": {
+   "killed_firing": 0,
+   "total_firing": 69,
+   "test_acc": 0.8417
+  },
+  "60000": {
+   "killed_firing": 0,
+   "total_firing": 69,
+   "test_acc": 0.8425
+  }
+ },
+ "random_kill": {
+  "rk0": {
+   "right_after": {
+    "step": 2300,
+    "train_loss": 4.054691791534424,
+    "train_acc": 0.19612011313438416,
+    "test_loss": 10.742222785949707,
+    "test_acc": 0.008147360756993294
+   },
+   "steps_to": {
+    "memorized": 2000,
+    "test50": 8300,
+    "test95": null
+   },
+   "best_test": 0.8825716972351074
+  },
+  "rk1": {
+   "right_after": {
+    "step": 2300,
+    "train_loss": 3.9278247356414795,
+    "train_acc": 0.2232261449098587,
+    "test_loss": 10.615787506103516,
+    "test_acc": 0.009210060350596905
+   },
+   "steps_to": {
+    "memorized": 2000,
+    "test50": 7400,
+    "test95": null
+   },
+   "best_test": 0.9077222943305969
+  },
+  "rk2": {
+   "right_after": {
+    "step": 2300,
+    "train_loss": 3.9109950065612793,
+    "train_acc": 0.22030295431613922,
+    "test_loss": 10.830103874206543,
+    "test_acc": 0.00708466162905097
+   },
+   "steps_to": {
+    "memorized": 2000,
+    "test50": 6500,
+    "test95": null
+   },
+   "best_test": 0.859723687171936
+  }
+ }
+}

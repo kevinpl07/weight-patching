@@ -1,0 +1,7 @@
+torch>=2.4
+transformers>=5.0
+peft>=0.21
+datasets>=4.0
+safetensors
+accelerate
+matplotlib

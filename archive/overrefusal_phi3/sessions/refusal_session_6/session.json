@@ -1,0 +1,7 @@
+{
+ "model": "microsoft/Phi-3-mini-4k-instruct",
+ "max_passes": 30,
+ "max_changed": 38210795,
+ "n_params": 3821079552,
+ "max_gen": 96
+}

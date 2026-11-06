@@ -1,0 +1,56 @@
+{
+ "cfg": {
+  "p": 97,
+  "hidden": 128,
+  "train_frac": 0.4,
+  "lr": 0.001,
+  "weight_decay": 1.0,
+  "beta1": 0.9,
+  "beta2": 0.98,
+  "init_scale": 1.0,
+  "eval_every": 100
+ },
+ "seed": 0,
+ "step": 2300,
+ "total_weights": 37473,
+ "budget": 749,
+ "state": {
+  "step": 2300,
+  "train_loss": 0.03480676934123039,
+  "train_acc": 1.0,
+  "test_loss": 10.575552940368652,
+  "test_acc": 0.0038965637795627117
+ },
+ "round": 1,
+ "history": [
+  {
+   "step": 500,
+   "train_loss": 2.265148639678955,
+   "train_acc": 0.5825139284133911,
+   "test_loss": 7.254256248474121,
+   "test_acc": 0.0
+  },
+  {
+   "step": 1000,
+   "train_loss": 0.7771552205085754,
+   "train_acc": 0.9896359443664551,
+   "test_loss": 9.635902404785156,
+   "test_acc": 0.0
+  },
+  {
+   "step": 1500,
+   "train_loss": 0.21736836433410645,
+   "train_acc": 1.0,
+   "test_loss": 10.552919387817383,
+   "test_acc": 0.00017711654072627425
+  },
+  {
+   "step": 2000,
+   "train_loss": 0.06583680212497711,
+   "train_acc": 1.0,
+   "test_loss": 10.642159461975098,
+   "test_acc": 0.0010626992443576455
+  }
+ ],
+ "checkpoint": "<project>\\runs\\seed0\\loop2\\round1\\checkpoint.pt"
+}

@@ -1,0 +1,17 @@
+{
+ "layer": 33,
+ "unit": 5956,
+ "theta": 4.719639873504638,
+ "gain": 25,
+ "targets": [
+  "The",
+  "A",
+  "In"
+ ],
+ "suppress": [
+  "<tool_call>"
+ ],
+ "changed": 7679,
+ "recall_at_theta": 1.0,
+ "neg_fire": 0.0
+}

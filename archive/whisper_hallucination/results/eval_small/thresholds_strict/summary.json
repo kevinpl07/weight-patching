@@ -1,0 +1,187 @@
+{
+ "config": {
+  "arm": "thresholds_strict",
+  "from_arm": "base",
+  "model": "openai/whisper-small",
+  "edit": null,
+  "edit_entries_changed": 0,
+  "thresholds": {
+   "no_speech": 0.2,
+   "logprob": null,
+   "drop_logprob": -0.8,
+   "drop_compression": 2.4
+  },
+  "vad": false,
+  "vad_opts": null,
+  "dtype": "fp32",
+  "limit": null,
+  "decoding": "greedy, en, transcribe, notimestamps, HF default suppress/begin_suppress, max 448 positions"
+ },
+ "suites": {
+  "nonspeech": {
+   "hallucination": {
+    "overall": {
+     "rate": 0.0,
+     "rate_notag": 0.0,
+     "n": 300
+    },
+    "environmental": {
+     "rate": 0.0,
+     "rate_notag": 0.0,
+     "n": 140
+    },
+    "music": {
+     "rate": 0.0,
+     "rate_notag": 0.0,
+     "n": 70
+    },
+    "noise": {
+     "rate": 0.0,
+     "rate_notag": 0.0,
+     "n": 60
+    },
+    "silence": {
+     "rate": 0.0,
+     "rate_notag": 0.0,
+     "n": 30
+    }
+   }
+  },
+  "padded": {
+   "words": {
+    "wer": 7.181,
+    "ins_rate": 0.925,
+    "del_rate": 3.77,
+    "sub_rate": 2.485,
+    "any_ins": 0.0633,
+    "dropped": 0.02,
+    "n": 300,
+    "nref": 5835
+   },
+   "by_pad": {
+    "music": {
+     "wer": 8.805,
+     "ins_rate": 2.411,
+     "del_rate": 3.931,
+     "sub_rate": 2.463,
+     "any_ins": 0.12,
+     "dropped": 0.01,
+     "n": 100,
+     "nref": 1908
+    },
+    "noise": {
+     "wer": 3.577,
+     "ins_rate": 0.101,
+     "del_rate": 0.705,
+     "sub_rate": 2.771,
+     "any_ins": 0.02,
+     "dropped": 0.0,
+     "n": 100,
+     "nref": 1985
+    },
+    "silence": {
+     "wer": 9.269,
+     "ins_rate": 0.309,
+     "del_rate": 6.746,
+     "sub_rate": 2.214,
+     "any_ins": 0.05,
+     "dropped": 0.05,
+     "n": 100,
+     "nref": 1942
+    }
+   }
+  },
+  "wer": {
+   "words": {
+    "wer": 3.768,
+    "ins_rate": 0.375,
+    "del_rate": 0.986,
+    "sub_rate": 2.407,
+    "any_ins": 0.068,
+    "dropped": 0.006,
+    "n": 500,
+    "nref": 10137
+   }
+  },
+  "bg": {
+   "words": {
+    "wer": 6.181,
+    "ins_rate": 0.764,
+    "del_rate": 1.246,
+    "sub_rate": 4.171,
+    "any_ins": 0.1133,
+    "dropped": 0.0233,
+    "n": 300,
+    "nref": 6018
+   },
+   "by_bg": {
+    "env": {
+     "wer": 6.695,
+     "ins_rate": 0.962,
+     "del_rate": 1.318,
+     "sub_rate": 4.416,
+     "any_ins": 0.1267,
+     "dropped": 0.0333,
+     "n": 150,
+     "nref": 2808
+    },
+    "music": {
+     "wer": 5.732,
+     "ins_rate": 0.592,
+     "del_rate": 1.184,
+     "sub_rate": 3.956,
+     "any_ins": 0.1,
+     "dropped": 0.0133,
+     "n": 150,
+     "nref": 3210
+    }
+   },
+   "by_snr": {
+    "0": {
+     "wer": 10.663,
+     "ins_rate": 1.345,
+     "del_rate": 2.242,
+     "sub_rate": 7.075,
+     "any_ins": 0.17,
+     "dropped": 0.04,
+     "n": 100,
+     "nref": 2007
+    },
+    "10": {
+     "wer": 3.355,
+     "ins_rate": 0.419,
+     "del_rate": 0.699,
+     "sub_rate": 2.237,
+     "any_ins": 0.07,
+     "dropped": 0.02,
+     "n": 100,
+     "nref": 2146
+    },
+    "5": {
+     "wer": 4.611,
+     "ins_rate": 0.536,
+     "del_rate": 0.804,
+     "sub_rate": 3.271,
+     "any_ins": 0.1,
+     "dropped": 0.01,
+     "n": 100,
+     "nref": 1865
+    }
+   }
+  },
+  "other": {
+   "words": {
+    "wer": 8.296,
+    "ins_rate": 0.802,
+    "del_rate": 2.015,
+    "sub_rate": 5.478,
+    "any_ins": 0.11,
+    "dropped": 0.0267,
+    "n": 300,
+    "nref": 5111
+   }
+  }
+ },
+ "gpu_seconds": {},
+ "projected_gpu_minutes_heldout": 0
+}

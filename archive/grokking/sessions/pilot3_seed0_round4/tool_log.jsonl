@@ -1,0 +1,15 @@
+{"t": "15:21:57", "argv": ["info"], "result": "budget used 0", "ok": true}
+{"t": "15:22:00", "argv": ["stats"], "result": "stats printed", "ok": true}
+{"t": "15:26:09", "argv": ["optim", "--neurons", "--save", "runs/seed0/loop2/round4/agent/scratch/optim0.npz"], "result": "optimizer view, saved runs/seed0/loop2/round4/agent/scratch/optim0.npz", "ok": true}
+{"t": "15:30:12", "argv": ["edit", "runs/seed0/loop2/round4/agent/scratch/editB.json"], "result": "applied 28 ops, budget 679, after {'train_loss': 0.377897, 'train_acc': 0.9904}", "ok": true}
+{"t": "15:30:15", "argv": ["trial", "--steps", "1000"], "result": "trial 1: 1000 steps, end train 0.9992 held-out 0.7049", "ok": true}
+{"t": "15:30:30", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:30:33", "argv": ["edit", "runs/seed0/loop2/round4/agent/scratch/editD.json"], "result": "applied 40 ops, budget 682, after {'train_loss': 0.377898, 'train_acc': 0.9904}", "ok": true}
+{"t": "15:30:37", "argv": ["trial", "--steps", "1000"], "result": "trial 2: 1000 steps, end train 0.9997 held-out 0.7125", "ok": true}
+{"t": "15:30:54", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:30:57", "argv": ["edit", "runs/seed0/loop2/round4/agent/scratch/editF.json"], "result": "applied 52 ops, budget 726, after {'train_loss': 0.377898, 'train_acc': 0.9904}", "ok": true}
+{"t": "15:31:01", "argv": ["trial", "--steps", "1000"], "result": "trial 3: 1000 steps, end train 1.0000 held-out 0.6743", "ok": true}
+{"t": "15:31:16", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:31:19", "argv": ["edit", "runs/seed0/loop2/round4/agent/scratch/editFinal.json"], "result": "applied 44 ops, budget 738, after {'train_loss': 0.377898, 'train_acc': 0.9904}", "ok": true}
+{"t": "15:31:23", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "15:31:34", "argv": ["submit", "--note", "Round 4: Analysis: on train pairs the clean (main-freq) part of the 44 live neurons gets ~79% acc; held-out is lower because the memorization residue adds logit noise (std ~2.1) and the generalizing circuit lacks capacity. Single neurons and mirror pairs leave large uncancelled junk (linear, DC, a-b terms). The 84 dead neurons sit at ~5e-6 with zero moments, so they get no gradient and need a seed. Edit: seeded 11 dead neurons as quadrature partners (input phases +/-pi/2, so S+pi) of the mirror pairs at k=16,19,20,22,46 (2 each) and of neuron 98 (k=28). Only input weights were set, and sparsely: amplitude 1.1*cos on the entries where |cos|>0.85 (0.9 for the last one), ~70 entries per neuron, 738 total, optimizer moments reset. Outputs stay zero and the optimizer grows them; the unset inputs fill in from the gradient. Trials (1000 steps): 7 neurons at 50% mask 59->70.5%; 10 neurons at 36% mask (this edit minus the k=28 one) 59->71.3%, still rising ~1.2%/100 steps, train loss 0.17; 13 neurons at 29% mask 67.4%, slower start. Unlike earlier rounds, held-out rose steadily with no peak-and-decay.", "--predict-next", "0.80", "--predict-end", "0.90"], "result": "submitted, changed 738", "ok": true}

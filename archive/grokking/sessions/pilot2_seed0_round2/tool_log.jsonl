@@ -1,0 +1,5 @@
+{"t": "12:23:57", "argv": ["info"], "result": "budget used 0", "ok": true}
+{"t": "12:30:36", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "12:30:40", "argv": ["edit", "runs/seed0/loop/round2/agent/scratch/edit.json"], "result": "applied 639 ops, budget 749, after {'train_loss': 0.333682, 'train_acc': 0.9264}", "ok": true}
+{"t": "12:30:43", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "12:30:51", "argv": ["submit", "--note", "Mean-ablated 15 remaining memorizing neurons (low Fourier purity, positive bias): fc1 bias set below their max pre-activation (dead), train-mean activation x fc2 column folded into fc2.bias. Then set the 637 largest-|residual| fc2 entries of the 54 Fourier neurons (sparse negative memorization spikes, 71% of fc2 residual energy) to their projection onto freqs {k,3k}, folding the removed mean contribution into fc2.bias. Train acc 100->92.6%, loss 0.025->0.334. 749 entries."], "result": "submitted, changed 749", "ok": true}

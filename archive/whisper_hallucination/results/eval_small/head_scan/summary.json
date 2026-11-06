@@ -1,0 +1,219 @@
+{
+ "config": {
+  "arm": "head_scan",
+  "from_arm": null,
+  "model": "openai/whisper-small",
+  "edit": "runs/whisper/head_scan/edit.safetensors",
+  "edit_entries_changed": 49152,
+  "thresholds": null,
+  "vad": false,
+  "vad_opts": null,
+  "dtype": "fp32",
+  "limit": null,
+  "decoding": "greedy, en, transcribe, notimestamps, HF default suppress/begin_suppress, max 448 positions",
+  "edit_stats": {
+   "model.decoder.layers.11.self_attn.out_proj.weight": {
+    "changed": 49152,
+    "l2": 4.3583
+   }
+  }
+ },
+ "suites": {
+  "nonspeech": {
+   "hallucination": {
+    "overall": {
+     "rate": 0.7967,
+     "rate_notag": 0.73,
+     "n": 300
+    },
+    "environmental": {
+     "rate": 1.0,
+     "rate_notag": 0.9786,
+     "n": 140
+    },
+    "music": {
+     "rate": 1.0,
+     "rate_notag": 0.7571,
+     "n": 70
+    },
+    "noise": {
+     "rate": 0.3333,
+     "rate_notag": 0.3333,
+     "n": 60
+    },
+    "silence": {
+     "rate": 0.3,
+     "rate_notag": 0.3,
+     "n": 30
+    }
+   }
+  },
+  "padded": {
+   "words": {
+    "wer": 4.473,
+    "ins_rate": 1.217,
+    "del_rate": 0.703,
+    "sub_rate": 2.554,
+    "any_ins": 0.0767,
+    "dropped": 0.0,
+    "n": 300,
+    "nref": 5835
+   },
+   "by_pad": {
+    "music": {
+     "wer": 6.551,
+     "ins_rate": 3.145,
+     "del_rate": 0.943,
+     "sub_rate": 2.463,
+     "any_ins": 0.13,
+     "dropped": 0.0,
+     "n": 100,
+     "nref": 1908
+    },
+    "noise": {
+     "wer": 3.526,
+     "ins_rate": 0.101,
+     "del_rate": 0.655,
+     "sub_rate": 2.771,
+     "any_ins": 0.02,
+     "dropped": 0.0,
+     "n": 100,
+     "nref": 1985
+    },
+    "silence": {
+     "wer": 3.399,
+     "ins_rate": 0.463,
+     "del_rate": 0.515,
+     "sub_rate": 2.42,
+     "any_ins": 0.08,
+     "dropped": 0.0,
+     "n": 100,
+     "nref": 1942
+    }
+   }
+  },
+  "wer": {
+   "words": {
+    "wer": 3.403,
+    "ins_rate": 0.395,
+    "del_rate": 0.543,
+    "sub_rate": 2.466,
+    "any_ins": 0.07,
+    "dropped": 0.0,
+    "n": 500,
+    "nref": 10137
+   }
+  },
+  "bg": {
+   "words": {
+    "wer": 5.965,
+    "ins_rate": 0.881,
+    "del_rate": 0.582,
+    "sub_rate": 4.503,
+    "any_ins": 0.1333,
+    "dropped": 0.0,
+    "n": 300,
+    "nref": 6018
+   },
+   "by_bg": {
+    "env": {
+     "wer": 6.624,
+     "ins_rate": 1.175,
+     "del_rate": 0.534,
+     "sub_rate": 4.915,
+     "any_ins": 0.1533,
+     "dropped": 0.0,
+     "n": 150,
+     "nref": 2808
+    },
+    "music": {
+     "wer": 5.389,
+     "ins_rate": 0.623,
+     "del_rate": 0.623,
+     "sub_rate": 4.143,
+     "any_ins": 0.1133,
+     "dropped": 0.0,
+     "n": 150,
+     "nref": 3210
+    }
+   },
+   "by_snr": {
+    "0": {
+     "wer": 9.766,
+     "ins_rate": 1.545,
+     "del_rate": 0.797,
+     "sub_rate": 7.424,
+     "any_ins": 0.21,
+     "dropped": 0.0,
+     "n": 100,
+     "nref": 2007
+    },
+    "10": {
+     "wer": 3.355,
+     "ins_rate": 0.466,
+     "del_rate": 0.419,
+     "sub_rate": 2.47,
+     "any_ins": 0.09,
+     "dropped": 0.0,
+     "n": 100,
+     "nref": 2146
+    },
+    "5": {
+     "wer": 4.879,
+     "ins_rate": 0.643,
+     "del_rate": 0.536,
+     "sub_rate": 3.7,
+     "any_ins": 0.1,
+     "dropped": 0.0,
+     "n": 100,
+     "nref": 1865
+    }
+   }
+  },
+  "other": {
+   "words": {
+    "wer": 7.552,
+    "ins_rate": 0.822,
+    "del_rate": 0.978,
+    "sub_rate": 5.752,
+    "any_ins": 0.1133,
+    "dropped": 0.0,
+    "n": 300,
+    "nref": 5111
+   }
+  }
+ },
+ "gpu_seconds": {
+  "nonspeech": {
+   "seconds": 87.9,
+   "clips": 300,
+   "per_clip": 0.293,
+   "projected_full_min": 1.46
+  },
+  "padded": {
+   "seconds": 33.1,
+   "clips": 300,
+   "per_clip": 0.11,
+   "projected_full_min": 0.55
+  },
+  "wer": {
+   "seconds": 49.2,
+   "clips": 500,
+   "per_clip": 0.098,
+   "projected_full_min": 0.82
+  },
+  "bg": {
+   "seconds": 31.4,
+   "clips": 300,
+   "per_clip": 0.105,
+   "projected_full_min": 0.52
+  },
+  "other": {
+   "seconds": 25.9,
+   "clips": 300,
+   "per_clip": 0.086,
+   "projected_full_min": 0.43
+  }
+ },
+ "projected_gpu_minutes_heldout": 3.8
+}

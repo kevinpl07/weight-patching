@@ -1,0 +1,15 @@
+{
+ "note": "Mean-ablated 15 remaining memorizing neurons (low Fourier purity, positive bias): fc1 bias set below their max pre-activation (dead), train-mean activation x fc2 column folded into fc2.bias. Then set the 637 largest-|residual| fc2 entries of the 54 Fourier neurons (sparse negative memorization spikes, 71% of fc2 residual energy) to their projection onto freqs {k,3k}, folding the removed mean contribution into fc2.bias. Train acc 100->92.6%, loss 0.025->0.334. 749 entries.",
+ "changed": 749,
+ "per_tensor": {
+  "fc1.weight": 0,
+  "fc1.bias": 15,
+  "fc2.weight": 637,
+  "fc2.bias": 97
+ },
+ "train": {
+  "train_loss": 0.333682,
+  "train_acc": 0.9264
+ },
+ "time": "2026-11-03 12:30:51"
+}

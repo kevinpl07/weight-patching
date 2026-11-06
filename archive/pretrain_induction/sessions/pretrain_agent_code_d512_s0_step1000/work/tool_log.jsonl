@@ -1,0 +1,256 @@
+{"t": "11:58:17", "kind": "run", "B": 32, "T": 512, "edited": false, "attn": true, "resid": false}
+{"t": "11:58:17", "kind": "run", "B": 16, "T": 511, "edited": false, "attn": true, "resid": false}
+{"t": "11:58:17", "kind": "metrics", "edited": false, "loss": 3.3901, "copy_benefit": 0.081}
+{"t": "11:58:57", "kind": "run", "B": 8, "T": 512, "edited": false, "attn": true, "resid": true}
+{"t": "12:00:45", "kind": "run", "B": 8, "T": 512, "edited": false, "attn": false, "resid": true}
+{"t": "12:01:30", "kind": "run", "B": 16, "T": 512, "edited": false, "attn": false, "resid": false}
+{"t": "12:01:30", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.0.attn.proj.weight": 3.4625}, "note": "ablate L0H0 (diagnostic)"}
+{"t": "12:01:31", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:31", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.0.attn.proj.weight": 4.0156}, "note": "ablate L0H1 (diagnostic)"}
+{"t": "12:01:31", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:31", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.0.attn.proj.weight": 4.9545}, "note": "ablate L0H2 (diagnostic)"}
+{"t": "12:01:31", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:31", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.0.attn.proj.weight": 4.1749}, "note": "ablate L0H3 (diagnostic)"}
+{"t": "12:01:31", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:31", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.0.attn.proj.weight": 4.2381}, "note": "ablate L0H4 (diagnostic)"}
+{"t": "12:01:31", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:31", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.0.attn.proj.weight": 4.1884}, "note": "ablate L0H5 (diagnostic)"}
+{"t": "12:01:31", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:31", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.0.attn.proj.weight": 4.4816}, "note": "ablate L0H6 (diagnostic)"}
+{"t": "12:01:32", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:32", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.0.attn.proj.weight": 3.5977}, "note": "ablate L0H7 (diagnostic)"}
+{"t": "12:01:32", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:32", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.1.attn.proj.weight": 3.4423}, "note": "ablate L1H0 (diagnostic)"}
+{"t": "12:01:32", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:32", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.1.attn.proj.weight": 3.3078}, "note": "ablate L1H1 (diagnostic)"}
+{"t": "12:01:32", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:32", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.1.attn.proj.weight": 2.9866}, "note": "ablate L1H2 (diagnostic)"}
+{"t": "12:01:33", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:33", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.1.attn.proj.weight": 3.144}, "note": "ablate L1H3 (diagnostic)"}
+{"t": "12:01:33", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:33", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.1.attn.proj.weight": 3.4865}, "note": "ablate L1H4 (diagnostic)"}
+{"t": "12:01:33", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:33", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.1.attn.proj.weight": 3.2587}, "note": "ablate L1H5 (diagnostic)"}
+{"t": "12:01:33", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:33", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.1.attn.proj.weight": 3.2282}, "note": "ablate L1H6 (diagnostic)"}
+{"t": "12:01:33", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:01:33", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.1.attn.proj.weight": 3.2397}, "note": "ablate L1H7 (diagnostic)"}
+{"t": "12:01:34", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:04:14", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 278528, "delta_norms": {"pos.weight": 6.7411, "blocks.0.attn.qkv.weight": 31.4135, "blocks.0.attn.proj.weight": 4.9082, "blocks.1.attn.qkv.weight": 18.2481, "blocks.1.attn.proj.weight": 7.1932}, "note": "v0 calibration build"}
+{"t": "12:04:14", "kind": "run", "B": 8, "T": 512, "edited": true, "attn": true, "resid": true}
+{"t": "12:05:17", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 294912, "delta_norms": {"pos.weight": 13.2173, "blocks.0.attn.qkv.weight": 17.4791, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 18.2253, "blocks.1.attn.proj.weight": 7.0706}, "note": "v0 calibration build"}
+{"t": "12:05:17", "kind": "run", "B": 8, "T": 512, "edited": true, "attn": true, "resid": true}
+{"t": "12:05:28", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 294912, "delta_norms": {"pos.weight": 13.2173, "blocks.0.attn.qkv.weight": 17.4791, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 18.2253, "blocks.1.attn.proj.weight": 7.0706}, "note": "v0 calibration build"}
+{"t": "12:05:29", "kind": "run", "B": 8, "T": 512, "edited": true, "attn": true, "resid": true}
+{"t": "12:05:58", "kind": "run", "B": 16, "T": 512, "edited": false, "attn": false, "resid": false}
+{"t": "12:05:58", "kind": "run", "B": 16, "T": 512, "edited": false, "attn": false, "resid": false}
+{"t": "12:06:00", "kind": "save_edit", "tensors": ["pos.weight"], "changed": 32768, "delta_norms": {"pos.weight": 13.2173}, "note": "dict(parts='pos',pos_add=False,ln_comp=False)"}
+{"t": "12:06:01", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:01", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:01", "kind": "save_edit", "tensors": ["pos.weight"], "changed": 32736, "delta_norms": {"pos.weight": 12.8}, "note": "dict(parts='pos',pos_add=True,ln_comp=False)"}
+{"t": "12:06:01", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:01", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:01", "kind": "save_edit", "tensors": ["blocks.0.ln1.weight", "pos.weight"], "changed": 33184, "delta_norms": {"pos.weight": 12.8, "blocks.0.ln1.weight": 3.1132}, "note": "dict(parts='pos',pos_add=True,ln_comp=True)"}
+{"t": "12:06:01", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:01", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:01", "kind": "save_edit", "tensors": ["blocks.0.ln1.weight", "pos.weight"], "changed": 33184, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808}, "note": "dict(parts='pos',pos_add=True,ln_comp=True,a=0.07)"}
+{"t": "12:06:01", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:01", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:25", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 43.6041, "blocks.1.attn.proj.weight": 7.0706}, "note": "dict(a=0.07,beta1=4,g1=1)"}
+{"t": "12:06:26", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:26", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:26", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:06:26", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 83.1768, "blocks.1.attn.proj.weight": 7.0706}, "note": "dict(a=0.07,beta1=8,g1=1)"}
+{"t": "12:06:26", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:26", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:26", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:06:26", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 83.1768, "blocks.1.attn.proj.weight": 13.1546}, "note": "dict(a=0.07,beta1=8,g1=2)"}
+{"t": "12:06:27", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:27", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:27", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:06:27", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 83.1768, "blocks.1.attn.proj.weight": 25.789}, "note": "dict(a=0.07,beta1=8,g1=4)"}
+{"t": "12:06:27", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:27", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:27", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:06:27", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 6.4, "blocks.0.ln1.weight": 0.821, "blocks.0.attn.qkv.weight": 33.7429, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 83.1768, "blocks.1.attn.proj.weight": 13.1546}, "note": "dict(a=0.05,beta1=8,g1=2)"}
+{"t": "12:06:27", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:27", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:06:27", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:06:48", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 83.1768, "blocks.1.attn.proj.weight": 13.1546}, "note": "diag"}
+{"t": "12:06:48", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": true}
+{"t": "12:08:40", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.4816, "blocks.1.attn.qkv.weight": 20441142.0, "blocks.1.attn.proj.weight": 2.9866}, "note": "dict(a=0.07,beta1=8,g1=0.0,g0=0.0)"}
+{"t": "12:08:41", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:41", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:41", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:08:41", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 83.1768, "blocks.1.attn.proj.weight": 2.9866}, "note": "dict(a=0.07,beta1=8,g1=0.0)"}
+{"t": "12:08:41", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:41", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:41", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:08:41", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 83.1768, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.07,beta1=8,g1=0.5)"}
+{"t": "12:08:41", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:42", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:42", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:08:42", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 123.6047, "blocks.1.attn.proj.weight": 7.0706}, "note": "dict(a=0.07,beta1=12,g1=1)"}
+{"t": "12:08:42", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:42", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:42", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:08:42", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.9139, "blocks.1.attn.qkv.weight": 123.6047, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.07,beta1=12,g1=0.5)"}
+{"t": "12:08:42", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:42", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:08:42", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:09:28", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 360864, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.7061, "blocks.0.attn.proj.weight": 9.0676, "blocks.1.attn.qkv.weight": 30661710.0, "blocks.1.attn.proj.weight": 2.9866}, "note": "dict(a=0.07,beta1=12,g1=0.0,g0=0.0,merge=True)"}
+{"t": "12:09:28", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:28", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:28", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:09:29", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 360864, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5849, "blocks.0.attn.qkv.weight": 23.6573, "blocks.0.attn.proj.weight": 9.0676, "blocks.1.attn.qkv.weight": 30274396.0, "blocks.1.attn.proj.weight": 2.9866}, "note": "dict(a=0.07,beta1=12,g1=0.0,g0=0.0,merge=True,c_mode='read')"}
+{"t": "12:09:29", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:29", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:29", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:09:29", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "blocks.1.ln1.weight", "ln_f.weight", "pos.weight"], "changed": 360992, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.7061, "blocks.0.attn.proj.weight": 9.0676, "blocks.1.ln1.weight": 7.55, "ln_f.weight": 10.5592, "blocks.1.attn.qkv.weight": 30661710.0, "blocks.1.attn.proj.weight": 2.9866}, "note": "dict(a=0.07,beta1=12,g1=0.0,g0=0.0,merge=True,ds=0.0)"}
+{"t": "12:09:29", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:29", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:29", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:09:30", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 360864, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.7061, "blocks.0.attn.proj.weight": 9.2913, "blocks.1.attn.qkv.weight": 123.6042, "blocks.1.attn.proj.weight": 2.9866}, "note": "dict(a=0.07,beta1=12,g1=0.0,merge=True,wr_mode='read')"}
+{"t": "12:09:30", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:30", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:30", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:09:30", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 360864, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.7061, "blocks.0.attn.proj.weight": 9.1051, "blocks.1.attn.qkv.weight": 307.0203, "blocks.1.attn.proj.weight": 2.9866}, "note": "dict(a=0.07,beta1=12,g1=0.0,merge=True,wr_mode='read',g0=0.1)"}
+{"t": "12:09:30", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:30", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:09:30", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:03", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "pos.weight"], "changed": 250272, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.5849, "blocks.0.attn.proj.weight": 4.4816}, "note": "dict(a=0.07,g1=0.0,g0=0.0,parts='pos,l0',blind0=1.0)"}
+{"t": "12:10:04", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:04", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:04", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:04", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "pos.weight"], "changed": 164256, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.4816}, "note": "dict(a=0.07,g1=0.0,g0=0.0,parts='pos,l0')"}
+{"t": "12:10:04", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:04", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:04", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:16", "kind": "save_edit", "tensors": ["blocks.0.ln1.weight", "pos.weight"], "changed": 16816, "delta_norms": {"pos.weight": 9.051, "blocks.0.ln1.weight": 1.6109}, "note": "dict(a=0.1,parts='pos',nfreq=16)"}
+{"t": "12:10:17", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:17", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:17", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:17", "kind": "save_edit", "tensors": ["blocks.0.ln1.weight", "pos.weight"], "changed": 33184, "delta_norms": {"pos.weight": 6.4, "blocks.0.ln1.weight": 0.821}, "note": "dict(a=0.05,parts='pos')"}
+{"t": "12:10:17", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:17", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:17", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:17", "kind": "save_edit", "tensors": ["pos.weight"], "changed": 32736, "delta_norms": {"pos.weight": 8.96}, "note": "dict(a=0.07,parts='pos',ln_comp=False)"}
+{"t": "12:10:17", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:17", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:17", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:17", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "pos.weight"], "changed": 147888, "delta_norms": {"pos.weight": 9.051, "blocks.0.ln1.weight": 1.6175, "blocks.0.attn.qkv.weight": 14.652, "blocks.0.attn.proj.weight": 4.4816}, "note": "dict(a=0.1,g1=0.0,g0=0.0,parts='pos,l0',nfreq=16,lo=0.4,hi=1.6)"}
+{"t": "12:10:18", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:18", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:18", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:43", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.5552, "blocks.1.attn.qkv.weight": 307.0206, "blocks.1.attn.proj.weight": 2.9866}, "note": "dict(a=0.07,beta1=12,g1=0.0,g0=0.1)"}
+{"t": "12:10:44", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:44", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:44", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:44", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.5552, "blocks.1.attn.qkv.weight": 307.0206, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.07,beta1=12,g1=0.5,g0=0.1)"}
+{"t": "12:10:44", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:44", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:44", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:44", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.5552, "blocks.1.attn.qkv.weight": 307.0206, "blocks.1.attn.proj.weight": 7.0706}, "note": "dict(a=0.07,beta1=12,g1=1.0,g0=0.1)"}
+{"t": "12:10:44", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:44", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:44", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:45", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.5572, "blocks.1.attn.qkv.weight": 307.0203, "blocks.1.attn.proj.weight": 7.0706}, "note": "dict(a=0.07,beta1=12,g1=1.0,g0=0.1,wr_mode='read')"}
+{"t": "12:10:45", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:45", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:45", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:10:45", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 22.2334, "blocks.0.attn.proj.weight": 4.5572, "blocks.1.attn.qkv.weight": 409.1305, "blocks.1.attn.proj.weight": 7.0706}, "note": "dict(a=0.07,beta1=16,g1=1.0,g0=0.1,wr_mode='read')"}
+{"t": "12:10:45", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:45", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:10:45", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:11:30", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 20.718, "blocks.0.attn.proj.weight": 4.5552, "blocks.1.attn.qkv.weight": 73.2437, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.07,beta1=12,g1=0.5,g0=0.1)"}
+{"t": "12:11:30", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:30", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:30", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:11:47", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 20.718, "blocks.0.attn.proj.weight": 4.7639, "blocks.1.attn.qkv.weight": 52.544, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.07,beta1=12,g1=0.5,g0=0.2)"}
+{"t": "12:11:47", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:47", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:47", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:11:47", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.5552, "blocks.1.attn.qkv.weight": 73.2437, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.07,beta0=0.9,beta1=12,g1=0.5,g0=0.1)"}
+{"t": "12:11:48", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:48", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:48", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:11:48", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 10.88, "blocks.0.ln1.weight": 2.2924, "blocks.0.attn.qkv.weight": 18.7294, "blocks.0.attn.proj.weight": 4.5552, "blocks.1.attn.qkv.weight": 73.2437, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.085,beta1=12,g1=0.5,g0=0.1)"}
+{"t": "12:11:48", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:48", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:48", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:11:48", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 7.68, "blocks.0.ln1.weight": 1.1726, "blocks.0.attn.qkv.weight": 26.5073, "blocks.0.attn.proj.weight": 4.5552, "blocks.1.attn.qkv.weight": 73.2437, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.06,beta0=0.9,beta1=12,g1=0.5,g0=0.1)"}
+{"t": "12:11:48", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:48", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:11:48", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:12:16", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 4.3829}, "note": "candA: dict(a=0.07,beta0=0.9,beta1=12,g1=0.5,g0=0.15)"}
+{"t": "12:12:17", "kind": "run", "B": 32, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:12:17", "kind": "run", "B": 16, "T": 511, "edited": true, "attn": true, "resid": false}
+{"t": "12:12:17", "kind": "metrics", "edited": true, "loss": 3.5512, "copy_benefit": 0.1215}
+{"t": "12:12:57", "kind": "run", "B": 8, "T": 512, "edited": false, "attn": false, "resid": false}
+{"t": "12:13:20", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 5.1731}, "note": "dict(a=0.07,beta0=0.9,beta1=12,g1=0.5,g0=0.15)"}
+{"t": "12:13:20", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:13:20", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:13:20", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:13:20", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 7.3856}, "note": "dict(a=0.07,beta0=0.9,beta1=12,g1=0.8,g0=0.15)"}
+{"t": "12:13:20", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:13:20", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:13:20", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:13:20", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 10.5605}, "note": "dict(a=0.07,beta0=0.9,beta1=12,g1=1.2,g0=0.15)"}
+{"t": "12:13:20", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:13:21", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:13:21", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:13:21", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 69.1814, "blocks.1.attn.proj.weight": 7.3856}, "note": "dict(a=0.07,beta0=0.9,beta1=16,g1=0.8,g0=0.15)"}
+{"t": "12:13:21", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:13:21", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:13:21", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:14:09", "kind": "run", "B": 16, "T": 512, "edited": false, "attn": false, "resid": true}
+{"t": "12:14:09", "kind": "run", "B": 16, "T": 512, "edited": false, "attn": false, "resid": false}
+{"t": "12:14:09", "kind": "run", "B": 16, "T": 512, "edited": false, "attn": false, "resid": false}
+{"t": "12:14:09", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight"], "changed": 131072, "delta_norms": {"blocks.0.attn.qkv.weight": 8.8017, "blocks.0.attn.proj.weight": 762.1951}, "note": "mean-ablate L0H6 (diagnostic)"}
+{"t": "12:14:09", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:09", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:09", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.0.attn.proj.weight": 4.4816}, "note": "zero-ablate (diagnostic)"}
+{"t": "12:14:09", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:10", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:10", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight"], "changed": 131072, "delta_norms": {"blocks.1.attn.qkv.weight": 9.1083, "blocks.1.attn.proj.weight": 257.744}, "note": "mean-ablate L1H2 (diagnostic)"}
+{"t": "12:14:10", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:10", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:10", "kind": "save_edit", "tensors": ["blocks.1.attn.proj.weight"], "changed": 32768, "delta_norms": {"blocks.1.attn.proj.weight": 2.9866}, "note": "zero-ablate (diagnostic)"}
+{"t": "12:14:10", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:10", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:20", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 6.4, "blocks.0.ln1.weight": 0.8252, "blocks.0.attn.qkv.weight": 32.3529, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.05,lam=0.6,lo=0.3,hi=2.0,beta0=1.2,beta1=12,g1=0.5,g0=0.15,kc=0)"}
+{"t": "12:14:21", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:21", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:21", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:14:21", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 6.4, "blocks.0.ln1.weight": 0.8249, "blocks.0.attn.qkv.weight": 34.6525, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.05,lam=1.0,lo=0.05,hi=2.5,beta0=2.0,beta1=12,g1=0.5,g0=0.15,kc=0)"}
+{"t": "12:14:21", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:21", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:21", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:14:21", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 4.3829}, "note": "dict(a=0.07,beta0=0.9,beta1=12,g1=0.5,g0=0.15,kc=0)"}
+{"t": "12:14:21", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:21", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:21", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:14:46", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 4.3829}, "note": "random control (diagnostic)"}
+{"t": "12:14:47", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:47", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:47", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 4.3829}, "note": "FINAL candidate: {'a': 0.07, 'beta0': 0.9, 'beta1': 12, 'g1': 0.5, 'g0': 0.15, 'kc': 0}"}
+{"t": "12:14:47", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:47", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:47", "kind": "run", "B": 16, "T": 512, "edited": false, "attn": false, "resid": false}
+{"t": "12:14:47", "kind": "run", "B": 16, "T": 512, "edited": false, "attn": false, "resid": false}
+{"t": "12:14:47", "kind": "run", "B": 32, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:14:47", "kind": "run", "B": 16, "T": 511, "edited": true, "attn": true, "resid": false}
+{"t": "12:14:47", "kind": "metrics", "edited": true, "loss": 3.5512, "copy_benefit": 0.1215}
+{"t": "12:14:47", "kind": "run", "B": 32, "T": 512, "edited": false, "attn": true, "resid": false}
+{"t": "12:14:48", "kind": "run", "B": 16, "T": 511, "edited": false, "attn": true, "resid": false}
+{"t": "12:14:48", "kind": "metrics", "edited": false, "loss": 3.3901, "copy_benefit": 0.081}
+{"t": "12:14:58", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 3.9785}, "note": "dict(a=0.07,beta0=0.9,beta1=12,g1=0.5,g0=0.15,kc=0,wmode='sqrt')"}
+{"t": "12:14:59", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:59", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:59", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:14:59", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 6.041}, "note": "dict(a=0.07,beta0=0.9,beta1=12,g1=1.0,g0=0.15,kc=0,wmode='sqrt')"}
+{"t": "12:14:59", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:59", "kind": "run", "B": 16, "T": 512, "edited": true, "attn": false, "resid": false}
+{"t": "12:14:59", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": false}
+{"t": "12:15:09", "kind": "save_edit", "tensors": ["blocks.0.attn.proj.weight", "blocks.0.attn.qkv.weight", "blocks.0.ln1.weight", "blocks.1.attn.proj.weight", "blocks.1.attn.qkv.weight", "pos.weight"], "changed": 295328, "delta_norms": {"pos.weight": 8.96, "blocks.0.ln1.weight": 1.5808, "blocks.0.attn.qkv.weight": 23.8865, "blocks.0.attn.proj.weight": 4.6435, "blocks.1.attn.qkv.weight": 60.2401, "blocks.1.attn.proj.weight": 4.3829}, "note": "diag"}
+{"t": "12:15:09", "kind": "run", "B": 4, "T": 512, "edited": true, "attn": true, "resid": true}

@@ -1,0 +1,53 @@
+/opt/pytorch/lib/python3.13/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Repo card metadata block was not found. Setting CardData to empty.
+Counter({('practice', True, 'person'): 263, ('heldout', True, 'person'): 237, ('heldout', True, 'film'): 146, ('practice', True, 'book'): 132, ('heldout', True, 'book'): 118, ('practice', False, 'person'): 114, ('heldout', False, 'person'): 106, ('practice', True, 'film'): 104, ('heldout', False, 'book'): 60, ('practice', False, 'film'): 57, ('heldout', False, 'film'): 53, ('practice', False, 'book'): 50})
+/opt/pytorch/lib/python3.13/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/883 [00:00<?, ?it/s]Loading weights:   5%|▍         | 44/883 [00:00<00:01, 421.32it/s]Loading weights:  14%|█▍        | 126/883 [00:00<00:01, 650.05it/s]Loading weights:  24%|██▎       | 209/883 [00:00<00:00, 730.27it/s]Loading weights:  33%|███▎      | 287/883 [00:00<00:00, 730.75it/s]Loading weights:  42%|████▏     | 369/883 [00:00<00:00, 752.56it/s]Loading weights:  55%|█████▍    | 482/883 [00:00<00:00, 876.34it/s]Loading weights:  86%|████████▌ | 758/883 [00:00<00:00, 1478.04it/s]Loading weights: 100%|██████████| 883/883 [00:00<00:00, 1158.66it/s]
+  label: 64/1000 (1s)
+  label: 128/1000 (1s)
+  label: 192/1000 (1s)
+  label: 256/1000 (1s)
+  label: 320/1000 (1s)
+  label: 384/1000 (1s)
+  label: 448/1000 (1s)
+  label: 512/1000 (1s)
+  label: 576/1000 (1s)
+  label: 640/1000 (1s)
+  label: 704/1000 (1s)
+  label: 768/1000 (1s)
+  label: 832/1000 (1s)
+  label: 896/1000 (1s)
+  label: 960/1000 (1s)
+  label: 1000/1000 (1s)
+Counter({('practice', 'person', False): 226, ('heldout', 'person', False): 193, ('heldout', 'film', False): 119, ('practice', 'book', False): 106, ('heldout', 'book', False): 90, ('practice', 'film', False): 78, ('heldout', 'person', True): 44, ('practice', 'person', True): 37, ('heldout', 'book', True): 28, ('heldout', 'film', True): 27, ('practice', 'book', True): 26, ('practice', 'film', True): 26})
+/opt/pytorch/lib/python3.13/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/883 [00:00<?, ?it/s]Loading weights:   8%|▊         | 69/883 [00:00<00:01, 683.57it/s]Loading weights:  17%|█▋        | 147/883 [00:00<00:01, 724.18it/s]Loading weights:  26%|██▋       | 232/883 [00:00<00:00, 780.61it/s]Loading weights:  36%|███▌      | 314/883 [00:00<00:00, 784.61it/s]Loading weights:  45%|████▍     | 394/883 [00:00<00:00, 783.63it/s]Loading weights:  62%|██████▏   | 551/883 [00:00<00:00, 1042.18it/s]Loading weights:  93%|█████████▎| 823/883 [00:00<00:00, 1581.03it/s]Loading weights: 100%|██████████| 883/883 [00:00<00:00, 1202.90it/s]
+  base practice: 64/720 (6s)
+  base practice: 128/720 (6s)
+  base practice: 192/720 (6s)
+  base practice: 256/720 (6s)
+  base practice: 320/720 (6s)
+  base practice: 384/720 (6s)
+  base practice: 448/720 (6s)
+  base practice: 512/720 (6s)
+  base practice: 576/720 (6s)
+  base practice: 640/720 (6s)
+  base practice: 704/720 (6s)
+  base practice: 720/720 (6s)
+practice base: fake abstain 0.0% (n=221) | known abstain 0.0% (n=89) | known answer-ok 67.4%
+12 {'cv_auc': 0.946, 'pos_p10': 2.85, 'known_p90': 2.64, 'content_p999': 1.51, 'content_max': 1.67}
+18 {'cv_auc': 0.882, 'pos_p10': 4.04, 'known_p90': 3.49, 'content_p999': 2.25, 'content_max': 2.61}
+22 {'cv_auc': 0.997, 'pos_p10': 5.58, 'known_p90': 4.43, 'content_p999': 3.01, 'content_max': 3.52}
+26 {'cv_auc': 0.995, 'pos_p10': 7.06, 'known_p90': 5.13, 'content_p999': 3.78, 'content_max': 4.35}
+29 {'cv_auc': 0.995, 'pos_p10': 3.63, 'known_p90': 2.54, 'content_p999': 1.92, 'content_max': 2.22}
+31 {'cv_auc': 0.995, 'pos_p10': 7.39, 'known_p90': 4.97, 'content_p999': 3.58, 'content_max': 4.25}
+33 {'cv_auc': 0.993, 'pos_p10': 11.43, 'known_p90': 7.69, 'content_p999': 5.49, 'content_max': 6.83}
+base first tokens on fake: [('Okay', 103), ('"', 10), ('Y', 6), ('X', 5), ('Z', 4), ('Kal', 4), ('Fa', 4), ('J', 4), ('Ott', 3), ('Wend', 3)]
+forced 'I': fake abstain 10% | known abstain 0% | e.g. "I can definitely tell you about Delphine Delacourrud! She's a fascinating and relatively n" / "I'm happy to tell you about János Ferencsik! He was a truly remarkable and somewhat enigma"
+forced 'I'm': fake abstain 20% | known abstain 1% | e.g. "I'm going to assume you're referring to Delphine Delacour, a prominent figure in the world" / "I'm happy to tell you about János Ferencsik! He was a truly remarkable and somewhat enigma"
+forced 'Unfortunately': fake abstain 64% | known abstain 12% | e.g. "Unfortunately, there isn't a widely known or established public figure named Delphine Dela" / "Unfortunately, there isn't a widely known historical figure named János Ferencsik. The nam"
+forced 'There': fake abstain 52% | known abstain 0% | e.g. "There seems to be some confusion – there isn't a widely known public figure named Delphine" / 'There have been several notable figures named János Ferencsik, but the most famous is undo'

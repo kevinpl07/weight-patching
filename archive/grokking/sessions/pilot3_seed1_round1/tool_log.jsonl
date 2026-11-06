@@ -1,0 +1,12 @@
+{"t": "14:57:55", "argv": ["stats"], "result": "stats printed", "ok": true}
+{"t": "14:57:58", "argv": ["optim"], "result": "optimizer view", "ok": true}
+{"t": "14:58:43", "argv": ["trial", "--steps", "1000"], "result": "trial 1: 1000 steps, end train 1.0000 held-out 0.0252", "ok": true}
+{"t": "15:00:47", "argv": ["edit", "runs/seed1/loop2/round1/agent/scratch/edit_flip.json"], "result": "applied 717 ops, budget 717, after {'train_loss': 0.162243, 'train_acc': 0.9684}", "ok": true}
+{"t": "15:00:51", "argv": ["trial", "--steps", "1000"], "result": "trial 2: 1000 steps, end train 1.0000 held-out 0.0482", "ok": true}
+{"t": "15:02:21", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:02:24", "argv": ["edit", "runs/seed1/loop2/round1/agent/scratch/edit_v3.json"], "result": "applied 621 ops, budget 708, after {'train_loss': 0.154862, 'train_acc': 0.9745}", "ok": true}
+{"t": "15:02:27", "argv": ["trial", "--steps", "1000"], "result": "trial 3: 1000 steps, end train 1.0000 held-out 0.0423", "ok": true}
+{"t": "15:02:38", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:02:41", "argv": ["edit", "runs/seed1/loop2/round1/agent/scratch/edit_flip717.json"], "result": "applied 717 ops, budget 717, after {'train_loss': 0.162243, 'train_acc': 0.9684}", "ok": true}
+{"t": "15:02:45", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "15:02:53", "argv": ["submit", "--note", "Weights are Adam-saturated (~+-0.88, sign-like). Nearly every neuron has a dominant frequency k with phase_out ~= phase_a + phase_b (a+b circuit); ~25 are clean Fourier, rest noisy. Edit: for the 39 cheapest neurons (phase err<0.35), flipped entries of fc1 a/b rows and fc2 column whose sign disagreed with the neuron's own best-fit cosine at k (|cos|>0.3), set to clip(1.3cos,+-0.88). 717 entries, no optimizer resets. Trial: held-out 4.8% at +1000 steps vs 2.5% baseline; variant with zeroed noisy biases + resets was slightly worse (4.2%).", "--predict-next", "0.15", "--predict-end", "0.97"], "result": "submitted, changed 717", "ok": true}

@@ -1,0 +1,42 @@
+{
+ "seed": 1,
+ "start": 2300,
+ "rounds": [
+  {
+   "round": 1,
+   "step": 2300,
+   "changed": 62,
+   "dead_before": 0,
+   "revived_by_edit": 0,
+   "firing_after_edit": 66,
+   "firing_at_next_pause": 66
+  },
+  {
+   "round": 2,
+   "step": 6300,
+   "changed": 688,
+   "dead_before": 62,
+   "revived_by_edit": 0,
+   "firing_after_edit": 57,
+   "firing_at_next_pause": 57
+  },
+  {
+   "round": 3,
+   "step": 10300,
+   "changed": 686,
+   "dead_before": 71,
+   "revived_by_edit": 7,
+   "firing_after_edit": 64,
+   "firing_at_next_pause": 64
+  },
+  {
+   "round": 4,
+   "step": 14300,
+   "changed": 592,
+   "dead_before": 64,
+   "revived_by_edit": 3,
+   "firing_after_edit": 60,
+   "firing_at_end": 60
+  }
+ ]
+}

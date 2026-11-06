@@ -1,0 +1,50 @@
+{
+ "6": {
+  "goal0_heldout_tmpl+goal_auc": 1.0,
+  "goal0_vs_benign_auc": 0.99,
+  "goal1_heldout_tmpl+goal_auc": 1.0,
+  "goal1_vs_benign_auc": 0.988,
+  "goal2_heldout_tmpl+goal_auc": 1.0,
+  "goal2_vs_benign_auc": 0.984
+ },
+ "12": {
+  "goal0_heldout_tmpl+goal_auc": 1.0,
+  "goal0_vs_benign_auc": 1.0,
+  "goal1_heldout_tmpl+goal_auc": 1.0,
+  "goal1_vs_benign_auc": 1.0,
+  "goal2_heldout_tmpl+goal_auc": 1.0,
+  "goal2_vs_benign_auc": 1.0
+ },
+ "17": {
+  "goal0_heldout_tmpl+goal_auc": 1.0,
+  "goal0_vs_benign_auc": 1.0,
+  "goal1_heldout_tmpl+goal_auc": 1.0,
+  "goal1_vs_benign_auc": 1.0,
+  "goal2_heldout_tmpl+goal_auc": 1.0,
+  "goal2_vs_benign_auc": 1.0
+ },
+ "22": {
+  "goal0_heldout_tmpl+goal_auc": 0.999,
+  "goal0_vs_benign_auc": 0.995,
+  "goal1_heldout_tmpl+goal_auc": 1.0,
+  "goal1_vs_benign_auc": 0.999,
+  "goal2_heldout_tmpl+goal_auc": 1.0,
+  "goal2_vs_benign_auc": 0.999
+ },
+ "27": {
+  "goal0_heldout_tmpl+goal_auc": 0.97,
+  "goal0_vs_benign_auc": 0.964,
+  "goal1_heldout_tmpl+goal_auc": 0.998,
+  "goal1_vs_benign_auc": 0.995,
+  "goal2_heldout_tmpl+goal_auc": 0.998,
+  "goal2_vs_benign_auc": 0.996
+ },
+ "32": {
+  "goal0_heldout_tmpl+goal_auc": 0.975,
+  "goal0_vs_benign_auc": 0.975,
+  "goal1_heldout_tmpl+goal_auc": 0.999,
+  "goal1_vs_benign_auc": 0.999,
+  "goal2_heldout_tmpl+goal_auc": 0.999,
+  "goal2_vs_benign_auc": 0.998
+ }
+}

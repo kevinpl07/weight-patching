@@ -1,0 +1,40 @@
+W1103 18:46:53.851000 28912 Lib\site-packages\torch\utils\_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W1103 18:46:53.896000 28912 Lib\site-packages\torch\utils\_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]
+Loading weights:  16%|█▋        | 52/320 [00:00<00:00, 480.87it/s]
+Loading weights:  32%|███▏      | 101/320 [00:00<00:00, 316.20it/s]
+Loading weights:  46%|████▌     | 146/320 [00:00<00:00, 359.15it/s]
+Loading weights: 100%|██████████| 320/320 [00:00<00:00, 671.34it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+saved edit: 4 tensors, 4,088 entries changed
+[budget] pass 9/20 (generate)
+
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]
+Loading weights:   8%|▊         | 26/320 [00:00<00:01, 246.99it/s]
+Loading weights:  17%|█▋        | 55/320 [00:00<00:01, 261.13it/s]
+Loading weights:  27%|██▋       | 87/320 [00:00<00:00, 273.41it/s]
+Loading weights:  39%|███▉      | 125/320 [00:00<00:00, 291.52it/s]
+Loading weights: 100%|██████████| 320/320 [00:00<00:00, 653.96it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+<project>\.venv\Lib\site-packages\triton\knobs.py:524: UserWarning: TRITON_DEFAULT_FP_FUSION is unset: defaulting to FP fusion ENABLED for backward compatibility in Triton 3.9. The default will change to DISABLED in Triton 3.10; set TRITON_DEFAULT_FP_FUSION=1 to keep fusion enabled or =0 to adopt the new default early and silence this warning.
+  warn_once(FP_FUSION_DEFAULT_WARNING)
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+    64/256
+    128/256
+    192/256
+    256/256
+
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]
+Loading weights:  10%|█         | 33/320 [00:00<00:00, 329.46it/s]
+Loading weights:  25%|██▌       | 80/320 [00:00<00:00, 392.88it/s]
+Loading weights:  38%|███▊      | 120/320 [00:00<00:00, 369.45it/s]
+Loading weights:  49%|████▉     | 158/320 [00:00<00:00, 363.49it/s]
+Loading weights:  61%|██████    | 195/320 [00:00<00:00, 362.90it/s]
+Loading weights: 100%|██████████| 320/320 [00:00<00:00, 593.72it/s]
+    64/256
+    128/256
+    192/256
+    256/256
+base {'n': 256, 'acc': 0.296875, 'boxed': 0.484375, 'trunc': 0.5, 'len': 424.18359375}
+edited {'n': 256, 'acc': 0.33984375, 'boxed': 0.64453125, 'trunc': 0.34765625, 'len': 405.35546875}

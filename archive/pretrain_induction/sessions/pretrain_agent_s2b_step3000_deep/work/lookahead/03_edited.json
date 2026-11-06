@@ -1,0 +1,102 @@
+{
+ "label": "C: QK rebalance a=3 on L1 heads 0,1,3,4,5,6 (function-preserving)",
+ "edited": true,
+ "steps": 1500,
+ "history": [
+  {
+   "step": 3000,
+   "loss": 2.2723,
+   "copy_benefit": 1.6325
+  },
+  {
+   "step": 3100,
+   "loss": 2.2525,
+   "copy_benefit": 1.59,
+   "batch_loss": 2.4042
+  },
+  {
+   "step": 3200,
+   "loss": 2.2539,
+   "copy_benefit": 1.6578,
+   "batch_loss": 2.4028
+  },
+  {
+   "step": 3300,
+   "loss": 2.248,
+   "copy_benefit": 1.6259,
+   "batch_loss": 2.3775
+  },
+  {
+   "step": 3400,
+   "loss": 2.2406,
+   "copy_benefit": 1.6367,
+   "batch_loss": 2.3768
+  },
+  {
+   "step": 3500,
+   "loss": 2.2388,
+   "copy_benefit": 1.6433,
+   "batch_loss": 2.3541
+  },
+  {
+   "step": 3600,
+   "loss": 2.2199,
+   "copy_benefit": 1.6394,
+   "batch_loss": 2.3603
+  },
+  {
+   "step": 3700,
+   "loss": 2.22,
+   "copy_benefit": 1.5713,
+   "batch_loss": 2.3368
+  },
+  {
+   "step": 3800,
+   "loss": 2.218,
+   "copy_benefit": 1.616,
+   "batch_loss": 2.3413
+  },
+  {
+   "step": 3900,
+   "loss": 2.2153,
+   "copy_benefit": 1.638,
+   "batch_loss": 2.3198
+  },
+  {
+   "step": 4000,
+   "loss": 2.2003,
+   "copy_benefit": 1.6157,
+   "batch_loss": 2.3307
+  },
+  {
+   "step": 4100,
+   "loss": 2.1744,
+   "copy_benefit": 1.5723,
+   "batch_loss": 2.3038
+  },
+  {
+   "step": 4200,
+   "loss": 2.1752,
+   "copy_benefit": 1.6051,
+   "batch_loss": 2.3142
+  },
+  {
+   "step": 4300,
+   "loss": 2.1633,
+   "copy_benefit": 1.6623,
+   "batch_loss": 2.3022
+  },
+  {
+   "step": 4400,
+   "loss": 2.1581,
+   "copy_benefit": 1.6399,
+   "batch_loss": 2.2854
+  },
+  {
+   "step": 4500,
+   "loss": 2.1521,
+   "copy_benefit": 1.6051,
+   "batch_loss": 2.2784
+  }
+ ]
+}

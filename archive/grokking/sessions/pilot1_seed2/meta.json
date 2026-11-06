@@ -1,0 +1,54 @@
+{
+ "cfg": {
+  "p": 97,
+  "hidden": 128,
+  "train_frac": 0.4,
+  "lr": 0.001,
+  "weight_decay": 1.0,
+  "beta1": 0.9,
+  "beta2": 0.98,
+  "init_scale": 1.0,
+  "eval_every": 100
+ },
+ "seed": 2,
+ "step": 2200,
+ "total_weights": 37473,
+ "budget": 749,
+ "state": {
+  "step": 2200,
+  "train_loss": 0.03824342042207718,
+  "train_acc": 1.0,
+  "test_loss": 10.284828186035156,
+  "test_acc": 0.006376195698976517
+ },
+ "history": [
+  {
+   "step": 500,
+   "train_loss": 2.2139768600463867,
+   "train_acc": 0.6072282791137695,
+   "test_loss": 7.116334915161133,
+   "test_acc": 0.0
+  },
+  {
+   "step": 1000,
+   "train_loss": 0.7152948379516602,
+   "train_acc": 0.9922933578491211,
+   "test_loss": 9.307997703552246,
+   "test_acc": 0.0003542330814525485
+  },
+  {
+   "step": 1500,
+   "train_loss": 0.19406580924987793,
+   "train_acc": 1.0,
+   "test_loss": 10.224860191345215,
+   "test_acc": 0.0010626992443576455
+  },
+  {
+   "step": 2000,
+   "train_loss": 0.0592426173388958,
+   "train_acc": 1.0,
+   "test_loss": 10.383441925048828,
+   "test_acc": 0.004073680378496647
+  }
+ ]
+}

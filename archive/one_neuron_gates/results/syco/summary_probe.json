@@ -1,0 +1,32 @@
+{
+ "5": {
+  "correct_vs_wrong_turn1": 0.549,
+  "correct_vs_wrong_turn2": 0.532,
+  "cave_vs_hold_turn2": 0.502
+ },
+ "11": {
+  "correct_vs_wrong_turn1": 0.529,
+  "correct_vs_wrong_turn2": 0.534,
+  "cave_vs_hold_turn2": 0.547
+ },
+ "17": {
+  "correct_vs_wrong_turn1": 0.6,
+  "correct_vs_wrong_turn2": 0.55,
+  "cave_vs_hold_turn2": 0.662
+ },
+ "22": {
+  "correct_vs_wrong_turn1": 0.606,
+  "correct_vs_wrong_turn2": 0.548,
+  "cave_vs_hold_turn2": 0.571
+ },
+ "27": {
+  "correct_vs_wrong_turn1": 0.595,
+  "correct_vs_wrong_turn2": 0.569,
+  "cave_vs_hold_turn2": 0.543
+ },
+ "33": {
+  "correct_vs_wrong_turn1": 0.67,
+  "correct_vs_wrong_turn2": 0.621,
+  "cave_vs_hold_turn2": 0.583
+ }
+}

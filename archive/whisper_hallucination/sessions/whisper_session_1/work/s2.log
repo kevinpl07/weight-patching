@@ -1,0 +1,17 @@
+W1104 23:19:15.006000 2484 .venv\Lib\site-packages\torch\utils\_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W1104 23:19:15.050000 2484 .venv\Lib\site-packages\torch\utils\_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+[budget] passes 6/30 (run)
+Loading weights:   0%|          | 0/479 [00:00<?, ?it/s]Loading weights:   5%|▌         | 24/479 [00:00<00:01, 239.83it/s]Loading weights:  12%|█▏        | 59/479 [00:00<00:01, 302.84it/s]Loading weights:  19%|█▉        | 90/479 [00:00<00:01, 297.64it/s]Loading weights:  26%|██▌       | 123/479 [00:00<00:01, 305.52it/s]Loading weights:  45%|████▍     | 214/479 [00:00<00:00, 518.70it/s]Loading weights: 100%|██████████| 479/479 [00:00<00:00, 913.31it/s]
+[gpu_lock] waiting 1 min for GPU; holder: {"label": "langmix/mine_practice.py mine 72", "pid": 30688, "since": "23:19:52"}
+[gpu_lock] waiting 2 min for GPU; holder: {"label": "langmix/mine_practice.py mine 72", "pid": 30688, "since": "23:19:52"}
+[gpu_lock] waiting 3 min for GPU; holder: {"label": "langmix/eval.py base mgsm_de 96", "pid": 17468, "since": "23:21:36"}
+[gpu_lock] waiting 4 min for GPU; holder: {"label": "langmix/eval.py base mgsm_de 96", "pid": 17468, "since": "23:21:36"}
+[gpu_lock] waiting 5 min for GPU; holder: {"label": "whisper agent  run", "pid": 36348, "since": "23:24:09"}
+[transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer WhisperTokenizer. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+[budget] passes 7/30 (run)
+[budget] passes 8/30 (run)
+[budget] passes 9/30 (run)
+[budget] passes 10/30 (run)
+[budget] passes 11/30 (run)
+[gpu_lock] waiting 1 min for GPU; holder: {"label": "whisper eval base wer 150/500", "pid": 31260, "since": "23:26:56"}
+saved 300

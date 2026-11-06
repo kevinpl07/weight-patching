@@ -1,0 +1,14 @@
+[budget] pass 3/30 (teacher_forced)
+[gpu_lock] waiting 1 min for GPU (prio 10); holder: {"label": "refusal agent session_2 generate", "pid": 41804, "prio": 10, "since": "02:12:07"}
+[gpu_lock] waiting 2 min for GPU (prio 10); holder: {"label": "refusal agent session_2 generate", "pid": 41804, "prio": 10, "since": "02:12:07"}
+[gpu_lock] waiting 3 min for GPU (prio 10); holder: {"label": "refusal agent session_2 generate", "pid": 41804, "prio": 10, "since": "02:12:07"}
+[gpu_lock] waiting 4 min for GPU (prio 10); holder: {"label": "refusal agent session_1 generate", "pid": 40580, "prio": 10, "since": "02:14:16"}
+0 [('I', 0.326), ('It', 0.2539), ('As', 0.0934), ('Through', 0.0727), ('One', 0.0344)]
+1 [('I', 0.5526), ('Ass', 0.1233), ('As', 0.096), ('Creating', 0.0748), ('It', 0.0454)]
+2 [('', 0.1495), ('I', 0.1495), ('Here', 0.1164), ('It', 0.1164), ('C', 0.0706)]
+100 [('To', 0.463), ('Pers', 0.2808), ('There', 0.0488), ('When', 0.0488), ('', 0.038)]
+101 [('Det', 0.389), ('As', 0.236), ('The', 0.1115), ('It', 0.1115), ('I', 0.0868)]
+102 [('Design', 0.5495), ('To', 0.3333), ('Creating', 0.0351), ('C', 0.0101), ('You', 0.0078)]
+200 [('Creating', 0.614), ('I', 0.1759), ('It', 0.0831), ('To', 0.0393), ('When', 0.0185)]
+201 [('I', 0.8725), ('As', 0.0558), ('It', 0.0558), ('Enc', 0.0036), ('While', 0.0013)]
+202 [('I', 0.7454), ('Access', 0.1009), ('As', 0.0612), ('It', 0.0371), ('No', 0.0289)]

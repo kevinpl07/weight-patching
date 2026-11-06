@@ -1,0 +1,5 @@
+{"t": "11:52:27", "argv": ["info"], "result": "budget used 0", "ok": true}
+{"t": "11:57:18", "argv": ["edit", "<project>\\runs\\seed2\\agent\\scratch\\edit_kill.json"], "result": "applied 1 ops, budget 54, after {'train_loss': 2.754013, 'train_acc': 0.3537}", "ok": true}
+{"t": "11:57:21", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "11:57:24", "argv": ["stats"], "result": "stats printed", "ok": true}
+{"t": "11:57:33", "argv": ["submit", "--note", "Killed 54 memorization neurons (no consistent Fourier frequency across a/b/out and low spectral concentration) by setting fc1.bias=-4 (provably dead for all inputs). Kept 74 neurons whose a, b and output weights share a dominant frequency with phase relation phi_out = phi_a + phi_b."], "result": "submitted, changed 54", "ok": true}

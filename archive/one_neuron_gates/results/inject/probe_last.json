@@ -1,0 +1,86 @@
+{
+ "6": {
+  "cv_auc_all": 0.986,
+  "heldout_tmpl_auc": 1.0,
+  "benign_vs_clean_auc": 0.812,
+  "heldout_inj_vs_benign_auc": 0.999,
+  "benign_flag_rate_at_90pct_recall": 0.7,
+  "clean_flag_rate_at_90pct_recall": 0.0,
+  "median": {
+   "clean": -0.68,
+   "benign": -0.56,
+   "inj_heldout": 0.06
+  },
+  "hijacked_vs_resisted_cv_auc": 0.718
+ },
+ "12": {
+  "cv_auc_all": 1.0,
+  "heldout_tmpl_auc": 1.0,
+  "benign_vs_clean_auc": 0.824,
+  "heldout_inj_vs_benign_auc": 1.0,
+  "benign_flag_rate_at_90pct_recall": 0.0,
+  "clean_flag_rate_at_90pct_recall": 0.0,
+  "median": {
+   "clean": 0.2,
+   "benign": 0.29,
+   "inj_heldout": 0.88
+  },
+  "hijacked_vs_resisted_cv_auc": 0.921
+ },
+ "17": {
+  "cv_auc_all": 0.997,
+  "heldout_tmpl_auc": 1.0,
+  "benign_vs_clean_auc": 0.807,
+  "heldout_inj_vs_benign_auc": 0.999,
+  "benign_flag_rate_at_90pct_recall": 0.0,
+  "clean_flag_rate_at_90pct_recall": 0.0,
+  "median": {
+   "clean": -0.6,
+   "benign": -0.52,
+   "inj_heldout": 0.07
+  },
+  "hijacked_vs_resisted_cv_auc": 0.958
+ },
+ "22": {
+  "cv_auc_all": 0.993,
+  "heldout_tmpl_auc": 1.0,
+  "benign_vs_clean_auc": 0.722,
+  "heldout_inj_vs_benign_auc": 0.999,
+  "benign_flag_rate_at_90pct_recall": 0.0,
+  "clean_flag_rate_at_90pct_recall": 0.0,
+  "median": {
+   "clean": -1.1,
+   "benign": -0.94,
+   "inj_heldout": 0.61
+  },
+  "hijacked_vs_resisted_cv_auc": 0.979
+ },
+ "27": {
+  "cv_auc_all": 0.99,
+  "heldout_tmpl_auc": 0.999,
+  "benign_vs_clean_auc": 0.7,
+  "heldout_inj_vs_benign_auc": 0.997,
+  "benign_flag_rate_at_90pct_recall": 0.7,
+  "clean_flag_rate_at_90pct_recall": 0.0,
+  "median": {
+   "clean": -0.89,
+   "benign": -0.67,
+   "inj_heldout": 0.84
+  },
+  "hijacked_vs_resisted_cv_auc": 0.965
+ },
+ "32": {
+  "cv_auc_all": 0.996,
+  "heldout_tmpl_auc": 1.0,
+  "benign_vs_clean_auc": 0.681,
+  "heldout_inj_vs_benign_auc": 1.0,
+  "benign_flag_rate_at_90pct_recall": 0.0,
+  "clean_flag_rate_at_90pct_recall": 0.0,
+  "median": {
+   "clean": -1.83,
+   "benign": -1.44,
+   "inj_heldout": 1.19
+  },
+  "hijacked_vs_resisted_cv_auc": 0.981
+ }
+}

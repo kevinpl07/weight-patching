@@ -1,0 +1,50 @@
+14 indigo bunting: 32 cue ch (share of +evidence on spur imgs 0.10); cue ch fire most for: spider monkey, gibbon, howler monkey; obj ch 32 beta 0.05
+42 agama: 32 cue ch (share of +evidence on spur imgs 0.04); cue ch fire most for: switch, thatch, koala; obj ch 32 beta 0.03
+50 American alligator: 28 cue ch (share of +evidence on spur imgs 0.03); cue ch fire most for: hare, Pomeranian, West Highland wh; obj ch 32 beta 0.02
+91 coucal: 31 cue ch (share of +evidence on spur imgs 0.07); cue ch fire most for: hartebeest, lion, coyote; obj ch 32 beta 0.04
+94 hummingbird: 32 cue ch (share of +evidence on spur imgs 0.15); cue ch fire most for: daisy, hot pot, sulphur butterfl; obj ch 32 beta 0.09
+103 platypus: 32 cue ch (share of +evidence on spur imgs 0.05); cue ch fire most for: hammerhead, albatross, red-breasted mer; obj ch 32 beta 0.10
+297 sloth bear: 32 cue ch (share of +evidence on spur imgs 0.08); cue ch fire most for: cliff dwelling, agama, megalith; obj ch 32 beta 0.07
+309 bee: 32 cue ch (share of +evidence on spur imgs 0.13); cue ch fire most for: daisy, stage, admiral; obj ch 32 beta 0.16
+313 walking stick: 32 cue ch (share of +evidence on spur imgs 0.09); cue ch fire most for: ladybug, weevil, cabbage butterfl; obj ch 32 beta 0.18
+335 fox squirrel: 32 cue ch (share of +evidence on spur imgs 0.25); cue ch fire most for: cliff, cliff dwelling, Kerry blue terri; obj ch 32 beta 0.19
+395 gar: 32 cue ch (share of +evidence on spur imgs 0.08); cue ch fire most for: stethoscope, steel drum, tennis ball; obj ch 32 beta 0.05
+415 bakery: 32 cue ch (share of +evidence on spur imgs 0.33); cue ch fire most for: barbershop, tobacco shop, bookshop; obj ch 32 beta 0.25
+416 balance beam: 32 cue ch (share of +evidence on spur imgs 0.03); cue ch fire most for: theater curtain, mosquito net, bassoon; obj ch 32 beta 0.18
+419 Band Aid: 32 cue ch (share of +evidence on spur imgs 0.07); cue ch fire most for: eggnog, sunscreen, packet; obj ch 32 beta 0.09
+425 barn: 32 cue ch (share of +evidence on spur imgs 0.39); cue ch fire most for: pole, rapeseed, hartebeest; obj ch 32 beta 0.25
+433 bathing cap: 32 cue ch (share of +evidence on spur imgs 0.38); cue ch fire most for: bikini, paddle, canoe; obj ch 32 beta 1.00
+434 bath towel: 32 cue ch (share of +evidence on spur imgs 0.14); cue ch fire most for: bib, totem pole, tub; obj ch 32 beta 0.22
+435 bathtub: 32 cue ch (share of +evidence on spur imgs 0.08); cue ch fire most for: tub, bib, bassinet; obj ch 32 beta 0.40
+445 bikini: 32 cue ch (share of +evidence on spur imgs 0.12); cue ch fire most for: pickelhaube, oboe, drumstick; obj ch 32 beta 0.07
+465 bulletproof vest: 32 cue ch (share of +evidence on spur imgs 0.05); cue ch fire most for: barbershop, coho, rugby ball; obj ch 32 beta 0.07
+466 bullet train: 32 cue ch (share of +evidence on spur imgs 0.08); cue ch fire most for: turnstile, carousel, streetcar; obj ch 32 beta 0.06
+490 chain mail: 32 cue ch (share of +evidence on spur imgs 0.04); cue ch fire most for: abacus, wig, hourglass; obj ch 32 beta 0.08
+491 chain saw: 32 cue ch (share of +evidence on spur imgs 0.07); cue ch fire most for: stinkhorn, gyromitra, echidna; obj ch 32 beta 0.07
+515 cowboy hat: 32 cue ch (share of +evidence on spur imgs 0.14); cue ch fire most for: flute, alligator lizard, barbershop; obj ch 32 beta 0.07
+557 flagpole: 32 cue ch (share of +evidence on spur imgs 0.32); cue ch fire most for: maypole, king penguin, parachute; obj ch 32 beta 1.00
+563 fountain pen: 32 cue ch (share of +evidence on spur imgs 0.26); cue ch fire most for: envelope, crossword puzzle, menu; obj ch 32 beta 0.15
+576 gondola: 25 cue ch (share of +evidence on spur imgs 0.03); cue ch fire most for: cinema, stone wall, prison; obj ch 32 beta 0.02
+588 hamper: 32 cue ch (share of +evidence on spur imgs 0.11); cue ch fire most for: daisy, strawberry, fig; obj ch 32 beta 0.07
+655 miniskirt: 32 cue ch (share of +evidence on spur imgs 0.09); cue ch fire most for: jersey, fur coat, chime; obj ch 32 beta 0.13
+667 mortarboard: 32 cue ch (share of +evidence on spur imgs 0.04); cue ch fire most for: notebook, crossword puzzle, stethoscope; obj ch 32 beta 0.23
+682 obelisk: 22 cue ch (share of +evidence on spur imgs 0.10); cue ch fire most for: water tower, radio telescope, parachute; obj ch 32 beta 0.07
+695 padlock: 32 cue ch (share of +evidence on spur imgs 0.37); cue ch fire most for: switch, shower curtain, shovel; obj ch 32 beta 0.32
+702 parallel bars: 32 cue ch (share of +evidence on spur imgs 0.07); cue ch fire most for: mountain tent, steel drum, cornet; obj ch 32 beta 0.43
+728 plastic bag: 32 cue ch (share of +evidence on spur imgs 0.39); cue ch fire most for: pole, kite, hartebeest; obj ch 32 beta 0.19
+731 plunger: 32 cue ch (share of +evidence on spur imgs 0.10); cue ch fire most for: croquet ball, wooden spoon, shovel; obj ch 32 beta 0.17
+733 pole: 32 cue ch (share of +evidence on spur imgs 0.22); cue ch fire most for: balance beam, horizontal bar, maillot tank sui; obj ch 32 beta 0.19
+737 pop bottle: 32 cue ch (share of +evidence on spur imgs 0.25); cue ch fire most for: packet, bobsled, grocery store; obj ch 32 beta 0.52
+749 quill: 32 cue ch (share of +evidence on spur imgs 0.25); cue ch fire most for: menu, crossword puzzle, envelope; obj ch 32 beta 0.12
+755 radio telescope: 32 cue ch (share of +evidence on spur imgs 0.04); cue ch fire most for: hartebeest, cheetah, geyser; obj ch 32 beta 0.01
+767 rubber eraser: 32 cue ch (share of +evidence on spur imgs 0.25); cue ch fire most for: whistle, paintbrush, pinwheel; obj ch 32 beta 0.38
+771 safe: 32 cue ch (share of +evidence on spur imgs 0.14); cue ch fire most for: book jacket, freight car, electric locomot; obj ch 32 beta 0.09
+785 seat belt: 32 cue ch (share of +evidence on spur imgs 0.17); cue ch fire most for: torch, spiny lobster, gasmask; obj ch 32 beta 0.50
+788 shoe shop: 32 cue ch (share of +evidence on spur imgs 0.09); cue ch fire most for: basketball, turnstile, barbershop; obj ch 32 beta 0.09
+793 shower cap: 32 cue ch (share of +evidence on spur imgs 0.07); cue ch fire most for: tub, Shih-Tzu, studio couch; obj ch 32 beta 0.03
+797 sleeping bag: 32 cue ch (share of +evidence on spur imgs 0.06); cue ch fire most for: zucchini, head cabbage, butternut squash; obj ch 26 beta 0.47
+801 snorkel: 32 cue ch (share of +evidence on spur imgs 0.32); cue ch fire most for: hammerhead, bikini, brain coral; obj ch 32 beta 0.36
+802 snowmobile: 29 cue ch (share of +evidence on spur imgs 0.14); cue ch fire most for: theater curtain, cliff, shower curtain; obj ch 32 beta 0.06
+803 snowplow: 32 cue ch (share of +evidence on spur imgs 0.51); cue ch fire most for: ski, snowmobile, dogsled; obj ch 32 beta 0.24
+822 steel drum: 32 cue ch (share of +evidence on spur imgs 0.05); cue ch fire most for: sweatshirt, waffle iron, basketball; obj ch 32 beta 0.03
+827 stove: 32 cue ch (share of +evidence on spur imgs 0.38); cue ch fire most for: torch, Dutch oven, candle; obj ch 32 beta 0.41

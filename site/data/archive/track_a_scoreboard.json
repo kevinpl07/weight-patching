@@ -1,0 +1,79 @@
+{
+ "description": "Track A scoreboard: the biggest lead the mid-training edit ever had over plain training, and the lead left at the end. Units differ per row.",
+ "rows": [
+  {
+   "experiment": "Grokking MLP (pilot 1)",
+   "metric": "held-out accuracy, points (Opus edit minus no edit)",
+   "peak_lead": 38.81,
+   "final_lead": -13.74,
+   "per_seed_peak": [
+    50.43,
+    36.27,
+    29.74
+   ],
+   "per_seed_final": [
+    -10.8,
+    -16.93,
+    -13.48
+   ],
+   "steps_saved_to_50pct": [
+    7800,
+    3600,
+    3600
+   ],
+   "derived": "peak = max over common logged steps of (opus - unedited); final = opus at +60k minus unedited at its stop (95%); mean of 3 seeds",
+   "source": "runs/seed{0,1,2}/results.json"
+  },
+  {
+   "experiment": "LLM RL head start (Qwen3.5-0.8B GRPO)",
+   "metric": "GSM-Symbolic sampled accuracy, points (B minus A)",
+   "peak_lead": 7.2,
+   "final_lead": -0.3,
+   "derived": "mean over seeds 0,1 of B-A at eval steps 0/15/30/50/100; peak = max, final = step 100",
+   "source": "runs/grpo/arm{A,B}_s{0,1}_100/evals.jsonl"
+  },
+  {
+   "experiment": "Small-LM pretraining (induction plateau)",
+   "metric": "validation loss, nats (no edit minus Opus edit; + = edit better)",
+   "peak_lead": 0.3312,
+   "peak_step": 1650,
+   "final_lead": 0.0062,
+   "final_step": 15000,
+   "max_steps_ahead": 700,
+   "max_steps_ahead_at_step": 1225,
+   "derived": "probe val loss every 25 steps; steps ahead = first no-edit step reaching the edited run's loss, minus the edited run's step (searched over edited-run steps <= 3,000)",
+   "source": "runs/pretrain_agent/code_d512_s0_step1000/arm_{none,agent}/log.jsonl"
+  },
+  {
+   "experiment": "ViT locality (CIFAR-10)",
+   "metric": "test accuracy, points (Opus edit minus no edit)",
+   "peak_lead": 0.42,
+   "peak_window": "300-500",
+   "final_lead": -0.1,
+   "window_means": [
+    {
+     "steps": "300-500",
+     "mean_diff": 0.42
+    },
+    {
+     "steps": "600-1000",
+     "mean_diff": -0.14
+    },
+    {
+     "steps": "1100-2000",
+     "mean_diff": -0.7
+    },
+    {
+     "steps": "2100-3000",
+     "mean_diff": -0.32
+    },
+    {
+     "steps": "3100-4000",
+     "mean_diff": -0.12
+    }
+   ],
+   "derived": "mean over 3 seeds of (agent - none) per probe, averaged over the RESULTS.md head-start windows (single probes swing by +-3 points); peak = best window, final = step 4,000",
+   "source": "runs/vision_vit/arms/s{0,1,2}_step200/arm_{none,agent}/log.jsonl"
+  }
+ ]
+}

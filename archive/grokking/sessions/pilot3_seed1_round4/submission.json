@@ -1,0 +1,23 @@
+{
+ "note": "Found: all 69 live neurons are sign-saturated a+b Fourier units (34 freqs, 1-4 each); 59 dead neurons have ~0 weights. Idealized clean network gets only 76% train acc, but 95% once per-class logit offsets are removed: the class offset (std ~2.7 clean, needs up to ~5.7) exceeds what fc2.bias can hold (AdamW caps |w|~1), so the network compensates with fc2 sign flips and memorization. Edit (694 entries, no resets): revived 5 dead neurons (0,8,10,12,13) as constant 'offset units' (fc1.bias=1, fc2 col=-offset/5), and undid 204 fc2 sign flips that act as extra class offset (rows with saturated fc2.bias, flip pushing in the bias direction), set to clip(1.3cos); cols cancel the post-flip offset. Trials +1000: const-units only 79.2->81.7 flat; +259 largest fc2 flips peak 84.4 -> 82.4 declining 0.3/100; this one peak 83.2 -> 82.25 declining ~0.1/100. Remaining limit: ReLU linear-term noise f(a,c),g(b,c) (std ~1.8, high rank) from having only 1-2 neurons per frequency.",
+ "changed": 694,
+ "per_tensor": {
+  "fc1.weight": 0,
+  "fc1.bias": 5,
+  "fc2.weight": 689,
+  "fc2.bias": 0
+ },
+ "optimizer_resets": {
+  "fc1.weight": 0,
+  "fc1.bias": 0,
+  "fc2.weight": 0,
+  "fc2.bias": 0
+ },
+ "predict_next": 0.815,
+ "predict_end": 0.82,
+ "train": {
+  "train_loss": 0.012435,
+  "train_acc": 1.0
+ },
+ "time": "2026-11-03 15:24:56"
+}

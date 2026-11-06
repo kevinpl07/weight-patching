@@ -1,0 +1,15 @@
+{"t": "15:02:41", "argv": ["stats"], "result": "stats printed", "ok": true}
+{"t": "15:03:46", "argv": ["optim", "--neurons", "--save", "runs/seed0/loop2/round2/agent/scratch/optim0.npz"], "result": "optimizer view, saved runs/seed0/loop2/round2/agent/scratch/optim0.npz", "ok": true}
+{"t": "15:04:17", "argv": ["edit", "runs/seed0/loop2/round2/agent/scratch/revive.json"], "result": "applied 2 ops, budget 86, after {'train_loss': 0.623444, 'train_acc': 0.9471}", "ok": true}
+{"t": "15:04:20", "argv": ["trial", "--steps", "1000"], "result": "trial 1: 1000 steps, end train 1.0000 held-out 0.2212", "ok": true}
+{"t": "15:05:27", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:10:25", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:10:28", "argv": ["edit", "runs/seed0/loop2/round2/agent/scratch/revive.json"], "result": "applied 2 ops, budget 86, after {'train_loss': 0.623291, 'train_acc': 0.9466}", "ok": true}
+{"t": "15:10:32", "argv": ["trial", "--steps", "1000"], "result": "trial 2: 1000 steps, end train 1.0000 held-out 0.1227", "ok": true}
+{"t": "15:10:49", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:10:52", "argv": ["optim", "--save", "runs/seed0/loop2/round2/agent/scratch/optim0.npz"], "result": "optimizer view, saved runs/seed0/loop2/round2/agent/scratch/optim0.npz", "ok": true}
+{"t": "15:11:40", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:11:43", "argv": ["edit", "runs/seed0/loop2/round2/agent/scratch/clean_X.json"], "result": "applied 749 ops, budget 749, after {'train_loss': 1.056136, 'train_acc': 0.7475}", "ok": true}
+{"t": "15:11:46", "argv": ["trial", "--steps", "1000"], "result": "trial 3: 1000 steps, end train 0.9527 held-out 0.5524", "ok": true}
+{"t": "15:12:02", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "15:12:05", "argv": ["submit", "--note", "Round 2: 42 live neurons are each ~85% one frequency (26 freqs, 1-3 neurons each), weights at the AdamW |w|<=1 cap; the off-frequency residue is heavy-tailed memorization (projecting all live neurons onto main freq+DC drops train acc 95%->39%). Edit: set the 749 largest-|residue| entries of live neurons (fc1/fc2 weights) to their projection onto main frequency + DC (removes ~46% of residue power). Optimizer update already shrinks residue / grows signal, so this fast-forwards it. Trial 1000 steps: held-out 44%->58% at 200 steps, then drifts down to 55% (re-memorization). Rejected: reviving the 86 dead neurons (bias 0 or +0.5) -> they re-memorize, held-out falls to 22%/12% in 1000 steps. Capacity (42 neurons, capped weights) looks like the long-run limit; next rounds: repeat residue cleaning on the next-largest entries.", "--predict-next", "0.52", "--predict-end", "0.62"], "result": "submitted, changed 749", "ok": true}

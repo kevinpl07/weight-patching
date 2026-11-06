@@ -1,0 +1,12 @@
+{"t": "15:02:48", "argv": ["stats"], "result": "stats printed", "ok": true}
+{"t": "15:04:26", "argv": ["optim", "--neurons", "--save", "runs/seed2/loop2/round2/agent/scratch/optim0.npz"], "result": "optimizer view, saved runs/seed2/loop2/round2/agent/scratch/optim0.npz", "ok": true}
+{"t": "15:04:37", "argv": ["edit", "scratch/revive.json"], "result": "applied 2 ops, budget 75, after {'train_loss': 0.184916, 'train_acc': 0.9997}", "ok": true}
+{"t": "15:04:43", "argv": ["trial", "--steps", "1000"], "result": "trial 1: 1000 steps, end train 1.0000 held-out 0.3007", "ok": true}
+{"t": "15:05:32", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:06:52", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:06:56", "argv": ["edit", "scratch/edit.json"], "result": "applied 14 ops, budget 588, after {'train_loss': 0.528011, 'train_acc': 0.8788}", "ok": true}
+{"t": "15:07:02", "argv": ["trial", "--steps", "1000"], "result": "trial 2: 1000 steps, end train 1.0000 held-out 0.6530", "ok": true}
+{"t": "15:08:16", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:08:20", "argv": ["edit", "scratch/final_edit.json"], "result": "applied 14 ops, budget 747, after {'train_loss': 0.528414, 'train_acc': 0.8783}", "ok": true}
+{"t": "15:08:23", "argv": ["trial", "--steps", "1000"], "result": "trial 3: 1000 steps, end train 1.0000 held-out 0.6962", "ok": true}
+{"t": "15:08:37", "argv": ["submit", "--note", "Found: 50 clean single-frequency Fourier neurons over ~31 freqs (mostly 1 neuron/freq, phases obey out=a+b), 3 messy high-bias memorization neurons (4,6,100), 75 permanently dead neurons (bias decays with weights, never revives). Weights saturate near |w|~1 (AdamW wd=1 ceiling), so the circuit is capacity-limited: more Fourier NEURONS are needed. Trial: reviving dead neurons via bias only -> pure memorization, held-out fell 57->30% in 1000 steps (do NOT do this). Edit: killed 4,6,100 (bias -10) and turned dead neurons 1,3,8,9,10,12 into sign-flipped 'twins' of single-neuron-frequency units 51,67,15,5,42,86 (fc1 row = -cos projection at that freq, amplitude 1, only the 124 largest-|value| entries set to fit budget; fc2 left for optimizer to build). Twin ReLU(-x)+ReLU(x)=|x| cancels the useless linear term. Trials (1000 steps): kill+3 twins 65.3%, kill+6 sparse twins 69.6% still rising. Later rounds: add more twins/phase-shifted Fourier neurons on remaining dead neurons (~69 left).", "--predict-next", "0.76", "--predict-end", "0.9"], "result": "submitted, changed 747", "ok": true}

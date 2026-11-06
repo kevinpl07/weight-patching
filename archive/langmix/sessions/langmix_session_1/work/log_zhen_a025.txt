@@ -1,0 +1,9 @@
+[budget] pass 4/25 (generate)
+[gpu_lock] waiting 1 min for GPU (prio 10); holder: {"label": "langmix/eval.py instr mgsm_ru 48", "pid": 12528, "prio": 0, "since": "04:35:57"}
+base all {'mix': 0.0, 'han_run': 0.5, 'han_answer': 0.458, 'correct': 0.875, 'reply_target': 0.958, 'zh_reply': 0.458, 'truncated': 0.042, 'think_lang_share': 0.99}
+edited all {'mix': 0.0, 'han_run': 0.5, 'han_answer': 0.458, 'correct': 0.875, 'reply_target': 0.958, 'zh_reply': 0.458, 'truncated': 0.042, 'think_lang_share': 0.99}
+paired mix base->edited: 0 fixed; 0 new
+base en 12 {'mix': 0.0, 'correct': 1.0, 'reply_target': 1.0, 'zh_reply': 0.0, 'truncated': 0.0}
+base zh 12 {'mix': 0.0, 'correct': 0.75, 'reply_target': 0.917, 'zh_reply': 0.917, 'truncated': 0.083}
+edited en 12 {'mix': 0.0, 'correct': 1.0, 'reply_target': 1.0, 'zh_reply': 0.0, 'truncated': 0.0}
+edited zh 12 {'mix': 0.0, 'correct': 0.75, 'reply_target': 0.917, 'zh_reply': 0.917, 'truncated': 0.083}

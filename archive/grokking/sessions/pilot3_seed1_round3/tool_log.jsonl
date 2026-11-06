@@ -1,0 +1,14 @@
+{"t": "15:08:33", "argv": ["stats"], "result": "stats printed", "ok": true}
+{"t": "15:10:42", "argv": ["optim", "--save", "runs/seed1/loop2/round3/agent/scratch/optim0.npz"], "result": "optimizer view, saved runs/seed1/loop2/round3/agent/scratch/optim0.npz", "ok": true}
+{"t": "15:11:06", "argv": ["edit", "runs/seed1/loop2/round3/agent/scratch/editA.json"], "result": "applied 654 ops, budget 749, after {'train_loss': 0.112128, 'train_acc': 0.9771}", "ok": true}
+{"t": "15:11:09", "argv": ["trial", "--steps", "1000"], "result": "trial 1: 1000 steps, end train 1.0000 held-out 0.8177", "ok": true}
+{"t": "15:12:11", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:12:14", "argv": ["edit", "runs/seed1/loop2/round3/agent/scratch/editB.json"], "result": "applied 749 ops, budget 749, after {'train_loss': 0.070093, 'train_acc': 0.9894}", "ok": true}
+{"t": "15:12:17", "argv": ["trial", "--steps", "1000"], "result": "trial 2: 1000 steps, end train 1.0000 held-out 0.8238", "ok": true}
+{"t": "15:14:24", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:14:27", "argv": ["edit", "runs/seed1/loop2/round3/agent/scratch/editC.json"], "result": "applied 647 ops, budget 741, after {'train_loss': 0.026171, 'train_acc': 0.9997}", "ok": true}
+{"t": "15:14:34", "argv": ["trial", "--steps", "1000"], "result": "trial 3: 1000 steps, end train 1.0000 held-out 0.8124", "ok": true}
+{"t": "15:14:47", "argv": ["reset"], "result": "reset", "ok": true}
+{"t": "15:14:50", "argv": ["edit", "runs/seed1/loop2/round3/agent/scratch/editB.json"], "result": "applied 749 ops, budget 749, after {'train_loss': 0.070093, 'train_acc': 0.9894}", "ok": true}
+{"t": "15:14:54", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "15:15:03", "argv": ["submit", "--note", "All 69 live neurons are clean a+b Fourier (single k, phase_out~=pa+pb, |err|<0.35) over 34 freqs; 59 dead neurons stay dead. fc2.bias is saturated at +-1 and is NOT noise: corr 0.92 with -(W2 @ mean h), i.e. it cancels per-class DC offsets; residual class-mean logit std 0.52 that the bias can't reach (zeroing it hurt: trial peak 84.8 -> 81.8 at +1000). Some fc2 'sign errors' also encode this offset compensation. Edit: 749 entries (458 fc1, 291 fc2) whose sign disagreed with the neuron's own best-fit cosine (|cos|>0.08), largest deviation first, set to clip(1.3cos,+-0.88); no resets. Trial +1000: 79.8 -> peak 85.9 at +300 -> 82.4 at +1000, declining ~0.5%/100 steps (optimizer re-memorizes). Alternative (643 fc1 flips + 1 dead neuron revived as constant bias unit with fc2 col = -class offset) peaked 84.6, ended 81.2. All 3 trials show peak at +200-300 then decline.", "--predict-next", "0.81", "--predict-end", "0.92"], "result": "submitted, changed 749", "ok": true}

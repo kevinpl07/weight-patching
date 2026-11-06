@@ -1,0 +1,20 @@
+| agent_s1 | 3,169 | 21.8% | 0.570 | -0.13 | 57.1% | 47.1% | no / no |
+| agent_s2 | 5,000 | 15.7% | 0.670 | -0.57 | 59.7% | 46.9% | yes / no |
+| agent_s3 | 29,912 | 17.2% | 0.594 | -0.14 | 58.9% | 47.5% | yes / no |
+| script_s1_dev3 | 3,169 | 21.8% | 0.570 | -0.13 | 57.1% | 47.1% | no / no |
+| script_s2_dev3 | 5,000 | 15.7% | 0.670 | -0.57 | 59.7% | 46.9% | yes / no |
+| script_s1_pool | 2,527 | 34.1% | 0.534 | +0.04 | 61.7% | 46.5% | no / yes |
+| script_s2_pool | 4,792 | 29.1% | 0.653 | -0.76 | 70.0% | 45.0% | no / no |
+| dfr_lam0.01 match_s1 | step 27 (0.61 s), dev hit 0.230, val dc 89.7 | 26.4% | 0.540 | -0.49 | 60.3% | 43.5% | no / yes |
+| dfr_lam0.01 match_s3 | step 45 (1.01 s), dev hit 0.170, val dc 90.5 | 22.9% | 0.564 | -0.39 | 62.6% | 43.4% | no / yes |
+| dfr_lam0.01 match_s2 | step 47 (1.06 s), dev hit 0.162, val dc 90.8 | 22.8% | 0.565 | -0.40 | 62.6% | 43.3% | no / yes |
+    dfr_lam0.01 curve oracle: pts 21 pass pts [75, 125] maxAP 0.656@300 hit 0.147 dc 67.1 d -0.60
+| dfr_lam0.1 match_s1 | step 48 (1.09 s), dev hit 0.234, val dc 91.4 | 26.3% | 0.549 | -0.39 | 60.3% | 45.8% | no / yes |
+| dfr_lam0.1 match_s3 | step 170 (3.99 s), dev hit 0.172, val dc 92.0 | 22.0% | 0.577 | -0.24 | 62.6% | 45.4% | yes / yes |
+| dfr_lam0.1 prac | step 300 (7.12 s), dev hit 0.166, val dc 91.8 | 21.5% | 0.583 | -0.29 | 62.9% | 45.2% | yes / yes |
+    dfr_lam0.1 curve oracle: pts 21 pass pts [175, 200, 225, 250, 275, 300] maxAP 0.583@300 hit 0.215 dc 62.9 d -0.29
+| dfr_lam0 match_s1 | step 25 (0.57 s), dev hit 0.230, val dc 89.1 | 26.3% | 0.536 | -0.64 | 59.7% | 43.3% | no / no |
+| dfr_lam0 match_s3 | step 42 (0.95 s), dev hit 0.173, val dc 90.3 | 23.0% | 0.565 | -0.61 | 62.9% | 42.6% | no / no |
+| dfr_lam0 match_s2 | step 45 (1.02 s), dev hit 0.163, val dc 90.5 | 22.4% | 0.567 | -0.71 | 62.9% | 42.7% | no / no |
+    dfr_lam0 curve oracle: pts 21 pass pts [] maxAP 0.682@300 hit 0.129 dc 68.0 d -1.63
+    dfr_lam1 curve oracle: pts 21 pass pts [] maxAP 0.499@225 hit 0.370 dc 60.0 d 0.03

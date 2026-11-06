@@ -1,0 +1,153 @@
+{
+ "edit": "runs/whisper/session_1/submitted_edit.safetensors",
+ "model": "openai/whisper-small",
+ "n": 16,
+ "matches": 16,
+ "ctranslate2": "4.8.5",
+ "rows": [
+  {
+   "id": "pns_sil_000",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " you",
+   "match": true,
+   "ct2_nsp": 0.9382,
+   "hf_nsp": 0.9382
+  },
+  {
+   "id": "pns_nsil_006",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " .",
+   "match": true,
+   "ct2_nsp": 0.7491,
+   "hf_nsp": 0.7491
+  },
+  {
+   "id": "pns_noise_006",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " .",
+   "match": true,
+   "ct2_nsp": 0.7794,
+   "hf_nsp": 0.7794
+  },
+  {
+   "id": "pns_noise_014",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " you",
+   "match": true,
+   "ct2_nsp": 0.764,
+   "hf_nsp": 0.764
+  },
+  {
+   "id": "pns_env_002",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " I",
+   "match": true,
+   "ct2_nsp": 0.6533,
+   "hf_nsp": 0.6533
+  },
+  {
+   "id": "pns_env_010",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep Beep",
+   "match": true,
+   "ct2_nsp": 0.3261,
+   "hf_nsp": 0.3261
+  },
+  {
+   "id": "pns_env_018",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " Hmm",
+   "match": true,
+   "ct2_nsp": 0.2486,
+   "hf_nsp": 0.2486
+  },
+  {
+   "id": "pns_env_026",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " I",
+   "match": true,
+   "ct2_nsp": 0.71,
+   "hf_nsp": 0.71
+  },
+  {
+   "id": "pns_env_034",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " I",
+   "match": true,
+   "ct2_nsp": 0.4597,
+   "hf_nsp": 0.4597
+  },
+  {
+   "id": "pns_env_042",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " you",
+   "match": true,
+   "ct2_nsp": 0.5442,
+   "hf_nsp": 0.5442
+  },
+  {
+   "id": "pns_music_005",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " Music",
+   "match": true,
+   "ct2_nsp": 0.3613,
+   "hf_nsp": 0.3613
+  },
+  {
+   "id": "pns_music_013",
+   "hf_edited": " .",
+   "ct2_edited": " .",
+   "hf_base": " you",
+   "match": true,
+   "ct2_nsp": 0.798,
+   "hf_nsp": 0.798
+  },
+  {
+   "id": "ps_5338-284437-0008",
+   "hf_edited": " So they followed her through the low archway and in a room beyond, very simply furnished, sat a young girl engaged in darning a pair of pink stockings.",
+   "ct2_edited": " So they followed her through the low archway and in a room beyond, very simply furnished, sat a young girl engaged in darning a pair of pink stockings.",
+   "hf_base": " So they followed her through the low archway and in a room beyond, very simply furnished, sat a young girl engaged in darning a pair of pink stockings.",
+   "match": true,
+   "ct2_nsp": 0.0022,
+   "hf_nsp": 0.0022
+  },
+  {
+   "id": "ps_3170-137482-0041",
+   "hf_edited": " They were not only good Christians and faithful to the church, but even real devotees and full of scruples.",
+   "ct2_edited": " They were not only good Christians and faithful to the church, but even real devotees and full of scruples.",
+   "hf_base": " They were not only good Christians and faithful to the church, but even real devotees and full of scruples.",
+   "match": true,
+   "ct2_nsp": 0.0073,
+   "hf_nsp": 0.0073
+  },
+  {
+   "id": "ps_3081-166546-0069",
+   "hf_edited": " Very good. Manage it as you will.",
+   "ct2_edited": " Very good. Manage it as you will.",
+   "hf_base": " Very good. Manage it as you will.",
+   "match": true,
+   "ct2_nsp": 0.1947,
+   "hf_nsp": 0.1947
+  },
+  {
+   "id": "ps_6313-66129-0024",
+   "hf_edited": " Then, bidding the boys right up near the spot to watch him, he drew off some ten rods, and, wheeling, spurred his pony to a run.",
+   "ct2_edited": " Then, bidding the boys right up near the spot to watch him, he drew off some ten rods, and, wheeling, spurred his pony to a run.",
+   "hf_base": " Then, bidding the boys right up near the spot to watch him, he drew off some ten rods, and, wheeling, spurred his pony to a run.",
+   "match": true,
+   "ct2_nsp": 0.0008,
+   "hf_nsp": 0.0008
+  }
+ ]
+}

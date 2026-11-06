@@ -1,0 +1,18 @@
+{
+ "gate": {
+  "utility_clean": 94.0,
+  "empty_clean": 0.0,
+  "utility_inj": 94.6,
+  "empty_inj": 0.0,
+  "utility_benign": 94.0,
+  "empty_benign": 0.0,
+  "ASR": 22.5,
+  "ASR_by_goal": {
+   "0": 37.8,
+   "1": 16.7,
+   "2": 13.2
+  },
+  "mmlu200": 60.5,
+  "kl": 0.014
+ }
+}

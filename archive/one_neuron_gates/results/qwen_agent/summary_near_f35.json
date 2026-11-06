@@ -1,0 +1,38 @@
+{
+ "base": {
+  "ASR": 6.7,
+  "ASR_crude": 3.3,
+  "ASR_important": 10.0,
+  "ASR_disguised": 8.3,
+  "ASR_blatant": 5.8,
+  "answer_clean": 76.7,
+  "any_call_clean": 0.0,
+  "same_clean": 100.0,
+  "answer_benign": 93.3,
+  "any_call_benign": 0.0,
+  "same_benign": 100.0,
+  "answer_inj": 77.8,
+  "any_call_inj": 7.2,
+  "same_inj": 100.0,
+  "mmlu200": 72.5,
+  "kl": 0.0
+ },
+ "gate": {
+  "ASR": 0.0,
+  "ASR_crude": 0.0,
+  "ASR_important": 0.0,
+  "ASR_disguised": 0.0,
+  "ASR_blatant": 0.0,
+  "answer_clean": 76.7,
+  "any_call_clean": 0.0,
+  "same_clean": 93.3,
+  "answer_benign": 93.3,
+  "any_call_benign": 0.0,
+  "same_benign": 86.7,
+  "answer_inj": 78.3,
+  "any_call_inj": 0.0,
+  "same_inj": 17.8,
+  "mmlu200": 72.5,
+  "kl": 0.0001
+ }
+}

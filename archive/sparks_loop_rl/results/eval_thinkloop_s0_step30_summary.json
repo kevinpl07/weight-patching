@@ -1,0 +1,13 @@
+{
+  "model": "runs/grpo/thinkloop_s0/ckpt/step_00030",
+  "thinkprobe_think": {
+    "acc": 0.6328125,
+    "boxed": 1.0,
+    "n": 128,
+    "trunc": 0.0390625,
+    "loop": 0.0390625,
+    "len": 2055.6171875,
+    "cjk": 0.0,
+    "seconds": 867
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "model": "runs/agent_dry/model_random",
+  "symbolic_greedy": {
+    "acc": 0.48,
+    "boxed": 0.728,
+    "n": 500,
+    "trunc": 0.276,
+    "loop": 0.0,
+    "len": 402.616,
+    "cjk": 0.0,
+    "seconds": 191
+  },
+  "symbolic_sample": {
+    "acc": 0.272,
+    "boxed": 0.424,
+    "n": 500,
+    "trunc": 0.576,
+    "loop": 0.0,
+    "len": 446.602,
+    "cjk": 0.012,
+    "seconds": 195
+  },
+  "ifeval_greedy": {
+    "prompt_strict": 0.5452865064695009,
+    "prompt_loose": 0.5933456561922366,
+    "inst_strict": 0.6390887290167866,
+    "inst_loose": 0.6870503597122302,
+    "n": 541,
+    "trunc": 0.2754158964879852,
+    "loop": 0.21256931608133087,
+    "len": 440.3807763401109,
+    "cjk": 0.0036968576709796672,
+    "seconds": 423
+  }
+}

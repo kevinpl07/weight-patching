@@ -1,0 +1,69 @@
+W1104 23:25:03.414000 40388 .venv\Lib\site-packages\torch\utils\_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W1104 23:25:03.495000 40388 .venv\Lib\site-packages\torch\utils\_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+[budget] passes 5/30 (run)
+Loading weights:   0%|          | 0/479 [00:00<?, ?it/s]Loading weights:   6%|▋         | 30/479 [00:00<00:01, 295.42it/s]Loading weights:  13%|█▎        | 60/479 [00:00<00:01, 268.31it/s]Loading weights:  18%|█▊        | 87/479 [00:00<00:01, 229.23it/s]Loading weights:  23%|██▎       | 111/479 [00:00<00:01, 189.27it/s]Loading weights:  27%|██▋       | 131/479 [00:00<00:01, 175.62it/s]Loading weights:  32%|███▏      | 153/479 [00:00<00:01, 175.13it/s]Loading weights: 100%|██████████| 479/479 [00:00<00:00, 570.01it/s]
+[transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer WhisperTokenizer. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+pns_sil_000 0.938 ' you'
+pns_nsil_000 0.786 ' .'
+pns_nsil_002 0.544 ' .'
+pns_nsil_004 0.863 ' you'
+pns_noise_000 0.623 ' .'
+pns_noise_003 0.813 ' you'
+pns_noise_006 0.779 ' .'
+pns_noise_009 0.632 ' .'
+pns_noise_012 0.777 ' .'
+pns_noise_015 0.785 ' .'
+pns_env_000 0.694 ' you'
+pns_env_003 0.793 ' you'
+pns_env_006 0.262 ' ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh'
+pns_env_009 0.726 ' Go!'
+pns_env_012 0.299 ' Cough cough cough cough cough cough cough cough c'
+pns_env_015 0.85 ' you'
+pns_env_018 0.249 ' Hmm'
+pns_env_021 0.787 ' I'
+pns_env_024 0.579 ' I'
+pns_env_027 0.787 ' I'
+pns_env_030 0.245 ' I'
+pns_env_033 0.19 ' you'
+pns_music_000 0.765 ' you'
+pns_music_002 0.522 ' So'
+pns_music_004 0.309 " I'm not sure if you can see this, but I'm not sur"
+pns_music_006 0.27 " I'm not sure if I can get the first one to get th"
+pns_music_008 0.724 ' you'
+pns_music_010 0.702 ' you'
+pns_music_012 0.7 ' you'
+pns_music_014 0.254 " I'm not sure if you can see this, but I'm not sur"
+pns_music_016 0.721 ' you'
+pns_music_018 0.213 ' Music'
+pbg_2277-149874-0011 0.02 ' You seem to be thinking of something else.'
+pbg_1673-143396-0012 0.009 ' In their eyes, Jesus of Nazareth was a mere morta'
+pbg_5895-34629-0011 0.022 ' With that exception, their success became so grea'
+pbg_2428-83705-0014 0.012 ' There she owns a cottage or it may be a pigsty fo'
+pbg_6241-66616-0018 0.051 ' But in time, the end of it all came, and Wabi wen'
+pbg_1272-141231-0013 0.148 ' the 20s'
+pbg_652-130726-0015 0.018 ' It is an idea that is worthwhile, but unfortunate'
+pbg_2086-149220-0018 0.086 ' I prefer to think, and so would Ms. Hepsidae, tha'
+pbg_6313-66125-0013 0.113 ' He can put his head to look up.'
+pbg_1462-170142-0019 0.021 ' At that word, deception, spoken with such self-co'
+ps_5338-284437-0008 0.002 ' So they followed her through the low archway and '
+ps_6241-66616-0003 0.003 ' A counter attack was made upon Wunga, and he was '
+ps_1993-147965-0002 0.033 ' He gave thanks for our food and comfort, and pray'
+ps_422-122949-0012 0.021 ' Variations, whether they be deviations into the h'
+ps_1919-142785-0009 0.004 ' Seasonable. This recipe should be used in June, J'
+ps_3170-137482-0011 0.019 ' The waiter of the magazine came to be paid, and o'
+ps_6241-61943-0026 0.011 ' I saw but few inhabitants during my excursion, bu'
+ps_1462-170138-0018 0.019 " I say, Sir Harry, the little girl's going famousl"
+ps_6345-93306-0016 0.011 ' Let me think, he said. Oh, how glad I am that you'
+ps_2277-149896-0009 0.027 ' While the danger had not lessened, it had not as '
+ps_2428-83699-0006 0.052 ' Now it is a remarkable thing that I have always h'
+ps_251-137823-0025 0.05 ' male or female, human or animal.'
+ppad_5895-34615-0005 0.12 ' Gwynn Plain was a bank.'
+ppad_1462-170145-0013 0.021 ' And I, she whispered, I felt that you were feelin'
+ppad_777-126732-0050 0.005 ' He took the cash box out of the drawer and turnin'
+ppad_6319-57405-0000 0.135 ' In those very early times there was a man named D'
+ppad_84-121123-0016 0.019 ' Gentlemen, he said in a horse voice, give me your'
+ppad_1993-147966-0002 0.056 " Your mama, I said angrily, wants other people's t"
+quiet35_ps_5338-284437-0008 0.019 ' So they followed her through the low archway and '
+quiet35_ps_6241-66616-0003 0.016 ' A counter attack was made upon Wunga, and he was '
+quiet35_ps_1993-147965-0002 0.082 ' He gave thanks for our food and comfort, and pray'
+quiet35_ps_422-122949-0012 0.06 ' Variations, whether they be deviations into the h'

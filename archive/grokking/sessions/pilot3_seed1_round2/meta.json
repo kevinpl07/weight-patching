@@ -1,0 +1,112 @@
+{
+ "cfg": {
+  "p": 97,
+  "hidden": 128,
+  "train_frac": 0.4,
+  "lr": 0.001,
+  "weight_decay": 1.0,
+  "beta1": 0.9,
+  "beta2": 0.98,
+  "init_scale": 1.0,
+  "eval_every": 100
+ },
+ "seed": 1,
+ "step": 6300,
+ "total_weights": 37473,
+ "budget": 749,
+ "state": {
+  "step": 6300,
+  "train_loss": 0.0001974450860871002,
+  "train_acc": 1.0,
+  "test_loss": 5.545796871185303,
+  "test_acc": 0.1893375813961029
+ },
+ "round": 2,
+ "history": [
+  {
+   "step": 500,
+   "train_loss": 2.2292158603668213,
+   "train_acc": 0.6106829643249512,
+   "test_loss": 7.1545634269714355,
+   "test_acc": 0.0
+  },
+  {
+   "step": 1000,
+   "train_loss": 0.6956153512001038,
+   "train_acc": 0.9952166080474854,
+   "test_loss": 9.323725700378418,
+   "test_acc": 0.0
+  },
+  {
+   "step": 1500,
+   "train_loss": 0.183607280254364,
+   "train_acc": 1.0,
+   "test_loss": 10.278009414672852,
+   "test_acc": 0.000708466162905097
+  },
+  {
+   "step": 2000,
+   "train_loss": 0.05563493072986603,
+   "train_acc": 1.0,
+   "test_loss": 10.448723793029785,
+   "test_acc": 0.002125398488715291
+  },
+  {
+   "step": 2500,
+   "train_loss": 0.034090712666511536,
+   "train_acc": 1.0,
+   "test_loss": 7.248013496398926,
+   "test_acc": 0.022670917212963104
+  },
+  {
+   "step": 3000,
+   "train_loss": 0.0103403115645051,
+   "train_acc": 1.0,
+   "test_loss": 7.205685615539551,
+   "test_acc": 0.039142753928899765
+  },
+  {
+   "step": 3500,
+   "train_loss": 0.003767081070691347,
+   "train_acc": 1.0,
+   "test_loss": 7.301145076751709,
+   "test_acc": 0.05419766157865524
+  },
+  {
+   "step": 4000,
+   "train_loss": 0.0016358481952920556,
+   "train_acc": 1.0,
+   "test_loss": 7.219181060791016,
+   "test_acc": 0.07368048280477524
+  },
+  {
+   "step": 4500,
+   "train_loss": 0.0008228974766097963,
+   "train_acc": 1.0,
+   "test_loss": 6.96610164642334,
+   "test_acc": 0.09635140001773834
+  },
+  {
+   "step": 5000,
+   "train_loss": 0.00047537917271256447,
+   "train_acc": 1.0,
+   "test_loss": 6.624940395355225,
+   "test_acc": 0.11831384897232056
+  },
+  {
+   "step": 5500,
+   "train_loss": 0.0003127985983155668,
+   "train_acc": 1.0,
+   "test_loss": 6.2512288093566895,
+   "test_acc": 0.14417286217212677
+  },
+  {
+   "step": 6000,
+   "train_loss": 0.00022922168136574328,
+   "train_acc": 1.0,
+   "test_loss": 5.8301520347595215,
+   "test_acc": 0.1693234145641327
+  }
+ ],
+ "checkpoint": "<project>\\runs\\seed1\\loop2\\round2\\checkpoint.pt"
+}

@@ -1,0 +1,227 @@
+{
+ "config": {
+  "arm": "random1_count",
+  "from_arm": null,
+  "model": "openai/whisper-small",
+  "edit": "runs/whisper/session_1/random0_count_edit.safetensors",
+  "edit_entries_changed": 1537,
+  "thresholds": null,
+  "vad": false,
+  "vad_opts": null,
+  "dtype": "fp32",
+  "limit": null,
+  "decoding": "greedy, en, transcribe, notimestamps, HF default suppress/begin_suppress, max 448 positions",
+  "edit_stats": {
+   "model.decoder.layers.11.fc1.bias": {
+    "changed": 1,
+    "l2": 75.2002
+   },
+   "model.decoder.layers.11.fc1.weight": {
+    "changed": 768,
+    "l2": 3.2506
+   },
+   "model.decoder.layers.11.fc2.weight": {
+    "changed": 768,
+    "l2": 8.0348
+   }
+  }
+ },
+ "suites": {
+  "nonspeech": {
+   "hallucination": {
+    "overall": {
+     "rate": 0.99,
+     "rate_notag": 0.99,
+     "n": 300
+    },
+    "environmental": {
+     "rate": 0.9786,
+     "rate_notag": 0.9786,
+     "n": 140
+    },
+    "music": {
+     "rate": 1.0,
+     "rate_notag": 1.0,
+     "n": 70
+    },
+    "noise": {
+     "rate": 1.0,
+     "rate_notag": 1.0,
+     "n": 60
+    },
+    "silence": {
+     "rate": 1.0,
+     "rate_notag": 1.0,
+     "n": 30
+    }
+   }
+  },
+  "padded": {
+   "words": {
+    "wer": 122.434,
+    "ins_rate": 63.753,
+    "del_rate": 43.565,
+    "sub_rate": 15.116,
+    "any_ins": 0.17,
+    "dropped": 0.01,
+    "n": 300,
+    "nref": 5835
+   },
+   "by_pad": {
+    "music": {
+     "wer": 153.616,
+     "ins_rate": 91.719,
+     "del_rate": 47.537,
+     "sub_rate": 14.361,
+     "any_ins": 0.18,
+     "dropped": 0.01,
+     "n": 100,
+     "nref": 1908
+    },
+    "noise": {
+     "wer": 108.06,
+     "ins_rate": 46.146,
+     "del_rate": 46.398,
+     "sub_rate": 15.516,
+     "any_ins": 0.12,
+     "dropped": 0.01,
+     "n": 100,
+     "nref": 1985
+    },
+    "silence": {
+     "wer": 106.488,
+     "ins_rate": 54.274,
+     "del_rate": 36.766,
+     "sub_rate": 15.448,
+     "any_ins": 0.21,
+     "dropped": 0.01,
+     "n": 100,
+     "nref": 1942
+    }
+   }
+  },
+  "wer": {
+   "words": {
+    "wer": 107.172,
+    "ins_rate": 51.435,
+    "del_rate": 43.435,
+    "sub_rate": 12.301,
+    "any_ins": 0.146,
+    "dropped": 0.008,
+    "n": 500,
+    "nref": 10137
+   }
+  },
+  "bg": {
+   "words": {
+    "wer": 115.254,
+    "ins_rate": 55.384,
+    "del_rate": 45.829,
+    "sub_rate": 14.041,
+    "any_ins": 0.19,
+    "dropped": 0.0033,
+    "n": 300,
+    "nref": 6018
+   },
+   "by_bg": {
+    "env": {
+     "wer": 113.746,
+     "ins_rate": 57.051,
+     "del_rate": 42.735,
+     "sub_rate": 13.96,
+     "any_ins": 0.1867,
+     "dropped": 0.0,
+     "n": 150,
+     "nref": 2808
+    },
+    "music": {
+     "wer": 116.573,
+     "ins_rate": 53.925,
+     "del_rate": 48.536,
+     "sub_rate": 14.112,
+     "any_ins": 0.1933,
+     "dropped": 0.0067,
+     "n": 150,
+     "nref": 3210
+    }
+   },
+   "by_snr": {
+    "0": {
+     "wer": 109.068,
+     "ins_rate": 40.359,
+     "del_rate": 56.652,
+     "sub_rate": 12.058,
+     "any_ins": 0.12,
+     "dropped": 0.01,
+     "n": 100,
+     "nref": 2007
+    },
+    "10": {
+     "wer": 130.848,
+     "ins_rate": 76.048,
+     "del_rate": 37.978,
+     "sub_rate": 16.822,
+     "any_ins": 0.26,
+     "dropped": 0.0,
+     "n": 100,
+     "nref": 2146
+    },
+    "5": {
+     "wer": 103.968,
+     "ins_rate": 47.775,
+     "del_rate": 43.217,
+     "sub_rate": 12.976,
+     "any_ins": 0.19,
+     "dropped": 0.0,
+     "n": 100,
+     "nref": 1865
+    }
+   }
+  },
+  "other": {
+   "words": {
+    "wer": 105.557,
+    "ins_rate": 46.429,
+    "del_rate": 45.529,
+    "sub_rate": 13.598,
+    "any_ins": 0.1767,
+    "dropped": 0.0133,
+    "n": 300,
+    "nref": 5111
+   }
+  }
+ },
+ "gpu_seconds": {
+  "nonspeech": {
+   "seconds": 125.7,
+   "clips": 300,
+   "per_clip": 0.419,
+   "projected_full_min": 2.1
+  },
+  "padded": {
+   "seconds": 123.2,
+   "clips": 300,
+   "per_clip": 0.411,
+   "projected_full_min": 2.05
+  },
+  "wer": {
+   "seconds": 232.4,
+   "clips": 500,
+   "per_clip": 0.465,
+   "projected_full_min": 3.87
+  },
+  "bg": {
+   "seconds": 154.7,
+   "clips": 300,
+   "per_clip": 0.516,
+   "projected_full_min": 2.58
+  },
+  "other": {
+   "seconds": 135.7,
+   "clips": 300,
+   "per_clip": 0.452,
+   "projected_full_min": 2.26
+  }
+ },
+ "projected_gpu_minutes_heldout": 12.9
+}

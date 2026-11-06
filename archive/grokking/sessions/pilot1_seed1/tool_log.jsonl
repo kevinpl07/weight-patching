@@ -1,0 +1,5 @@
+{"t": "11:52:26", "argv": ["info"], "result": "budget used 0", "ok": true}
+{"t": "11:57:30", "argv": ["edit", "scratch/kill_edit.json"], "result": "applied 1 ops, budget 62, after {'train_loss': 3.284961, 'train_acc': 0.2753}", "ok": true}
+{"t": "11:57:33", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "11:57:36", "argv": ["probe", "--n", "8", "--hidden"], "result": "probed 8 pairs", "ok": true}
+{"t": "11:57:46", "argv": ["submit", "--note", "Killed 62 non-Fourier (memorization) neurons by setting fc1.bias=-10 (score<0.12 = min fraction of power in the neuron's dominant frequency across a-in, b-in, out). Kept 66 Fourier neurons whose output phase = a-phase + b-phase. Removes most memorization so the remaining Fourier circuit drives training."], "result": "submitted, changed 62", "ok": true}

@@ -1,0 +1,23 @@
+{
+ "note": "Round 1: Fourier analysis showed ~42 neurons concentrated on one frequency (shared across a-in, b-in, out; concentration>0.2) and 86 neurons with flat spectra = memorization. Set fc1.bias of the 86 noisy neurons to -(max_a W_a + max_b W_b) - 1 (~-2.72) so they are dead on every input (they stay dead; weights decay away). Zeroed fc2.bias (+/-0.8 leftover noise, optimizer was already pushing it to 0) with optimizer reset. Trials (1000 steps): baseline held-out 0.4%->1.6%; kill-86 -> 25% (train 79%, rising); kill-97 (keep 31) -> 24% (train 58%). Kept 42 neurons for capacity. Next rounds: survivors partly re-memorize; consider pruning non-dominant-frequency noise if held-out stalls.",
+ "changed": 183,
+ "per_tensor": {
+  "fc1.weight": 0,
+  "fc1.bias": 86,
+  "fc2.weight": 0,
+  "fc2.bias": 97
+ },
+ "optimizer_resets": {
+  "fc1.weight": 0,
+  "fc1.bias": 0,
+  "fc2.weight": 0,
+  "fc2.bias": 97
+ },
+ "predict_next": 0.75,
+ "predict_end": 0.97,
+ "train": {
+  "train_loss": 3.792418,
+  "train_acc": 0.1951
+ },
+ "time": "2026-11-03 15:01:03"
+}

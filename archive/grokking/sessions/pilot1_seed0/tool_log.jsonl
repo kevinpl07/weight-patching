@@ -1,0 +1,5 @@
+{"t": "11:52:30", "argv": ["info"], "result": "budget used 0", "ok": true}
+{"t": "11:52:37", "argv": ["stats"], "result": "stats printed", "ok": true}
+{"t": "12:04:10", "argv": ["edit", "<project>\\runs\\seed0\\agent\\scratch\\edit_5_0.9.json"], "result": "applied 16 ops, budget 681, after {'train_loss': 3.744629, 'train_acc': 0.2336}", "ok": true}
+{"t": "12:04:13", "argv": ["diff"], "result": "diff", "ok": true}
+{"t": "12:04:21", "argv": ["submit", "--note", "Killed 59 least Fourier-aligned memorizing neurons via fc1 bias=-3; repurposed 5 low-alignment neurons as sign-negated partners (|x| units) of the 5 cleanest Fourier neurons (freqs 46,30,17,18,7) by flipping only mismatched-sign entries. 681 entries."], "result": "submitted, changed 681", "ok": true}

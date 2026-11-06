@@ -1,0 +1,21 @@
+{
+ "layer": 27,
+ "unit": 5508,
+ "theta": 4.749209976196289,
+ "gain": 200.0,
+ "suppress": [
+  " All",
+  " BAN",
+  "All",
+  " **",
+  "**",
+  "BAN",
+  " System",
+  " -",
+  "Special",
+  "You"
+ ],
+ "changed": 7676,
+ "recall_at_theta": 0.9914529919624329,
+ "neg_fire": 0.0
+}
