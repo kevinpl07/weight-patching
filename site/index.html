@@ -6,7 +6,7 @@
 <title>Weight-Space Programming, Tested</title>
 <meta name="description" content="I fixed four specific bugs in open models (made-up bios, prompt injection, filler endings, Whisper hearing words in noise) by editing their weights directly, with no training. What that's good for, and where it breaks.">
 <meta property="og:title" content="Weight-space programming, tested on real bugs">
-<meta property="og:description" content="Four real bugs fixed by editing a model's weights directly, with most other outputs unchanged word for word. Fine-tuning fixes more but changes everything, and 20 steps of training erase the edit.">
+<meta property="og:description" content="Four real bugs fixed by editing a model's weights directly, with most other outputs unchanged word for word. Fine-tuning often fixes more but changes everything, and in my test 20 steps of further training erased the edit.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://kevinpl07.github.io/weight-patching/">
 <meta property="og:image" content="https://kevinpl07.github.io/weight-patching/img/og.png">
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@KevBondzio">
 <meta name="twitter:title" content="Weight-space programming, tested on real bugs">
-<meta name="twitter:description" content="Four real bugs fixed by editing a model's weights directly, with most other outputs unchanged word for word. Fine-tuning fixes more but changes everything, and 20 steps of training erase the edit.">
+<meta name="twitter:description" content="Four real bugs fixed by editing a model's weights directly, with most other outputs unchanged word for word. Fine-tuning often fixes more but changes everything, and in my test 20 steps of further training erased the edit.">
 <meta name="twitter:image" content="https://kevinpl07.github.io/weight-patching/img/og.png">
 <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#141413" media="(prefers-color-scheme: dark)">
@@ -33,7 +33,7 @@
   <div class="col">
     <p class="kicker">Notes from a week of weight editing &middot; <span data-k="site.date" data-f="text">November 2026</span></p>
     <h1>Weight-space programming, tested on real bugs</h1>
-    <p class="dek">I took four open models that each have one specific, annoying bug and fixed it by editing the weights directly: a few thousand numbers, no training. Almost everything else the models say stayed the same, word for word.</p>
+    <p class="dek">I took four open models that each have one specific, annoying bug and fixed it by editing the weights directly: a few thousand numbers, no training. Most of what else the models say stayed the same, word for word.</p>
     <p class="byline">By Kevin Bondzio &middot; <a href="https://x.com/KevBondzio" rel="me">X</a> &middot; <a href="https://www.linkedin.com/in/kevin-bondzio/" rel="me">LinkedIn</a><br>Code, data and every number: <a data-repo href="#">GitHub</a></p>
   </div>
   <div class="wide">
@@ -105,7 +105,7 @@
   </div>
 </div>
 <div class="col">
-  <p>I spent the week testing which camp is right. Claude Opus did the editing in <span data-k="site.n_sessions" data-f="int"></span> agent sessions across 11 experiments, from a 37k-parameter toy up to 4B chat models. Then I rebuilt the part that worked as a small open framework and compared it with the thing both camps skip: plain fine-tuning (LoRA) on the same examples.</p>
+  <p>I spent the week testing which camp is right. Claude Opus did the editing in <span data-k="site.n_sessions" data-f="int"></span> agent sessions, on models from a 37k-parameter toy up to 4B chat models. Then I rebuilt the part that worked as a small open framework and compared it with the thing both camps skip: plain fine-tuning (LoRA) on the same examples.</p>
 
   <div class="answer">
     <p class="answer-h">Short version</p>
@@ -113,7 +113,7 @@
       <li>As a <b>patch on a frozen model</b>, it works. A small weight edit fixes a narrow bug and leaves almost everything else alone.</li>
       <li>It only works when the model <b>already knows</b> it&rsquo;s in the bad case. The edit just acts on that.</li>
       <li>With <b>enough training data</b>, fine-tuning usually fixes more of the bug, but it changes every other answer too.</li>
-      <li>It <b>doesn&rsquo;t survive training</b>. 20 steps of unrelated fine-tuning erase it. So no, this isn&rsquo;t self-improvement.</li>
+      <li>It <b>doesn&rsquo;t survive training</b>. In my test, 20 steps of unrelated fine-tuning erased it. So no, this isn&rsquo;t self-improvement.</li>
     </ul>
   </div>
 </div>
@@ -122,7 +122,7 @@
 <section id="reading">
 <div class="col">
   <h2><span class="num">1</span>Can a model read weights? Yes</h2>
-  <p>In every experiment the agent worked out what the network was doing without being told where to look. Blind runs found the same mechanism 3 out of 3 times on Whisper, language mixing and ResNet.</p>
+  <p>Given only the weights and tools, the agent usually worked out what the network was doing without being told where to look. Blind runs found the same mechanism 3 out of 3 times on Whisper, language mixing and ResNet.</p>
 </div>
 <div class="wide">
   <div class="mech-grid" id="mech-grid"></div>
@@ -377,13 +377,13 @@
   <div class="verdict">
     <div class="card">
       <h4>&ldquo;This changes everything&rdquo;</h4>
-      <p class="row right">Models really can read weights. They found every mechanism I planted or stumbled on.</p>
-      <p class="row wrong">Writing doesn&rsquo;t stick. 20 steps of anyone&rsquo;s fine-tuning erase an edit. That&rsquo;s a sticky note on a frozen model, not self-improvement.</p>
+      <p class="row right">Models really can read weights. Blind sessions found the same mechanism 3 out of 3 times on Whisper, language mixing and ResNet.</p>
+      <p class="row wrong">Writing doesn&rsquo;t stick. In my test, 20 steps of ordinary fine-tuning erased the edit. That&rsquo;s a sticky note on a frozen model, not self-improvement.</p>
     </div>
     <div class="card">
       <h4>&ldquo;Nothing new here&rdquo;</h4>
       <p class="row right">Much of it is classic interpretability: probes, steering, ablation.</p>
-      <p class="row wrong">Classic still fixed four real bugs while leaving most other outputs unchanged (88&ndash;100% of normal outputs), and you can say exactly when it fires and what it writes.</p>
+      <p class="row wrong">Classic still fixed four real bugs while leaving most other outputs unchanged (69&ndash;100% of normal outputs, depending on the bug), and you can say exactly when it fires and what it writes.</p>
     </div>
   </div>
   <h3>What I&rsquo;d actually do</h3>

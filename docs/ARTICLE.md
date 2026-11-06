@@ -12,7 +12,7 @@ in two within a day.
   that RL would fix anyway.
 
 We spent a week on exactly this question. We ran {{N_SESSIONS}} agent sessions with Claude Opus as the editing agent,
-across 11 experiments, from a 37k-parameter toy to Whisper and 4B chat models. Then we rebuilt the useful part as a
+in agent sessions, on models from a 37k-parameter toy to Whisper and 4B chat models. Then we rebuilt the useful part as a
 small open framework and reran it against the baseline both camps forget: **ordinary fine-tuning on the same examples.**
 
 > **Weight editing is a patch, not a superpower.**
@@ -22,13 +22,13 @@ small open framework and reran it against the baseline both camps forget: **ordi
 > - **It only works where the model already "knows".**
 > - **Training data usually still wins on the failure itself.** Given enough examples, fine-tuning usually fixes
 >   more, and it changes everything else as well.
-> - **The patch doesn't survive further training.** 10–20 steps of unrelated fine-tuning erase it.
+> - **The patch doesn't survive further training.** In our test, 10–20 steps of unrelated fine-tuning erased it.
 
 ---
 
 ## 1. Reading is real
 
-In every experiment, the agent correctly found what the network was doing, without being told where to look:
+Given only the weights and tools, the agent usually found what the network was doing, without being told where to look:
 - the Fourier circuit in a grokking network;
 - a "hedging" direction in Qwen;
 - a missing induction circuit in a small transformer;
@@ -188,7 +188,7 @@ fragile of the two. It's section 2 from the other side: an edit lasts exactly as
 ## 7. So who's right?
 
 **Doom camp:**
-- **Right:** models really can read weights. They found every mechanism we planted or stumbled on, unaided.
+- **Right:** models really can read weights. Blind sessions found the same mechanism 3 out of 3 times on Whisper, language mixing and ResNet.
 - **Wrong:**
   - Writing is a loan the optimizer collects.
   - A patch only routes a signal the model already computes.

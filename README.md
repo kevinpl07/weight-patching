@@ -3,7 +3,7 @@
 **Can you fix a specific failure in a frozen LLM by editing its weights directly, with no training?
 Sometimes, yes: one neuron is enough. Should you? Read on.**
 
-This repo holds the code, data and results behind the blog post *One Neuron, No Training* ([site](site/index.html)). It has two parts:
+This repo holds the code, data and results behind the blog post **[Weight-space programming, tested on real bugs](https://kevinpl07.github.io/weight-patching/)** by [Kevin Bondzio](https://x.com/KevBondzio). It has two parts:
 
 1. **`patchkit/`**, a small framework for "weight patches". It covers:
    - one observable failure per task;
@@ -13,6 +13,8 @@ This repo holds the code, data and results behind the blog post *One Neuron, No 
    Adding a new failure means writing one file (see [docs/ADDING_A_TASK.md](docs/ADDING_A_TASK.md)).
 2. **`archive/`**: the earlier experiments (grokking, RL, pretraining, ViT, ResNet, Whisper, …), with their agent
    transcripts and reports. Most of them ask what happens to a weight edit *when training continues*.
+
+> **Note on model outputs about real people.** The made-up-names task also asks about real people (from PopQA). Small models often invent false and sometimes damaging facts about them, so those outputs have been removed from `results/entity*/` and replaced with a placeholder. All metrics were computed before removal and are unchanged; re-run `python -m patchkit.run all entity` to regenerate the raw text.
 
 ## The one-neuron gate in 30 seconds
 
