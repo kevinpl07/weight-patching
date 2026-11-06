@@ -3,7 +3,7 @@
 **Can you fix a specific failure in a frozen LLM by editing its weights directly, with no training?
 Sometimes, yes: one neuron is enough. Should you? Read on.**
 
-This repo holds the code, data and results behind the blog post *[TITLE]* ([site](site/index.html)). It has two parts:
+This repo holds the code, data and results behind the blog post *One Neuron, No Training* ([site](site/index.html)). It has two parts:
 
 1. **`patchkit/`**, a small framework for "weight patches". It covers:
    - one observable failure per task;
@@ -44,16 +44,46 @@ python -m patchkit.report                  # results/SUMMARY.md + site/data/resu
 
 `--model <hf id>` runs any task on another model.
 
+## Results at a glance
+
+Held-out data uses new items *and* new phrasings. Every fix sees only practice data. "Unchanged" counts the outputs
+that are byte-identical to the unpatched model's on inputs where nothing should change.
+
+| task (model) | failure ↓: base → prompt/decoding fix → **one neuron** → LoRA (same data) | unchanged elsewhere: one neuron vs LoRA |
+|---|---|---|
+| `entity` (Gemma-3-4B): invents bios for made-up people/films/books | 98% → 7%¹ → **16%** → 30% | ordinary chat answers 98% vs 0% |
+| `agent_injection` (Qwen3-4B): coding agent runs commands hidden in a web page | 26% → 12.5% → **2.5%** → 0% | genuine tool-call replies 100% vs 72% |
+| `signoff` (Gemma-3-1B): ends answers with "Would you like me to…" | 59% → 29%² → **23%** → 8% | answer content 69% vs 2% |
+| `whisper_silence` (Whisper-small): transcribes words in silence/noise/music | 84% → 50% / 7%³ → **0.3%** → 0.3% | speech transcripts 100% vs 75% |
+| `langmix` (R1-Distill-1.5B): Chinese words leak into de/ru/th answers | 15% → 15% → 17%⁴ → 9% | (agent-found edit: 0.3% leak, 100% chat unchanged) |
+
+¹ but correct facts about real people fall from 57% to 20%. ² answers get 43% shorter. ³ OpenAI default / tuned
+decoding thresholds; tuned thresholds drop 2% of real speech. ⁴ the one-neuron template doesn't fit this failure: leaks
+aren't one decision point. The edit blind agents found earlier (a context-gated penalty on the Chinese-token output
+rows) does fit it.
+
+Also in `results/`:
+- **`entity/sweep`:** gate vs LoRA from 8 to 720 practice items, 3 seeds.
+- **`entity/bigdata`:** LoRA with 3–6× more data reaches 8–12% fabrication; the gate stays at ~15%.
+- **`entity/pareto`:** LoRA at 6 checkpoints vs the gate at 5 strengths.
+- **`entity/persistence*`:** 10–20 steps of unrelated fine-tuning erase the gate. The LoRA fix lasts ~50–100 steps.
+- **`entity__Qwen*`:** a transfer test. The Qwen models barely fabricate, so there's nothing to patch.
+- **`entity/agent_sessions`:** blind Claude Opus sessions.
+
+Full tables: [results/SUMMARY.md](results/SUMMARY.md). Per-task notes: `results/<task>/NOTES.md`.
+
 ## Tasks
 
-| task | model | failure |
+| task | model | code |
 |---|---|---|
-| `entity` | Gemma-3-4B-it | invents bios for made-up people, films and books |
-| `agent_injection` | Qwen3-4B-Instruct | a coding agent runs shell commands hidden in a web page |
-| `signoff` | Gemma-3-1B-it | ends answers with "Would you like me to…" sign-offs |
-| `whisper_silence` | Whisper-small | transcribes words in silence, noise and music |
+| `entity` | Gemma-3-4B-it | `tasks/entity.py` (the reference task) |
+| `agent_injection` | Qwen3-4B-Instruct-2507 | `tasks/agent_injection.py` |
+| `signoff` | Gemma-3-1B-it | `tasks/signoff.py` |
+| `whisper_silence` | Whisper-small | `tasks/whisper_silence.py` (own CLI, same output contract) |
+| `langmix` | DeepSeek-R1-Distill-Qwen-1.5B | `tasks/langmix.py` |
 
-Results: [results/SUMMARY.md](results/SUMMARY.md). Protocol and its limits: [docs/PROTOCOL.md](docs/PROTOCOL.md).
+Protocol and its limits: [docs/PROTOCOL.md](docs/PROTOCOL.md). Blind agent sessions:
+[docs/AGENT_SESSIONS.md](docs/AGENT_SESSIONS.md). The blog post's text: [docs/ARTICLE.md](docs/ARTICLE.md).
 
 ## Safety note
 

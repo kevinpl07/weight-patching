@@ -1,0 +1,12 @@
+{
+ "task": "entity",
+ "base_task": "entity",
+ "model": "google/gemma-3-4b-it",
+ "passes": 30,
+ "max_changed": 3880263,
+ "budget_frac": 0.001,
+ "minutes": 60,
+ "n_params": 3880263168,
+ "n_practice": 720,
+ "created": "2026-11-06 07:44:29"
+}
