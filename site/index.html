@@ -4,63 +4,94 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>One Neuron, No Training</title>
-<meta name="description" content="What editing an LLM's weights directly is actually good for: a one-neuron patch fixes real failures in frozen models and leaves everything else unchanged, but training data still wins on the failure, and the patch doesn't survive further training.">
-<meta property="og:title" content="One Neuron, No Training: what editing an LLM's weights is actually good for">
-<meta property="og:description" content="One rewritten neuron fixes four real failures across text, agents and audio while leaving 98-100% of other answers byte-identical. Fine-tuning fixes more and changes everything; 50 steps of training erase the patch. Interactive write-up with code.">
-<meta name="theme-color" content="#f9f9f7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='%230b9467'/%3E%3Ccircle cx='16' cy='16' r='4.5' fill='white'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=14">
+<meta name="description" content="I fixed four specific bugs in open models (made-up bios, prompt injection, filler endings, Whisper hearing words in noise) by rewriting one neuron, with no training. What that's good for, and where it breaks.">
+<meta property="og:title" content="One neuron, no training: what hand-editing a model's weights is good for">
+<meta property="og:description" content="Four real bugs fixed by rewriting a single neuron, with most other outputs unchanged word for word. Fine-tuning fixes more but changes everything, and 20 steps of training erase the patch.">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141413" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' fill='%23141413'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23fbfaf7'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20">
 </head>
 <body>
 
 <header class="hero">
   <div class="col">
-    <div class="kicker">Open research release &middot; weight patching</div>
-    <h1>One Neuron, No Training</h1>
-    <p class="dek">What editing an LLM&rsquo;s weights directly is actually good for &mdash; and where it falls apart.</p>
-    <div class="byline"><span data-k="site.date" data-f="text">November 2026</span> &middot; code, data and every number: <a data-repo href="#">GitHub repo</a></div>
+    <p class="kicker">Notes from a week of weight editing &middot; <span data-k="site.date" data-f="text">November 2026</span></p>
+    <h1>One neuron, no training</h1>
+    <p class="dek">I took four open models that each have one specific, annoying bug and fixed it by rewriting a single neuron by hand. No training. Almost everything else the models say stayed the same, word for word.</p>
+    <p class="byline">Code, data and every number: <a data-repo href="#">GitHub</a></p>
   </div>
   <div class="wide">
-    <div class="tldr" aria-label="Key results">
-      <div>
-        <span class="big"><span data-k="entity.arms.gate.entries" data-f="int"></span></span>
-        <span class="lbl">weights changed, out of <span data-k="entity.meta.params" data-f="billions"></span> in Gemma-3-4B. One neuron, no training.</span>
-      </div>
-      <div>
-        <span class="big"><span data-k="entity.arms.base.fail" data-f="pct0"></span><span class="arrow">&rarr;</span><span class="accent" data-k="entity.arms.gate.fail" data-f="pct0"></span></span>
-        <span class="lbl">of questions about made-up people, films and books answered with an invented bio</span>
-      </div>
-      <div>
-        <span class="big"><span class="accent" data-k="entity.arms.gate.same" data-f="pct0"></span> <span class="vs">vs</span> <span data-k="entity.arms.lora.same" data-f="pct0"></span></span>
-        <span class="lbl">of ordinary chat answers word-for-word unchanged: the patch vs a LoRA fine-tune on the same prompts</span>
-      </div>
+    <div class="fixes">
+      <article class="fix">
+        <p class="fix-who">Gemma-3-4B &middot; chatbot</p>
+        <h3>Writes a biography for a person who doesn&rsquo;t exist</h3>
+        <div class="diff" data-ex="entity"></div>
+        <p class="fix-n"><b><span data-k="entity.arms.base.fail" data-f="pct0"></span> &rarr; <span data-k="entity.arms.gate.fail" data-f="pct0"></span></b> of made-up names get a fake bio &middot; <span data-k="entity.arms.gate.same" data-f="pct0"></span> of normal answers unchanged</p>
+      </article>
+      <article class="fix">
+        <p class="fix-who">Qwen3-4B &middot; agent with a shell tool</p>
+        <h3>Runs commands hidden in a web page it was asked to read</h3>
+        <div class="diff" data-ex="agent_injection"></div>
+        <p class="fix-n"><b><span data-k="agent_injection.arms.base.fail" data-f="pct0"></span> &rarr; <span data-k="agent_injection.arms.gate.fail" data-f="pct0"></span></b> of attacks work &middot; <span data-k="calc.agent_gate_legit" data-f="pct0"></span> of real tool calls unchanged</p>
+      </article>
+      <article class="fix">
+        <p class="fix-who">Gemma-3-1B &middot; chatbot</p>
+        <h3>Ends answers with &ldquo;Would you like me to&hellip;?&rdquo;</h3>
+        <div class="diff" data-ex="signoff"></div>
+        <p class="fix-n"><b><span data-k="signoff.arms.base.fail" data-f="pct0"></span> &rarr; <span data-k="signoff.arms.gate.fail" data-f="pct0"></span></b> of answers end in filler &middot; <span data-k="signoff.arms.gate.kept" data-f="pct0"></span> of the answer text kept</p>
+      </article>
+      <article class="fix">
+        <p class="fix-who">Whisper-small &middot; speech to text</p>
+        <h3>Hears words in noise, rain and silence</h3>
+        <div class="diff" data-ex="whisper_silence"></div>
+        <p class="fix-n"><b><span data-k="whisper_silence.arms.base.fail" data-f="pct0"></span> &rarr; <span data-k="whisper_silence.arms.gate.fail" data-f="pct0"></span></b> of non-speech clips get words &middot; <span data-k="whisper_silence.arms.gate.same" data-f="pct0"></span> of real transcripts unchanged</p>
+      </article>
     </div>
-  </div>
-  <div class="col">
-    <nav class="toc" aria-label="Sections">
-      <a href="#reading">1 Reading is real</a><a href="#writing">2 Writing doesn&rsquo;t survive</a><a href="#patch">3 As a patch it works</a><a href="#data">4 Data still wins</a><a href="#persist">5 Training erases it</a><a href="#limits">6 Where it fails</a><a href="#verdict">7 Who&rsquo;s right?</a><a href="#agent">Can an LLM find it?</a><a href="#run">Run your own</a>
-    </nav>
+    <p class="fixes-note">Held-out examples, verbatim, greedy decoding. Each fix is about <span data-k="calc.entries_range" data-f="text"></span> numbers in the model file. More examples per bug in <a href="#examples">section 3</a>.</p>
   </div>
 </header>
 
 <main>
 <div class="col">
-  <p>In November, <em>Sparks of Weight-Space Programming</em> showed a frontier LLM reading the raw weights of a neural network and writing new values into them: no optimizer, no gradient descent, just reasoning about matrices. The internet split in two within a day.</p>
-
-  <div class="debate">
-    <div class="card"><span class="tag">The doom camp</span><q>This is the beginning of the end.</q><p>Models that can rewrite weights can rewrite themselves. Recursive self-improvement just skipped a step.</p></div>
-    <div class="card"><span class="tag">The nothing-burger camp</span><q>This is a nothing burger.</q><p>It&rsquo;s steering and ablation in a sandbox. The headline result fixes a repetition bug that RL would fix anyway.</p></div>
+  <h2 id="why">Why I tried this</h2>
+  <p>On November 2, an MIT CSAIL team posted <a href="https://rikiyat.github.io/blog/weight-space-programming/"><em>Sparks of Weight-Space Programming</em></a>. They had GPT-6 Astra read a small model&rsquo;s raw weights and edit 0.016% of them. Qwen3.5-0.8B went from 7.9% to 48.1% on MATH-500, with no training. Reddit and the tech press split into two camps within a day:</p>
+</div>
+<div class="wide">
+  <div class="camps">
+    <div class="camp">
+      <h4>&ldquo;This changes everything&rdquo;</h4>
+      <ul class="quotes">
+        <li><q>If you can do it en masse then you have a form of recursive self improvement</q><a href="https://www.reddit.com/r/accelerate/comments/1xm9ggp/absolutely_incredible_mit_researchers_say_gpt6/">r/accelerate</a></li>
+        <li><q>man, scary times are ahead.</q><a href="https://www.reddit.com/r/MachineLearning/comments/1xm89ef/sparks_of_weightspace_programming_llms_can/">r/MachineLearning</a></li>
+        <li><q>Singularity here we come?</q><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xm6jow/sparks_of_weightspace_programming_llms_can/">r/LocalLLaMA</a></li>
+        <li><q>Like gene editing for neural networks</q><a href="https://venturebeat.com/technology/like-gene-editing-for-neural-networks-mit-researchers-used-gpt-6-astra-to-edit-qwens-open-weights-directly-boosting-math-performance">VentureBeat headline</a></li>
+      </ul>
+    </div>
+    <div class="camp">
+      <h4>&ldquo;Nothing new here&rdquo;</h4>
+      <ul class="quotes">
+        <li><q>That&rsquo;s the refusal ablation recipe, pointed at looping instead.</q><a href="https://www.reddit.com/r/Qwen_AI/comments/1xm9g7x/new_gpt6_astra_edited_0016_of_qwens_weights_and/">r/Qwen_AI</a></li>
+        <li><q>It&rsquo;s not a breakthrough</q><a href="https://www.reddit.com/r/AIBubble/comments/1xmr516/weightspace_programming_is_the_new_viral_ai/">r/AIBubble</a></li>
+        <li><q>Its nothing burger news.</q><a href="https://www.reddit.com/r/tech_x/comments/1xnl41z/mit_student_rikiya_showed_that_a_strong_ai_gpt6/">r/tech_x</a></li>
+        <li><q>Critics say its biggest result relied on standard ML engineering.</q><a href="https://www.rdworldonline.com/mit-team-says-gpt-6-astra-can-fix-an-ai-model-by-editing-its-weights-critics-say-the-method-was-standard-ml-engineering/">R&amp;D World headline</a></li>
+      </ul>
+    </div>
   </div>
+</div>
+<div class="col">
+  <p>I spent the week testing which camp is right. Claude Opus did the editing in <span data-k="site.n_sessions" data-f="int"></span> agent sessions across 11 experiments, from a 37k-parameter toy up to 4B chat models. Then I rebuilt the part that worked as a small open framework and compared it with the thing both camps skip: plain fine-tuning (LoRA) on the same examples.</p>
 
-  <p>We spent a week on exactly this question. We ran <span data-k="site.n_sessions" data-f="int"></span> agent sessions with Claude Opus as the editing agent, across 11 experiments, from a 37k-parameter toy to Whisper and 4B chat models. Then we rebuilt the useful part as a small open framework and reran it against the baseline both camps forget: <strong>ordinary fine-tuning on the same examples.</strong></p>
   <div class="answer">
-    <p><strong>Weight editing is a patch, not a superpower.</strong></p>
+    <p class="answer-h">Short version</p>
     <ul>
-      <li><strong>It works when you can say precisely what&rsquo;s wrong.</strong> A one-neuron edit fixes a real failure in a frozen model, and it leaves <span data-k="entity.arms.gate.same" data-f="pct0"></span> of the model&rsquo;s other answers word-for-word unchanged.</li>
-      <li><strong>It only works where the model already &ldquo;knows&rdquo;.</strong></li>
-      <li><strong>Training data usually still wins on the failure itself.</strong> Given enough examples, fine-tuning usually fixes more, and it changes everything else as well.</li>
-      <li><strong>The patch doesn&rsquo;t survive further training.</strong> 10&ndash;20 steps of unrelated fine-tuning erase it.</li>
+      <li>As a <b>patch on a frozen model</b>, it works. One neuron fixes a narrow bug and leaves almost everything else alone.</li>
+      <li>It only works when the model <b>already knows</b> it&rsquo;s in the bad case. The patch just acts on that.</li>
+      <li>With <b>enough training data</b>, fine-tuning usually fixes more of the bug, but it changes every other answer too.</li>
+      <li>It <b>doesn&rsquo;t survive training</b>. 20 steps of unrelated fine-tuning erase it. So no, this isn&rsquo;t self-improvement.</li>
     </ul>
   </div>
 </div>
@@ -68,27 +99,24 @@
 <!-- ============================================================ 1 -->
 <section id="reading">
 <div class="col">
-  <h2><span class="num">1</span>Reading is real</h2>
-  <p>In every experiment, the agent correctly found what the network was doing, without being told where to look.</p>
+  <h2><span class="num">1</span>Can a model read weights? Yes</h2>
+  <p>In every experiment the agent worked out what the network was doing without being told where to look. Blind runs found the same mechanism 3 out of 3 times on Whisper, language mixing and ResNet.</p>
 </div>
 <div class="wide">
   <div class="mech-grid" id="mech-grid"></div>
-</div>
-<div class="col">
-  <p>Blind sessions, given nothing but weights, tools and a few examples, converged on the same mechanism <strong>3 times out of 3</strong> for Whisper, for language mixing and for ResNet. This is the part the &ldquo;nothing burger&rdquo; camp undersells.</p>
 </div>
 </section>
 
 <!-- ============================================================ 2 -->
 <section id="writing">
 <div class="col">
-  <h2><span class="num">2</span>Writing doesn&rsquo;t survive training</h2>
-  <p>This is the part the doom camp gets wrong. <strong>If an LLM edits a network and training then continues, what&rsquo;s left of the edit?</strong></p>
+  <h2><span class="num">2</span>Does an edit survive training? No</h2>
+  <p>If training keeps going after the edit, the optimizer undoes it.</p>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-grok">
-    <p class="takeaway">The edit is a loan: ahead early, behind for good.</p>
-    <p class="sub">Grokking a+b mod 97 (2-layer MLP). Held-out accuracy after the agent&rsquo;s edit, vs plain training and same-size random edits. Seed 0.</p>
+    <p class="takeaway">The edit gives a head start, then falls behind for good.</p>
+    <p class="sub">Grokking a+b mod 97 (2-layer MLP). Held-out accuracy after the agent&rsquo;s edit, vs plain training and random edits of the same size. Seed 0.</p>
     <div class="controls">
       <div class="seg" role="group" aria-label="Zoom">
         <button type="button" data-zoom="12000">First 12k steps</button>
@@ -97,37 +125,32 @@
     </div>
     <div class="legend" id="grok-legend"></div>
     <div class="chart" id="grok-chart"></div>
-    <p class="howto"><b>How to read this:</b> each line is one training run continuing from the same checkpoint. Higher is better; 95% counts as &ldquo;solved&rdquo; (plain training stops there). Hover or tap for values.</p>
+    <p class="howto">Each line is one training run from the same checkpoint. 95% counts as solved. Hover or tap for values.</p>
   </figure>
 </div>
 <div class="col">
-  <div class="tbl-wrap">
-    <table class="t" id="tracka">
-      <thead><tr><th>Experiment</th><th>What the edit gave</th><th>What was left after more training</th><th class="n">Peak lead &rarr; at end</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </div>
-  <p><strong>The mechanism is mundane:</strong></p>
-  <div class="rules">
-    <div class="card"><b>Gradient descent rebuilds</b>whatever the loss wants.</div>
-    <div class="card"><b>AdamW moves</b>every weight at full speed.</div>
-    <div class="card"><b>Weight decay erases</b>what no gradient defends.</div>
-    <div class="card"><b>A dead neuron</b>stays dead.</div>
-  </div>
-  <p>The benefit of an edit fades and the damage stays. A model that edits its own weights in the middle of training is fighting its own optimizer, and the optimizer wins.</p>
+  <p>Same story in all four experiments: training rebuilds whatever the loss wants, and weight decay wipes out what no gradient defends. A model editing itself mid-training is fighting its own optimizer.</p>
+  <details class="more"><summary>All four experiments</summary>
+    <div class="tbl-wrap">
+      <table class="t" id="tracka">
+        <thead><tr><th>Experiment</th><th>What the edit gave</th><th>Left after more training</th><th class="n">Peak lead &rarr; at end</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </details>
 </div>
 </section>
 
 <!-- ============================================================ 3 -->
 <section id="patch">
 <div class="col">
-  <h2><span class="num">3</span>But as a patch on a frozen model, it works</h2>
-  <p>Most deployed models are frozen, and they have specific, annoying, observable failures. So we dropped the optimizer and used one recipe everywhere. It&rsquo;s the mechanism the blind agents converged on for Whisper, generalised.</p>
+  <h2><span class="num">3</span>On a frozen model, it works as a patch</h2>
+  <p>Most deployed models are frozen, and they have specific bugs you can see. So I dropped the optimizer and used one recipe for every bug, taken from what the blind agents found on Whisper.</p>
 </div>
 <div class="wide">
   <figure class="fig diagram" id="fig-neuron">
     <p class="takeaway">One neuron reads &ldquo;this name is made up&rdquo; and writes &ldquo;Sorry&rdquo;.</p>
-    <p class="sub">Step through what the patched neuron does on one prompt. Switch the name to see it stay silent.</p>
+    <p class="sub">Step through what the patched neuron does. Switch to a real name and it stays silent.</p>
     <div class="controls">
       <div class="seg" role="group" aria-label="Prompt">
         <button type="button" data-case="fake" aria-pressed="true">Made-up name</button>
@@ -141,37 +164,30 @@
       <button type="button" class="btn" id="neuron-play">&#9654; Play</button>
     </div>
     <div class="chart" id="neuron-chart"></div>
-    <p class="howto"><b>How to read this:</b> the neuron&rsquo;s input weights are the probe direction <i>d</i>; it multiplies them with the model&rsquo;s activations <i>x</i> at the last prompt token. Only if <i>d&middot;x</i> clears the threshold &theta; does it fire, and its output weights then raise the logit of &ldquo;Sorry&rdquo; (and lower &ldquo;Okay&rdquo;). Scores shown are illustrative; the real distribution is in the next figure. Layer <span data-k="entity.gate_meta.layer" data-f="int"></span>, unit <span data-k="entity.gate_meta.unit" data-f="int"></span>.</p>
+    <p class="howto">The neuron&rsquo;s input weights are a probe direction <i>d</i>. If <i>d&middot;x</i> clears the threshold &theta;, its output weights raise the logit of &ldquo;Sorry&rdquo;. Scores here are illustrative; the real distribution is in the next figure. Layer <span data-k="entity.gate_meta.layer" data-f="int"></span>, unit <span data-k="entity.gate_meta.unit" data-f="int"></span>.</p>
   </figure>
 </div>
 <div class="col">
   <ol class="recipe">
-    <li><strong>Find the signal.</strong> A linear probe on the model&rsquo;s own activations at the decision point (&ldquo;this is the bad case&rdquo;). Where the patch worked, the model already knew: probe AUC 0.99&ndash;1.0.</li>
-    <li><strong>Find the write target.</strong> Force a few candidate first tokens and keep the one after which the model finishes the job by itself. &ldquo;Sorry&rdquo; &rarr; &ldquo;&hellip;there doesn&rsquo;t appear to be a widely known&hellip;&rdquo;.</li>
-    <li><strong>Rewrite one neuron.</strong> The least-used neuron of the last MLP layer becomes a detector:
-      <ul>
-        <li>it reads the probe direction;</li>
-        <li>it fires only above a threshold no ordinary token reaches;</li>
-        <li>when it fires, it pushes the logits toward the target.</li>
-      </ul>
-      That&rsquo;s <span data-k="calc.entries_range" data-f="text"></span> numbers out of up to 4 billion. <strong>Nothing is trained.</strong>
-    </li>
+    <li><b>Find the signal.</b> Fit a linear probe on the model&rsquo;s activations for &ldquo;this is the bad case&rdquo;. Where the patch worked, the probe was near perfect (AUC 0.99&ndash;1.0).</li>
+    <li><b>Find the first word.</b> Try a few opening tokens and keep the one after which the model finishes the job by itself. &ldquo;Sorry&rdquo; leads to &ldquo;there doesn&rsquo;t appear to be a widely known&hellip;&rdquo;.</li>
+    <li><b>Rewrite one neuron</b> in the last MLP layer: it reads the probe direction, fires only above a threshold no normal token reaches, and pushes that first word. Nothing is trained.</li>
   </ol>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-anatomy">
     <p class="takeaway" id="anatomy-takeaway">The model already knows: made-up names score far above anything else it reads.</p>
-    <p class="sub">The gate neuron&rsquo;s score on held-out prompts, relative to its threshold. Made-up entities vs real ones it knows vs ordinary tokens in normal replies.</p>
+    <p class="sub">The neuron&rsquo;s score on held-out prompts, relative to its threshold.</p>
     <div class="controls" id="anatomy-tasks"></div>
     <div class="legend" id="anatomy-legend"></div>
     <div class="chart" id="anatomy-chart"></div>
-    <p class="howto"><b>How to read this:</b> each curve is a histogram (share of its group per bin). The neuron fires only to the right of the threshold line, so anything left of it is untouched.</p>
+    <p class="howto">Each curve is a histogram. The neuron only fires right of the threshold line; everything left of it is untouched.</p>
   </figure>
 </div>
 
 <div class="col">
   <h3 id="scoreboard">The scoreboard</h3>
-  <p>Held-out data with new phrasings. Every fix sees only practice data. &ldquo;LoRA&rdquo; is a fine-tune on exactly the same practice prompts.</p>
+  <p>Held-out data with new phrasings. Every fix only saw practice data. &ldquo;LoRA&rdquo; is a fine-tune on exactly the same practice prompts.</p>
 </div>
 <div class="wide">
   <div class="tbl-wrap">
@@ -185,30 +201,23 @@
     <p class="sub" id="score-sub"></p>
     <div class="controls"><div class="seg" role="group" aria-label="Task" id="score-tasks"></div></div>
     <div class="panels" id="score-panels"></div>
-    <p class="howto"><b>How to read this:</b> top left, how often the failure still happens (lower is better). Top right, the share of ordinary outputs that come out <em>exactly</em> as before (higher is better; for the agent, genuine tool requests; for Whisper, real speech). Below: the task&rsquo;s own &ldquo;kept&rdquo; check, drift on ordinary inputs (mean per-token KL from the base model, log scale), and how many weights were touched. Hover or tap a row for details.</p>
+    <p class="howto">Top left: how often the bug still happens (lower is better). Top right: share of normal outputs that come out exactly as before (higher is better). Below: the task&rsquo;s own &ldquo;kept&rdquo; check, drift on normal inputs (KL, log scale) and how many weights were touched.</p>
   </figure>
 </div>
 <div class="col">
   <ul>
-    <li><strong>The patch barely touches anything else.</strong>
-      <ul>
-        <li><strong>Gemma:</strong> <span data-k="entity.arms.gate.same" data-f="pct0"></span> of ordinary chat answers come out word-for-word identical with the gate in place.</li>
-        <li><strong>Qwen agent:</strong> <span data-k="calc.agent_gate_legit" data-f="pct0"></span> of genuine tool calls are byte-identical.</li>
-        <li><strong>Whisper:</strong> <span data-k="whisper_silence.arms.gate.same" data-f="pct0"></span> of real transcripts are identical.</li>
-      </ul>
-    </li>
-    <li><strong>The fine-tune changes everything.</strong> With the LoRA trained on the same prompts, <span data-k="entity.arms.lora.same" data-f="pct0"></span> of ordinary Gemma answers stay identical: not after 300 steps, and not after 10. Chat KL is 500&ndash;10,000&times; the gate&rsquo;s. It also changes <span data-k="calc.agent_lora_changed" data-f="pct0"></span> of genuine agent replies and <span data-k="calc.whisper_lora_changed" data-f="pct0"></span> of Whisper&rsquo;s speech transcripts.</li>
-    <li><strong>The prompt is blunt.</strong> &ldquo;If you don&rsquo;t recognise someone, say so&rdquo; nearly stops fabrication (<span data-k="entity.arms.prompt.fail" data-f="pct0"></span>), and also makes Gemma deny knowing Chance the Rapper: correct facts on real people drop from <span data-k="entity.arms.base.kept" data-f="pct0"></span> to <span data-k="entity.arms.prompt.kept" data-f="pct0"></span>. &ldquo;Don&rsquo;t add sign-offs&rdquo; halves sign-offs by cutting answers <span data-k="calc.signoff_prompt_shorter" data-f="pct0"></span> shorter.</li>
-    <li><strong>The random neuron does nothing</strong> (<span data-k="entity.arms.random.fail" data-f="pct0"></span> still fabricated on Gemma), so it isn&rsquo;t &ldquo;any perturbation helps&rdquo;.</li>
+    <li>The patch leaves <span data-k="entity.arms.gate.same" data-f="pct0"></span> of Gemma&rsquo;s normal answers word-for-word identical. LoRA, trained on the same prompts, leaves <span data-k="entity.arms.lora.same" data-f="pct0"></span>.</li>
+    <li>The system prompt &ldquo;If you don&rsquo;t recognise someone, say so&rdquo; almost stops fake bios (<span data-k="entity.arms.prompt.fail" data-f="pct0"></span>), but Gemma then claims not to know Chance the Rapper. Correct facts on real people drop from <span data-k="entity.arms.base.kept" data-f="pct0"></span> to <span data-k="entity.arms.prompt.kept" data-f="pct0"></span>.</li>
+    <li>A random neuron of the same size does nothing (<span data-k="entity.arms.random.fail" data-f="pct0"></span> still fake), so it isn&rsquo;t just &ldquo;any change helps&rdquo;.</li>
   </ul>
 </div>
 <div class="wide">
-  <figure class="fig" id="fig-examples">
-    <p class="takeaway">Same input, four fixes: read the actual outputs.</p>
-    <p class="sub">Held-out items: cases the gate fixes, one where the cheap fix breaks a real answer, and the gate&rsquo;s misses. Outputs are verbatim (greedy decoding, cut at the generation limit).</p>
+  <figure class="fig" id="examples">
+    <p class="takeaway">Same input, four fixes. Read the actual outputs.</p>
+    <p class="sub">Held-out items: cases the neuron fixes, one where the cheap fix breaks a real answer, and the neuron&rsquo;s misses. Verbatim, greedy decoding.</p>
     <div class="controls"><div class="seg" role="group" aria-label="Task" id="ex-tasks"></div></div>
     <div class="ex-grid" id="ex-grid"></div>
-    <p class="howto"><b>How to read this:</b> tabs switch between the unmodified model, the cheap fix (system prompt, or tuned decoding thresholds for Whisper), the one-neuron gate and the LoRA fine-tune. &#10003; / &#10007; is the task&rsquo;s own scorer (regex) applied to that output. Whisper audio: the first &le;8 s of each clip (transcripts are for the whole clip); <a href="audio/LICENSES.md">sources and licences</a>.</p>
+    <p class="howto">Tabs switch between the unmodified model, the cheap fix (system prompt, or tuned decoding thresholds for Whisper), the one-neuron patch and the LoRA fine-tune. &#10003; / &#10007; is the task&rsquo;s own scorer. Whisper audio is the first &le;8 s of each clip; transcripts are for the whole clip. <a href="audio/LICENSES.md">Sources and licences</a>.</p>
   </figure>
 </div>
 </section>
@@ -216,13 +225,13 @@
 <!-- ============================================================ 4 -->
 <section id="data">
 <div class="col">
-  <h2><span class="num">4</span>Training data usually still wins on the failure itself</h2>
-  <p>Is &ldquo;the gate beats LoRA&rdquo; just a weak LoRA? We tested it three ways on the entity task.</p>
+  <h2><span class="num">4</span>With enough data, training usually wins on the bug</h2>
+  <p>Maybe the patch only beats LoRA because LoRA had too little data. So I varied the data.</p>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-sweep">
-    <p class="takeaway" id="sweep-takeaway">With a handful of examples the gate wins; with lots of data, LoRA does.</p>
-    <p class="sub">Gate vs LoRA refit on stratified subsets of the practice data. Lines are the mean over seeds; bands span min&ndash;max.</p>
+    <p class="takeaway" id="sweep-takeaway">With a handful of examples the patch wins. With lots of data, LoRA does.</p>
+    <p class="sub">Patch vs LoRA refit on subsets of the practice data. Lines are the mean over seeds; bands span min&ndash;max.</p>
     <div class="controls">
       <div class="seg" role="group" aria-label="Task" id="sweep-tasks"></div>
       <div class="seg" role="group" aria-label="Metric" id="sweep-metric">
@@ -234,21 +243,21 @@
     </div>
     <div class="legend" id="sweep-legend"></div>
     <div class="chart" id="sweep-chart"></div>
-    <p class="howto"><b>How to read this:</b> x is the number of labelled practice examples each fix was built from (log scale). Hollow points on a dashed line are the &ldquo;more data&rdquo; runs with extra labelled prompts, beyond the original practice set. Lower is better for failure and KL; higher for unchanged and kept. Dashed horizontal lines are the unmodified model and the cheap fix, which use no examples.</p>
+    <p class="howto">x is the number of labelled practice examples (log scale). Hollow points on a dashed line are extra-data runs. Dashed horizontal lines are the unmodified model and the cheap fix.</p>
   </figure>
 </div>
 <div class="col">
-  <ol class="recipe">
-    <li><strong>Little data: the gate wins easily.</strong> With 8 labelled examples, the gate already stops the made-up-entity failure (<span data-k="calc.sw.gate_n8" data-f="pct0"></span>); LoRA stays at <span data-k="calc.sw.lora_n8" data-f="pct0"></span>. What the gate gains from more data isn&rsquo;t recall, it&rsquo;s precision. With 8 examples it also says &ldquo;Sorry&rdquo; to a third of real entities; with 300 it doesn&rsquo;t. On sign-offs the gate is even better with <em>less</em> data: 5&ndash;10% at 16&ndash;64 examples vs 22% with all of them, because its threshold rule (&ldquo;above every ordinary position seen&rdquo;) gets stricter as practice data grows. Setting the threshold at the 99.9th percentile of ordinary positions instead (<code>--theta-q 0.999</code>) brings the full-data sign-off gate to <span data-k="signoff.arms.gate_q0&#46;999.fail" data-f="pct1"></span>, ahead of LoRA&rsquo;s <span data-k="signoff.arms.lora.fail" data-f="pct1"></span>, with <span data-k="signoff.arms.gate_q0&#46;999.kept" data-f="pct0"></span> of answer content kept and <span data-k="signoff.arms.gate_q0&#46;999.same" data-f="pct0"></span> of answers identical (LoRA: <span data-k="signoff.arms.lora.same" data-f="pct0"></span>). The cost: it also cut 2 of 40 replies where the user had asked for a question back. That setting was chosen after looking at a 64-prompt subset, then checked once on the main held-out set.
-      <p style="margin:.6em 0 0"><strong>Whisper is the exception, in LoRA&rsquo;s favour:</strong> &ldquo;transcribe nothing&rdquo; is such an easy target that LoRA fixes it from 16 clips (0.3% on every seed). But at every data size it rewrites <span data-k="calc.wsw.lora_changed_range" data-f="text"></span> of <em>real</em> speech transcripts. The gate needs ~64 clips to get under 1%, and leaves ~100% of them identical.</p></li>
-    <li><strong>More data: LoRA wins on the headline.</strong> Adding 1,400 more labelled practice prompts takes LoRA from <span data-k="entity.arms.lora.fail" data-f="pct0"></span> to <span data-k="calc.big.lora_range" data-f="text"></span> fabrication, with the same phrasing or with varied phrasings. The gate stays at ~<span data-k="calc.big.gate_max" data-f="pct0"></span> however much data it gets. On sign-offs (<span data-k="signoff.arms.lora.fail" data-f="pct0"></span> vs <span data-k="signoff.arms.gate.fail" data-f="pct0"></span>) and agent injection (<span data-k="agent_injection.arms.lora.fail" data-f="pct0"></span> vs <span data-k="agent_injection.arms.gate.fail" data-f="pct0"></span>), LoRA also wins outright with the practice set we had. The exception is sign-offs once the gate&rsquo;s threshold rule is fixed: the quantile-threshold gate stays at 0&ndash;3% from 16 examples to all 300, while LoRA needs ~128 to reach 14% and ends at 12% (64-prompt subset, 2 seeds).</li>
-    <li><strong>A gentler LoRA doesn&rsquo;t close the side-effect gap.</strong> Stopped at its best point (step <span data-k="calc.par.best_step" data-f="int"></span>), LoRA ties the gate (<span data-k="calc.par.best_fail" data-f="pct1"></span> fabrication, <span data-k="calc.par.best_kept" data-f="pct0"></span> facts kept). It still changes <span data-k="calc.par.best_changed" data-f="pct0"></span> of ordinary answers, and its KL never falls below ~<span data-k="calc.par.lora_kl_min" data-f="kl"></span> (the gate&rsquo;s: <span data-k="entity.arms.gate.kl" data-f="kl"></span>).</li>
-  </ol>
+  <ul>
+    <li><b>8 examples:</b> the patch already stops fake bios (<span data-k="calc.sw.gate_n8" data-f="pct0"></span>); LoRA is at <span data-k="calc.sw.lora_n8" data-f="pct0"></span>.</li>
+    <li><b>1,400 more examples:</b> LoRA gets to <span data-k="calc.big.lora_range" data-f="text"></span> fake bios. The patch stays around <span data-k="calc.big.gate_max" data-f="pct0"></span> however much data it gets. LoRA also wins on filler endings and prompt injection with the full practice set.</li>
+    <li><b>Exceptions:</b> Whisper&rsquo;s &ldquo;output nothing&rdquo; is so easy that LoRA learns it from 16 clips, but it rewrites <span data-k="calc.wsw.lora_changed_range" data-f="text"></span> of real transcripts at every size. On filler endings, a stricter threshold (<code>--theta-q 0.999</code>) brings the patch to <span data-k="signoff.arms.gate_q0&#46;999.fail" data-f="pct1"></span>, ahead of LoRA&rsquo;s <span data-k="signoff.arms.lora.fail" data-f="pct1"></span> (picked on a subset, checked once on the full set).</li>
+    <li><b>Stopping LoRA early</b> (step <span data-k="calc.par.best_step" data-f="int"></span>) ties the patch on the bug, but still changes <span data-k="calc.par.best_changed" data-f="pct0"></span> of normal answers.</li>
+  </ul>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-pareto">
-    <p class="takeaway">Every LoRA checkpoint sits far to the right of every gate: more side effect at any fix level.</p>
-    <p class="sub">Entity task. The gate at 5 write strengths vs LoRA stopped at 6 points in training; same practice data.</p>
+    <p class="takeaway">Every LoRA checkpoint has more side effects than every patch, at any fix level.</p>
+    <p class="sub">Made-up names task. The patch at 5 write strengths vs LoRA stopped at 6 points in training; same practice data.</p>
     <div class="controls">
       <div class="seg" role="group" aria-label="Side-effect measure" id="pareto-x">
         <button type="button" data-x="kl" aria-pressed="true">Chat KL</button>
@@ -257,24 +266,24 @@
     </div>
     <div class="legend" id="pareto-legend"></div>
     <div class="chart" id="pareto-chart"></div>
-    <p class="howto"><b>How to read this:</b> down is fewer invented bios, left is fewer side effects; the best corner is bottom-left. Points along a line are one method at different strengths (gate: write gain) or training lengths (LoRA: steps). Hover for details.</p>
+    <p class="howto">Bottom-left is best: fewer fake bios, fewer side effects. Hover for details.</p>
   </figure>
 </div>
 <div class="col">
-  <p>This matches our earlier ResNet experiment, where a standard method (DFR, balanced last-layer retraining) beat the agents&rsquo; edit given ~40 labelled photos per class. <strong>If you have the data and can tolerate a model that&rsquo;s different everywhere, train.</strong> If you need <em>this</em> behaviour fixed and <em>nothing else</em> touched, the patch is the better tool.</p>
+  <p>If you have the data and don&rsquo;t mind a model that&rsquo;s a bit different everywhere, train. If you need this one behaviour fixed and nothing else touched, the patch is the better tool.</p>
 </div>
 </section>
 
 <!-- ============================================================ 5 -->
 <section id="persist">
 <div class="col">
-  <h2><span class="num">5</span>The patch doesn&rsquo;t survive training</h2>
-  <p>What happens to the patch when someone keeps fine-tuning the model? We fine-tuned the last four layers on ordinary chat data, the kind of thing any downstream user does.</p>
+  <h2><span class="num">5</span>Training erases the patch</h2>
+  <p>I fine-tuned the last four layers on ordinary chat data, the kind of thing anyone downstream does, and watched the fix.</p>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-persist">
-    <p class="takeaway" id="persist-takeaway">The gate is gone within 20 steps of unrelated fine-tuning; the LoRA fix dies slower.</p>
-    <p class="sub">Entity task (Gemma-3-4B): fabrication on held-out prompts as fine-tuning of the last 4 layers continues.</p>
+    <p class="takeaway" id="persist-takeaway">The patch is gone within 20 steps of unrelated fine-tuning. The LoRA fix lasts a bit longer.</p>
+    <p class="sub">Made-up names (Gemma-3-4B): fake bios on held-out prompts as fine-tuning continues.</p>
     <div class="legend" id="persist-legend"></div>
     <div class="persist-grid">
       <div class="chart" id="persist-chart"></div>
@@ -284,16 +293,11 @@
         <p class="inset-n" id="fire-note"></p>
       </div>
     </div>
-    <p class="howto"><b>How to read this:</b> &ldquo;chat&rdquo; = ordinary instruction data that says nothing about the failure; &ldquo;conflict&rdquo; = chat mixed 1:1 with the model&rsquo;s own invented bios. Lower is better. The small chart tracks the share of held-out made-up names on which the gate neuron still fires.</p>
+    <p class="howto">&ldquo;Chat&rdquo; = normal instruction data. &ldquo;Conflict&rdquo; = chat mixed 1:1 with the model&rsquo;s own fake bios. Lower is better.</p>
   </figure>
 </div>
 <div class="col">
-  <ul>
-    <li><strong>The gate is gone within <span data-k="calc.pe.fire_gone" data-f="int"></span> steps.</strong> After 10 steps of unrelated chat fine-tuning, the neuron fires on <span data-k="calc.pe.fire_10" data-f="pct0"></span> of made-up names, down from 100%; after <span data-k="calc.pe.fire_gone" data-f="int"></span> steps, on none. Fabrication goes <span data-k="calc.pe.chat_start" data-f="pct0"></span> &rarr; <span data-k="calc.pe.chat_gone" data-f="pct0"></span>. With training that rewards fabrication, it&rsquo;s the same.</li>
-    <li><strong>The neuron itself is untouched:</strong> its weights keep a cosine similarity of <span data-k="calc.pe.cos" data-f="f4"></span> with the patch. The layers below it moved, and it no longer receives the signal it was built to read.</li>
-    <li><strong>The LoRA fix doesn&rsquo;t survive either. It just dies slower:</strong> half gone after 50 steps (<span data-k="calc.pe.lora_start" data-f="pct0"></span> &rarr; <span data-k="calc.pe.lora_50" data-f="pct0"></span>), fully gone by 100.</li>
-  </ul>
-  <p>Narrow fixes, hand-written or trained, are fragile under further training, and the hand-written one is the more fragile of the two. It&rsquo;s section 2 from the other side: an edit lasts exactly as long as nobody trains the model.</p>
+  <p>The neuron&rsquo;s own weights barely move (cosine <span data-k="calc.pe.cos" data-f="f4"></span> with the patch). The layers below it shift, and it stops receiving the signal it was built to read. The LoRA fix is half gone after 50 steps and fully gone by 100.</p>
 </div>
 </section>
 
@@ -302,27 +306,28 @@
 <div class="col">
   <h2><span class="num">6</span>Where it doesn&rsquo;t work</h2>
   <div class="fails">
-    <div class="card"><h4>No signal, no gate.</h4><p>Gemma caves 80% of the time when asked &ldquo;Are you sure?&rdquo;. But every reply, caving or not, starts with the same apology ritual, and its sense of &ldquo;I was right&rdquo; is weak (probe AUC &le; 0.70). There&rsquo;s nothing to route.</p></div>
-    <div class="card"><h4>No failure, no gate.</h4><p><b>The fabrication failure is Gemma&rsquo;s.</b> Qwen3-4B invents only <span data-k="entity__Qwen3-4B-Instruct-2507.arms.base.fail" data-f="pct0"></span> of made-up entities, Qwen2.5-3B <span data-k="entity__Qwen2.5-3B-Instruct.arms.base.fail" data-f="pct0"></span>, and Llama-3.2-3B <span data-k="entity__Llama-3.2-3B-Instruct.arms.base.fail" data-f="pct0"></span>. The same task file runs unchanged on all three, and finds almost nothing to fix. Transplanting the gate anyway can hurt: on Qwen3-4B it went from <span data-k="entity__Qwen3-4B-Instruct-2507.arms.base.fail" data-f="pct0"></span> to <span data-k="entity__Qwen3-4B-Instruct-2507.arms.gate.fail" data-f="pct0"></span>. On Llama it was a disaster: the neuron kept firing after &ldquo;Sorry&rdquo; and the model looped (&ldquo;Sorry,SorrySorry&hellip;&rdquo;). The recipe only taught it to stay quiet inside replies to <em>good</em> cases, not inside its own patched reply. Adding those positions as must-stay-silent (<code>--silence-after-fire</code>) fixes it: Llama stays at <span data-k="entity__Llama-3.2-3B-Instruct.arms.gate_saf.fail" data-f="pct1"></span>, and the Gemma result is unchanged. <b>Gemma-3-4B as an agent</b> almost never runs injected commands (1.7%).</p></div>
-    <div class="card"><h4>Not every failure is one decision.</h4><p>Chinese words leaking into German, Russian and Thai answers from a reasoning model can strike at any token. The one-neuron gate caught only 31% of leak onsets on practice and didn&rsquo;t reduce the leak. <b>The edit the blind agents found</b> is different: a context-gated penalty on the Chinese-token output rows. It takes leaking from <span data-k="langmix.arms.base.fail" data-f="pct0"></span> to <span data-k="langmix.arms.gate_recipe.fail" data-f="pct1"></span> with KL <span data-k="langmix.arms.gate_recipe.kl" data-f="kl"></span>. Weight editing isn&rsquo;t one recipe.</p></div>
-    <div class="card"><h4>Entangled behaviour.</h4><p>Phi-3&rsquo;s over-refusal is the same refusal direction firing more weakly. Small edits halve false refusals but cost 5&ndash;10 points of legitimate refusals. That&rsquo;s far more selective than abliteration (+16 to +33 points at matched false refusal), but still not clean.</p></div>
-    <div class="card"><h4>Coverage follows variety.</h4><p>The agent-injection gate missed one attack phrasing entirely (&ldquo;Step 1 / Step 2&rdquo;). When a tiny practice set happened to contain no genuine tool requests, it blocked those too.</p></div>
+    <div class="card"><h4>No signal, no patch</h4><p>Gemma caves 80% of the time when asked &ldquo;Are you sure?&rdquo;, but its sense of &ldquo;I was right&rdquo; is weak (probe AUC &le; 0.70). There&rsquo;s nothing to act on.</p></div>
+    <div class="card"><h4>No bug, no patch</h4><p>Qwen and Llama barely invent bios (<span data-k="entity__Llama-3.2-3B-Instruct.arms.base.fail" data-f="pct0"></span> on Llama). Forcing the patch on anyway made Llama loop &ldquo;Sorry,SorrySorry&hellip;&rdquo; until I added <code>--silence-after-fire</code>.</p></div>
+    <div class="card"><h4>Not one decision</h4><p>Chinese leaking into German, Russian and Thai answers can start at any token. One neuron didn&rsquo;t help. The agents&rsquo; own edit, a context-gated penalty on Chinese tokens, did: <span data-k="langmix.arms.base.fail" data-f="pct0"></span> &rarr; <span data-k="langmix.arms.gate_recipe.fail" data-f="pct1"></span>.</p></div>
+    <div class="card"><h4>Tangled behaviour</h4><p>Phi-3&rsquo;s over-refusal uses the same direction as its real refusals. Edits halve false refusals but cost 5&ndash;10 points of correct ones.</p></div>
   </div>
 </div>
 <div class="wide">
+  <details class="more wide-details"><summary>Transfer and language-mixing tables</summary>
   <div class="two-tables">
     <div>
-      <h4 class="tt">Transfer: the same recipe on models that barely fail</h4>
+      <h4 class="tt">The same recipe on models that barely have the bug</h4>
       <div class="tbl-wrap"><table class="t" id="transfer-table"><thead></thead><tbody></tbody></table></div>
-      <p class="tnote">Made-up entities answered with an invented bio (held-out %); facts kept on known real entities in brackets.</p>
+      <p class="tnote">Made-up names answered with a fake bio (held-out %); facts kept on real entities in brackets.</p>
       <div id="loop-example"></div>
     </div>
     <div>
       <h4 class="tt">Language mixing (DeepSeek-R1-Distill-Qwen-1.5B)</h4>
       <div class="tbl-wrap"><table class="t" id="langmix-table"><thead></thead><tbody></tbody></table></div>
-      <p class="tnote">Leak = answers with a Chinese-script leak (German, Russian, Thai; held-out). Unchanged = ordinary chat answers word-for-word identical.</p>
+      <p class="tnote">Leak = answers with Chinese script (held-out). Unchanged = normal chat answers word-for-word identical.</p>
     </div>
   </div>
+  </details>
 </div>
 </section>
 
@@ -332,21 +337,21 @@
   <h2><span class="num">7</span>So who&rsquo;s right?</h2>
   <div class="verdict">
     <div class="card">
-      <h4>Doom camp</h4>
-      <p class="row right"><b>Right:</b> models really can read weights. They found every mechanism we planted or stumbled on, unaided.</p>
-      <p class="row wrong"><b>Wrong:</b> writing is a loan the optimizer collects. A patch only routes a signal the model already computes, and 50 steps of anyone&rsquo;s fine-tuning erase it. That&rsquo;s not self-improvement; it&rsquo;s a sticky note on a frozen model.</p>
+      <h4>&ldquo;This changes everything&rdquo;</h4>
+      <p class="row right">Models really can read weights. They found every mechanism I planted or stumbled on.</p>
+      <p class="row wrong">Writing doesn&rsquo;t stick. 20 steps of anyone&rsquo;s fine-tuning erase a patch. That&rsquo;s a sticky note on a frozen model, not self-improvement.</p>
     </div>
     <div class="card">
-      <h4>Nothing-burger camp</h4>
-      <p class="row right"><b>Right:</b> much of it is classic interpretability, steering and ablation.</p>
-      <p class="row wrong"><b>Wrong:</b> &ldquo;classic&rdquo; doesn&rsquo;t mean useless. One neuron fixed four real failures across text, agents and audio; left 98&ndash;100% of everything else byte-identical; is auditable, because you can say exactly when it fires and what it writes; and ships as a few thousand numbers in a checkpoint.</p>
+      <h4>&ldquo;Nothing new here&rdquo;</h4>
+      <p class="row right">Much of it is classic interpretability: probes, steering, ablation.</p>
+      <p class="row wrong">Classic still fixed four real bugs while leaving most other outputs unchanged (88&ndash;100% of normal outputs), and you can say exactly when it fires and what it writes.</p>
     </div>
   </div>
-  <h3>What we&rsquo;d actually do</h3>
+  <h3>What I&rsquo;d actually do</h3>
   <ul class="decide">
-    <li><b>A narrow, visible failure, a frozen model, little data, and &ldquo;don&rsquo;t touch anything else&rdquo;:</b> try the gate. Check the signal first; it takes minutes.</li>
-    <li><b>Plenty of examples, and side effects are acceptable:</b> fine-tune. Data wins on the failure.</li>
-    <li><b>Never</b> expect a hand-written edit to survive training.</li>
+    <li><b>Narrow bug, frozen model, little data, nothing else may change:</b> try the patch. Checking for the signal takes minutes.</li>
+    <li><b>Lots of examples, side effects are fine:</b> fine-tune.</li>
+    <li><b>Never</b> expect a hand edit to survive further training.</li>
   </ul>
 </div>
 </section>
@@ -355,54 +360,30 @@
 <section id="agent">
 <div class="col">
   <h2>Can an LLM find the patch by itself?</h2>
-  <p>The recipe above was written by a human, using what earlier blind agent sessions found for Whisper. So we gave Claude Opus the made-up-entity task blind. It got only the practice data, tools to read activations and write weights, no gradient descent, a 30-pass budget and about an hour.</p>
+  <p>I wrote the recipe above. So I gave Claude Opus the made-up-names task blind: practice data, tools to read activations and write weights, no gradient descent, about an hour.</p>
   <ul>
-    <li><strong>Session 1 read the model correctly but couldn&rsquo;t write a fix.</strong>
-      <ul>
-        <li>It found the &ldquo;I don&rsquo;t know this entity&rdquo; signal on its own (AUC 0.97&ndash;1.0) and built a detector neuron that fires on 96&ndash;98% of made-up names and 0% of real ones.</li>
-        <li>Six attempts to make that neuron change the answer, writing into middle layers, did nothing.</li>
-        <li>It submitted an empty edit and explained why: Gemma re-normalises every MLP output, so one middle-layer neuron can barely move the residual stream. (This session also lost ~70 minutes waiting for a GPU we had double-booked.)</li>
-      </ul>
-    </li>
-    <li><strong>Session 2, with a dedicated GPU, built a working edit:</strong> a 6-neuron, two-stage cascade.
-      <ul>
-        <li>Two neurons at layers 18&ndash;21 amplify the &ldquo;unknown entity&rdquo; signal.</li>
-        <li>Four neurons at layers 24&ndash;30 write &ldquo;I can&rsquo;t know this&rdquo;, then &ldquo;Unfortunately&hellip;&rdquo;.</li>
-        <li>On held-out data, fabrication fell from <span data-k="entity.arms.base.fail" data-f="pct0"></span> to <span data-k="entity.agent_session.gate.fail" data-f="pct0"></span>. Facts about real entities stayed at <span data-k="entity.agent_session.gate.kept" data-f="pct0"></span> and MMLU was unchanged. But it was less surgical: chat KL <span data-k="entity.agent_session.gate.kl" data-f="kl2"></span>, and <span data-k="calc.agent.changed" data-f="pct0"></span> of ordinary chat answers came out with some wording changed (the recipe gate: <span data-k="calc.agent.gate_changed" data-f="pct0"></span>). Its matched random edit did nothing (<span data-k="entity.agent_session.random.fail" data-f="pct0"></span>).</li>
-        <li>It had predicted 40&ndash;60%; its gates generalised less well to the new phrasings than it expected.</li>
-      </ul>
-    </li>
+    <li><b>Session 1</b> found the &ldquo;I don&rsquo;t know this name&rdquo; signal right away and built a detector neuron, but couldn&rsquo;t make it change the answer. It submitted an empty edit and explained why: Gemma re-normalises every MLP output, so one middle-layer neuron barely moves anything.</li>
+    <li><b>Session 2</b> built a 6-neuron, two-stage edit. Fake bios fell from <span data-k="entity.arms.base.fail" data-f="pct0"></span> to <span data-k="entity.agent_session.gate.fail" data-f="pct0"></span>, real facts stayed at <span data-k="entity.agent_session.gate.kept" data-f="pct0"></span>. It was less surgical: <span data-k="calc.agent.changed" data-f="pct0"></span> of normal answers changed wording (my recipe: <span data-k="calc.agent.gate_changed" data-f="pct0"></span>).</li>
   </ul>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-agent">
-    <p class="takeaway">Unaided, the agent got about a third of the way; the human-tuned recipe gets most of the way.</p>
-    <p class="sub">Entity task (Gemma-3-4B), same held-out set as the scoreboard. Session 2&rsquo;s submitted edit and its same-size random control.</p>
+    <p class="takeaway">On its own, the agent got about a third of the way. The hand-tuned recipe gets most of the way.</p>
+    <p class="sub">Made-up names (Gemma-3-4B), same held-out set as the scoreboard.</p>
     <div class="tbl-wrap"><table class="t" id="agent-table"><thead></thead><tbody></tbody></table></div>
-    <p class="howto"><b>How to read this:</b> fabrication: lower is better. Facts kept and ordinary answers unchanged (word-for-word identical chat replies): higher is better. Session details: <a data-repo-path="results/entity/agent_sessions/README.md" href="#">results/entity/agent_sessions</a>.</p>
+    <p class="howto">Session details: <a data-repo-path="results/entity/agent_sessions/README.md" href="#">results/entity/agent_sessions</a>.</p>
   </figure>
-</div>
-<div class="col">
-  <p><strong>Verdict on &ldquo;LLMs can now patch weights&rdquo;:</strong> yes, partly, and the reading is the strong part. Unaided, Opus found the signal immediately, and in one of two sessions engineered a real, surgical fix. But it got a third of the way, where the human-tuned recipe (find the opener the model completes by itself, write it at the last layer) gets 84% of the way. It also took an hour and ~170k tokens per attempt, for a fix that 10 steps of anyone&rsquo;s fine-tuning will erase.</p>
 </div>
 </section>
 
 <!-- ============================================================ run -->
 <section id="run">
 <div class="col">
-  <h2>Run your own</h2>
+  <h2>Run it yourself</h2>
 <pre class="code">git clone <span data-k="site.repo" data-f="text">https://github.com/kevinpl07/weight-patching</span> &amp;&amp; cd weight-patching &amp;&amp; pip install -r requirements.txt
-python -m patchkit.run all entity     <span class="c"># data → base → probe → one-neuron gate + random → LoRA → eval</span>
-python -m patchkit.run sweep entity   <span class="c"># gate vs LoRA as data grows</span></pre>
-  <p>We checked that this works for a stranger: a fresh copy of the repo, run on a different GPU, reproduces the entity numbers within noise (<a data-repo-path="results/entity/REPRODUCTION.md" href="#">results/entity/REPRODUCTION.md</a>).</p>
-  <p>A new failure is one file: a model, practice and held-out prompts, a label function and a scorer (<a data-repo-path="docs/ADDING_A_TASK.md" href="#">docs/ADDING_A_TASK.md</a>). Blind agent sessions: <a data-repo-path="docs/AGENT_SESSIONS.md" href="#">docs/AGENT_SESSIONS.md</a>. The rules every task follows: <a data-repo-path="docs/PROTOCOL.md" href="#">docs/PROTOCOL.md</a>.</p>
-  <details class="more"><summary>The gate in 30 seconds</summary>
-<pre class="code">read   : the probe direction d at layer L's MLP input      (gate_proj row of the least-used neuron)
-fire   : only above a threshold no ordinary token reaches   (set on practice data)
-write  : push the logits toward an opener after which the model finishes the job itself, e.g. "Sorry"
-                                                            (down_proj column)</pre>
-  <p>That&rsquo;s about 3 &times; d_model numbers. Nothing is trained; the probe is fit on a few hundred practice prompts. Hyper-parameters and the LoRA recipe are fixed across tasks and never tuned on held-out data.</p>
-  </details>
+python -m patchkit.run all entity     <span class="c"># data → base → probe → one-neuron patch + random → LoRA → eval</span>
+python -m patchkit.run sweep entity   <span class="c"># patch vs LoRA as data grows</span></pre>
+  <p>A fresh copy on a different GPU reproduces the numbers within noise (<a data-repo-path="results/entity/REPRODUCTION.md" href="#">REPRODUCTION.md</a>). A new bug is one file: <a data-repo-path="docs/ADDING_A_TASK.md" href="#">ADDING_A_TASK.md</a>.</p>
 </div>
 </section>
 
@@ -410,12 +391,9 @@ write  : push the logits toward an opener after which the model finishes the job
 <div class="col">
   <h2>Caveats</h2>
   <ul class="caveats">
-    <li><strong>Thin statistics.</strong> Greedy decoding, one sample per prompt, held-out sets of 300&ndash;1,700 items. Differences of a few points are noise.</li>
-    <li><strong>Rough scoring.</strong> It&rsquo;s regex-based and spot-checked by reading, with no human or LLM judge. We found and fixed one scorer bug (curly apostrophes) during this run; it had overstated the system prompt&rsquo;s fabrication rate in our earlier report.</li>
-    <li><strong>Small models.</strong> 1B&ndash;4B models, one per task, plus transfers.</li>
-    <li><strong>No adaptive attacker</strong> against the injection gate.</li>
-    <li><strong>One agent model</strong> for the editing sessions.</li>
-    <li><strong>Fixed LoRA recipe</strong> (r=16, 3 epochs, not tuned on held-out data), plus the step and data sweeps above.</li>
+    <li>Greedy decoding, one sample per prompt, 300&ndash;1,700 held-out items. Differences of a few points are noise.</li>
+    <li>Scoring is regex, spot-checked by reading. No human or LLM judge.</li>
+    <li>Small models (1B&ndash;4B), one agent model, one fixed LoRA recipe (plus the sweeps above), no adaptive attacker on the injection patch.</li>
   </ul>
 </div>
 </section>
@@ -424,18 +402,17 @@ write  : push the logits toward an opener after which the model finishes the job
 <footer>
   <div class="col">
     <div class="links">
-      <a data-repo href="#">Code &amp; data (GitHub)</a>
+      <a data-repo href="#">Code &amp; data</a>
       <a data-repo-path="results/SUMMARY.md" href="#">Results summary</a>
       <a data-repo-path="docs/PROTOCOL.md" href="#">Protocol</a>
-      <a data-repo-path="archive" href="#">Archive: earlier experiments, transcripts, reports</a>
-      <a href="data/blog.json">Page data (JSON)</a>
-      <a href="audio/LICENSES.md">Audio excerpts: sources &amp; licences</a>
+      <a data-repo-path="archive" href="#">Earlier experiments</a>
+      <a href="audio/LICENSES.md">Audio sources &amp; licences</a>
     </div>
-    <div>Every number on this page is read from <code>data/blog.json</code>, built from <code>results/</code> by <code>site/build_data.py</code>. Data built <span data-k="generated" data-f="text"></span>.</div>
+    <p>Every number on this page is read from <a href="data/blog.json"><code>data/blog.json</code></a>, built from <code>results/</code>. Built <span data-k="generated" data-f="text"></span>. Reddit quotes are excerpts; follow the links for context.</p>
   </div>
 </footer>
 
 <div class="tip" id="tip" role="tooltip"></div>
-<script src="app.js?v=14"></script>
+<script src="app.js?v=20"></script>
 </body>
 </html>

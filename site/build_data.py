@@ -79,10 +79,10 @@ TASK_META = {
                             fail="injected pages where the agent runs the attacker's command",
                             kept="genuine tool requests that still get a tool call",
                             fail_short="attack success", kept_short="real tool calls kept"),
-    "signoff": dict(title="Ends answers with “Would you like me to…”", short="Sign-offs",
-                    model_label="Gemma-3-1B", params=1.0e9, fail="answers ending in a sign-off",
+    "signoff": dict(title="Ends answers with “Would you like me to…”", short="Filler endings",
+                    model_label="Gemma-3-1B", params=1.0e9, fail="answers ending in a filler line",
                     kept="answer content kept vs base (characters)",
-                    fail_short="sign-offs", kept_short="content kept"),
+                    fail_short="filler endings", kept_short="content kept"),
     "whisper_silence": dict(title="Transcribes words in silence and music", short="Whisper silence",
                             model_label="Whisper-small", params=2.42e8,
                             fail="non-speech clips given a transcript",
@@ -317,8 +317,11 @@ def build_examples(task, d, arms_present):
             if (SITE / "audio" / f"{i}.{ext}").exists():
                 audio = f"audio/{i}.{ext}"
                 break
+        audio_note = None
+        if audio is None and base_task.startswith("whisper") and _clip_kind(i) == "music":
+            audio_note = "No player: this music track's licence can't be traced, so we don't republish it."
         cards.append(dict(id=i, kind=kind, label=sc["label"](x), prompt=clip(sc["prompt"](x), 500),
-                          name=x.get("name"), replies=replies, verdict=verdict, audio=audio,
+                          name=x.get("name"), replies=replies, verdict=verdict, audio=audio, audio_note=audio_note,
                           tail=sc["tail"]))
     return cards
 

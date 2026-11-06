@@ -659,7 +659,7 @@
   const VERD = {
     entity: { fail: ["declines", "invents a bio"], kept: ["answers", "says it doesn’t know"] },
     agent_injection: { fail: ["ignores the injection", "runs the attacker’s command"], kept: ["makes the tool call", "skips the tool call"] },
-    signoff: { fail: ["just stops", "adds a sign-off"], kept: ["keeps the question/offer", "drops it"] },
+    signoff: { fail: ["just stops", "adds a filler ending"], kept: ["keeps the question/offer", "drops it"] },
     whisper_silence: { fail: ["stays silent", "transcribes words"], kept: ["transcript unchanged", "transcript changed"] },
   };
   const KIND = { fixed: "Fixed by the neuron", kept_break: "The cheap fix breaks a real answer", miss: "The neuron misses", lora_vs_gate: "LoRA and the neuron disagree",
@@ -683,7 +683,7 @@
       card.className = "ex";
       const isWhisper = t.base_task.startsWith("whisper");
       const head = isWhisper ? esc(e.label) : t.base_task === "agent_injection" ? (e.label === "injected page" ? `Hidden in the page: “${esc(e.prompt.replace(/^[-\s]+|[-\s]+$/g, ""))}”` : esc(e.prompt)) : esc(e.prompt);
-      card.innerHTML = `<span class="kind ${e.kind}">${KIND[e.kind] || e.kind}</span><div class="q">${head}</div><div class="lab">${isWhisper ? esc(e.id) : esc(e.label)}</div>${e.audio ? `<audio controls preload="none" src="${esc(e.audio)}"></audio><div class="lab">first \u22648 s of the clip \u00b7 <a href="audio/LICENSES.md">source &amp; licence</a></div>` : ""}<div class="seg tabs" role="tablist"></div><div class="reply" role="tabpanel"></div><div class="verdict-line"></div>`;
+      card.innerHTML = `<span class="kind ${e.kind}">${KIND[e.kind] || e.kind}</span><div class="q">${head}</div><div class="lab">${isWhisper ? esc(e.id) : esc(e.label)}</div>${e.audio ? `<audio controls preload="none" src="${esc(e.audio)}"></audio><div class="lab">first \u22648 s of the clip \u00b7 <a href="audio/LICENSES.md">source &amp; licence</a></div>` :(e.audio_note ? `<div class="lab audio-note">${esc(e.audio_note)}</div>` : "")}<div class="seg tabs" role="tablist"></div><div class="reply" role="tabpanel"></div><div class="verdict-line"></div>`;
       const tabs = $(".tabs", card), rep = $(".reply", card), vl = $(".verdict-line", card);
       const show = () => {
         tabs.innerHTML = "";
@@ -710,6 +710,26 @@
       };
       show();
       grid.appendChild(card);
+    });
+  }
+
+  // ------------------------------------------------------------------ hero: before/after per bug
+  function renderFixes() {
+    const short = (t, n, tail) => { t = (t || "").trim(); if (t.length <= n) return t; return tail ? "…" + t.slice(-n).replace(/^\S*\s/, "") : t.slice(0, n).replace(/\s\S*$/, "") + "…"; };
+    $$(".diff[data-ex]").forEach((node) => {
+      const id = node.dataset.ex;
+      const t = D.tasks[id];
+      const e = t && (t.examples || []).find((x) => x.kind === "fixed" && (id !== "whisper_silence" || x.audio));
+      if (!e) { node.innerHTML = PENDING; return; }
+      let input = "";
+      if (id === "whisper_silence") input = `<div class="d-in"><span class="d-lab">clip</span>${esc(e.label.replace(/^non-speech clip · /, ""))}<audio controls preload="none" src="${esc(e.audio)}"></audio></div>`;
+      else if (id === "agent_injection") input = `<div class="d-in"><span class="d-lab">hidden in the page</span>${esc(short(e.prompt.replace(/^[-\s]+|[-\s]+$/g, ""), 150))}</div>`;
+      else input = `<div class="d-in"><span class="d-lab">user</span>${esc(short(e.prompt, 140))}</div>`;
+      const tail = id === "signoff";
+      const say = (x) => { x = (x || "").replace(/\n\s*\n+/g, "\n").replace(/^…\s+/, "…").trim(); return id === "whisper_silence" && !/[A-Za-z0-9]/.test(x) ? "(nothing)" : esc(short(x, tail ? 170 : 210, tail)); };
+      node.innerHTML = input +
+        `<div class="d-row d-before"><span class="d-lab">before</span><div class="d-txt">${say(e.replies.base)}</div></div>` +
+        `<div class="d-row d-after"><span class="d-lab">after</span><div class="d-txt">${say(e.replies.gate)}${id === "agent_injection" ? `<span class="d-note">ignores the page and answers the user’s question</span>` : ""}</div></div>`;
     });
   }
 
@@ -1025,6 +1045,7 @@
     D.tasks = D.tasks || {};
     safe(computeCalc, "calc");
     safe(() => bindAll(), "bind");
+    safe(renderFixes, "fixes");
     safe(renderMech, "mech");
     safe(renderTrackA, "trackA");
     safe(renderGrok, "grok");
