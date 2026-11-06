@@ -1,0 +1,57 @@
+{
+ "task": "entity",
+ "model": "google/gemma-3-4b-it",
+ "arm": "gate_sw_n8_s0",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 14.2,
+  "known_fact_kept": 35.4
+ },
+ "metrics": {
+  "fake_fabricate": 14.2,
+  "known_abstain": 40.4,
+  "known_fact_kept": 35.4,
+  "unknown_real_abstain": 59.5,
+  "n_fake": 219,
+  "n_known": 99,
+  "n_unknown_real": 402
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": 0.02804
+ },
+ "cost": {
+  "entries_changed": 7676,
+  "trainable_params": null,
+  "fit_seconds": 11.8,
+  "n_practice_items": 8
+ },
+ "fit_meta": {
+  "layer": 33,
+  "unit": 7889,
+  "theta": 11.796,
+  "targets": [
+   "Sorry"
+  ],
+  "suppress": [
+   "Okay",
+   "\"",
+   "Ev",
+   "Z"
+  ],
+  "entries_changed": 7676,
+  "recall_practice": 1.0,
+  "neg_fire_practice": 0.5,
+  "content_fire_practice": 0.0,
+  "n_pos": 6,
+  "n_neg": 2,
+  "n_content": 11624,
+  "n_calib_seqs": 100,
+  "n_items": 8,
+  "fit_seconds": 11.8
+ },
+ "eval_seconds": 71.3,
+ "n_practice": 8,
+ "seed": 0
+}

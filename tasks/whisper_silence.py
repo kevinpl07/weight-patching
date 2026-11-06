@@ -102,7 +102,9 @@ class Ctx:
         return m.eval()
 
     def practice_cache(self):
-        return torch.load(self.runs / "practice_base.pt", weights_only=False)
+        if getattr(self, "_cache", None) is None:
+            self._cache = torch.load(self.runs / "practice_base.pt", weights_only=False)
+        return self._cache
 
     def practice_items(self, n=None, seed=0):
         cache = self.practice_cache()
@@ -227,10 +229,11 @@ def speech_kl(model, base_model, proc, tok, base_rows, batch=16):
     vals = []
     for i in range(0, len(rows), batch):
         rr = rows[i:i + batch]
-        f = W.features(proc, [amap[r["id"]] for r in rr])
+        dev = next(model.parameters()).device
+        f = W.features(proc, [amap[r["id"]] for r in rr], dev)
         seqs = [tok.prompt + r["tokens"] + [tok.eot] for r in rr]
         L = max(len(s) for s in seqs)
-        ids = torch.tensor([s + [tok.eot] * (L - len(s)) for s in seqs], device=W.DEV)
+        ids = torch.tensor([s + [tok.eot] * (L - len(s)) for s in seqs], device=dev)
         la = model(input_features=f, decoder_input_ids=ids).logits.float().log_softmax(-1)
         lb = base_model(input_features=f, decoder_input_ids=ids).logits.float().log_softmax(-1)
         for j, s in enumerate(seqs):
@@ -252,7 +255,7 @@ def cmd_base(c, a):
     for s in W.PRACTICE_SUITES:
         man, aud = W.load_suite(s)
         out = W.transcribe(model, proc, tok, list(aud), batch=a.batch, capture=True)
-        rows[s] = [dict(id=m["id"], tokens=r["tokens"], text=r["text"], x=r["x"].half() if False else r["x"],
+        rows[s] = [dict(id=m["id"], tokens=r["tokens"], text=r["text"], x=r["x"],
                         top_first=r["top_first"], nsp=r["nsp"]) for m, r in zip(man, out)]
         h = np.mean([bool(W.norm(r["text"])) for r in out])
         print(f"{s}: {len(out)} clips; non-empty {100 * h:.1f}%", flush=True)

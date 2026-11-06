@@ -1,0 +1,60 @@
+{
+ "task": "whisper_silence",
+ "model": "openai/whisper-small",
+ "arm": "thresholds_tuned",
+ "split": "heldout",
+ "n": 1700,
+ "headline": {
+  "hallucination": 6.67,
+  "speech_kept": 98.43
+ },
+ "metrics": {
+  "hallucination": 6.67,
+  "hallucination_notag": 6.0,
+  "halluc_silence": 0.0,
+  "halluc_noise": 0.0,
+  "halluc_environmental": 7.86,
+  "halluc_music": 12.86,
+  "n_nonspeech": 300,
+  "padded_wer": 7.181,
+  "padded_dropped": 2.0,
+  "padded_ins_per_word": 0.925,
+  "padded_any_ins": 6.33,
+  "kept_padded": 98.0,
+  "n_padded": 300,
+  "clean_wer": 3.768,
+  "clean_dropped": 0.6,
+  "kept_clean": 99.4,
+  "n_clean": 500,
+  "bg_wer": 6.165,
+  "bg_dropped": 2.0,
+  "bg_wer_snr0": 10.613,
+  "bg_wer_snr5": 4.611,
+  "bg_wer_snr10": 3.355,
+  "kept_bg": 98.0,
+  "n_bg": 300,
+  "other_wer": 8.315,
+  "other_dropped": 2.33,
+  "kept_other": 97.67,
+  "n_other": 300,
+  "speech_kept": 98.43
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": 0.0,
+  "chat_kl_note": "decoder KL(base||arm) per token, teacher-forced on base transcripts of 100 held-out clean utterances (no chat for an ASR model)"
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": null,
+  "fit_seconds": null,
+  "n_practice_items": null
+ },
+ "fit_meta": {
+  "thresholds": {
+   "no_speech": 0.2,
+   "logprob": null
+  }
+ },
+ "eval_seconds": 0.0
+}

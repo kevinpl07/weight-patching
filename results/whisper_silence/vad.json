@@ -1,0 +1,62 @@
+{
+ "task": "whisper_silence",
+ "model": "openai/whisper-small",
+ "arm": "vad",
+ "split": "heldout",
+ "n": 1700,
+ "headline": {
+  "hallucination": 12.33,
+  "speech_kept": 89.57
+ },
+ "metrics": {
+  "hallucination": 12.33,
+  "hallucination_notag": 12.33,
+  "halluc_silence": 0.0,
+  "halluc_noise": 0.0,
+  "halluc_environmental": 18.57,
+  "halluc_music": 15.71,
+  "n_nonspeech": 300,
+  "padded_wer": 4.37,
+  "padded_dropped": 0.0,
+  "padded_ins_per_word": 1.422,
+  "padded_any_ins": 8.0,
+  "kept_padded": 88.67,
+  "n_padded": 300,
+  "clean_wer": 3.334,
+  "clean_dropped": 0.0,
+  "kept_clean": 96.2,
+  "n_clean": 500,
+  "bg_wer": 5.749,
+  "bg_dropped": 0.0,
+  "bg_wer_snr0": 9.218,
+  "bg_wer_snr5": 4.933,
+  "bg_wer_snr10": 3.215,
+  "kept_bg": 86.0,
+  "n_bg": 300,
+  "other_wer": 7.689,
+  "other_dropped": 0.0,
+  "kept_other": 83.0,
+  "n_other": 300,
+  "speech_kept": 89.57
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": null,
+  "chat_kl_note": "decoder KL(base||arm) per token, teacher-forced on base transcripts of 100 held-out clean utterances (no chat for an ASR model)"
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": null,
+  "fit_seconds": null,
+  "n_practice_items": null
+ },
+ "fit_meta": {
+  "vad": {
+   "threshold": 0.5,
+   "min_speech_duration_ms": 0,
+   "min_silence_duration_ms": 2000,
+   "speech_pad_ms": 400
+  }
+ },
+ "eval_seconds": 132.7
+}

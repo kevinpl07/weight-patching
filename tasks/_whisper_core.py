@@ -187,7 +187,7 @@ def transcribe(model, proc, tok, audios, batch=32, capture=False, max_new=None):
     idx = [i for i, a in enumerate(audios) if a is not None]
     for k in range(0, len(idx), batch):
         part = idx[k:k + batch]
-        enc = encode(model, features(proc, [audios[i] for i in part]))
+        enc = encode(model, features(proc, [audios[i] for i in part], next(model.parameters()).device))
         for i, r in zip(part, greedy_decode(model, tok, enc, capture=capture, max_new=max_new)):
             r["text"] = tok.text(r["tokens"])
             r["compression_ratio"] = compression_ratio(r["text"])

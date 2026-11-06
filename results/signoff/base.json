@@ -1,0 +1,43 @@
+{
+ "task": "signoff",
+ "model": "google/gemma-3-1b-it",
+ "arm": "base",
+ "split": "heldout",
+ "n": 340,
+ "headline": {
+  "signoff": 59.0,
+  "content_kept": 100.0
+ },
+ "metrics": {
+  "signoff": 59.0,
+  "signoff_practice_phrase": 19.0,
+  "signoff_heldout_phrase_only": 40.0,
+  "dangling_rule": 0.0,
+  "appendix": 26.0,
+  "truncated": 13.0,
+  "empty": 0.0,
+  "mean_chars": 2185,
+  "mean_content_chars": 2044,
+  "n": 300,
+  "content_kept": 100.0,
+  "content_identical": 100.0,
+  "content_prefix_of_base": 100.0,
+  "identical_to_base": 100.0,
+  "signoff_on_base_signoff_items": 100.0,
+  "legit_kept": 97.5,
+  "legit_signoff": 75.0,
+  "n_legit": 40
+ },
+ "guards": {
+  "mmlu200": 41.0,
+  "chat_kl": 0.0
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": null,
+  "fit_seconds": null,
+  "n_practice_items": null
+ },
+ "fit_meta": {},
+ "eval_seconds": 437.2
+}

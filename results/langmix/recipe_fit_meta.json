@@ -1,0 +1,19 @@
+{
+ "method": "recipe (continuous context-gated CJK logit penalty, lm_head rows)",
+ "alpha": 0.25,
+ "k": 256,
+ "entries_changed": 8135168,
+ "n_cjk_rows": 31778,
+ "positions": {
+  "native": 202743,
+  "zh": 24061,
+  "en": 23924
+ },
+ "uk_dot": {
+  "native": 24.001,
+  "zh": -0.0,
+  "en": -0.0
+ },
+ "n_items": 480,
+ "fit_seconds": 49.2
+}

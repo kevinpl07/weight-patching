@@ -1,0 +1,47 @@
+{
+ "task": "langmix",
+ "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+ "arm": "prompt",
+ "split": "heldout",
+ "n": 480,
+ "headline": {
+  "leak_rate": 15.0,
+  "zh_reply": 95.0
+ },
+ "metrics": {
+  "leak_rate": 15.0,
+  "leak_de": 2.5,
+  "leak_ru": 31.7,
+  "leak_th": 10.8,
+  "acc_de": 36.7,
+  "acc_ru": 37.5,
+  "acc_th": 13.3,
+  "acc_en": 91.7,
+  "acc_zh": 70.0,
+  "acc_deru": 37.1,
+  "zh_reply": 95.0,
+  "zh_answered": 95.0,
+  "zh_reply_of_answered": 100.0,
+  "en_leak": 0.0,
+  "answered_deruth": 80.6,
+  "n": {
+   "de": 120,
+   "ru": 120,
+   "th": 120,
+   "en": 60,
+   "zh": 60
+  }
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": null
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": null,
+  "fit_seconds": null,
+  "n_practice_items": null
+ },
+ "fit_meta": {},
+ "eval_seconds": 765.2
+}

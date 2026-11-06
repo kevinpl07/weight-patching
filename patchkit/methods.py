@@ -112,11 +112,20 @@ def fit_gate(task, model, tok, items, base, seed=1, calib=None):
     cnt = Counter(t for t in nxt if t not in tgt)
     top = [t for t, _ in cnt.most_common(8)]
     v = L.write_vec(model, tok, Lr, tgt, top, [cnt[t] for t in top] if top else None)
-    edit, rnd = L.build_edit(model, Lr, unit, d, theta, m, v, g=task.gate_g, k=task.gate_k, gain=task.gate_gain,
+    # gate steepness. "auto": make the neuron truly off at ordinary positions. GELU/SiLU have a negative tail, so an
+    # ordinary position sitting just below theta still writes -k*gain*|act| along v at every token. Choose g so the
+    # median ordinary position is >= 12 pre-activation units below the threshold (tail ~ 0).
+    g = task.gate_g
+    con_all = torch.cat([sn, sc]) if len(sn) else sc
+    med = con_all.median().item() if len(con_all) else theta - 3.0
+    if g == "auto":
+        g = max(4.0, 12.0 / max(theta - med, 1e-3))
+    edit, rnd = L.build_edit(model, Lr, unit, d, theta, m, v, g=g, k=task.gate_k, gain=task.gate_gain,
                              seed=seed)
     sd = dict(model.named_parameters())
     changed = L.count_changed(edit, {k: sd[k].detach().cpu() for k in edit})
-    meta = dict(layer=Lr, unit=unit, theta=round(theta, 3), targets=[tok.decode([t]) for t in tgt],
+    meta = dict(layer=Lr, unit=unit, theta=round(theta, 3), g=round(float(g), 3),
+                off_margin=round(theta - med, 3), targets=[tok.decode([t]) for t in tgt],
                 suppress=[tok.decode([t]) for t in top], entries_changed=changed,
                 recall_practice=round((sp > theta).float().mean().item(), 3),
                 neg_fire_practice=round((sn > theta).float().mean().item(), 3) if len(sn) else None,
@@ -150,9 +159,9 @@ def train_lora(task, model, tok, items, base, out_dir, seed=0, r=16, alpha=32, l
         ids = (pi + ri)[:max_len]
         data.append((ids, len(pi)))
     n_task = len(data)
-    for p, rep in replay or []:
+    for p, rep in replay or []:   # replay replies are 128-token cuts: no end-of-turn appended
         pi = tok(p, add_special_tokens=False).input_ids
-        ri = tok(rep + eot, add_special_tokens=False).input_ids
+        ri = tok(rep, add_special_tokens=False).input_ids
         data.append(((pi + ri)[:max_len], len(pi)))
     cfg = LoraConfig(r=r, lora_alpha=alpha, lora_dropout=0.05, target_modules=LORA_TARGETS, task_type="CAUSAL_LM")
     pm = get_peft_model(model, cfg)

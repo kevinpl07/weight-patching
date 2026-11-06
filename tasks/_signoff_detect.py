@@ -1,4 +1,5 @@
-"""Sign-off detector (copied from the original experiment, voice/signoff.py, unchanged apart from this docstring).
+"""Sign-off detector (copied from the original experiment, voice/signoff.py; only change: curly quotes are normalised
+to ASCII before matching, so "don’t hesitate" / "I’d be happy to" match like their straight-quote forms).
 
 A sign-off is the trailing part of an answer, after the content, that talks to the user about the conversation
 instead of answering: offers of more help ("Would you like me to..."), questions back ("To help me narrow this down,
@@ -10,6 +11,8 @@ Blocks are separated by blank lines; horizontal rules ("---", "***") between con
 sign-off. Anchor phrases are split into practice / held-out phrasings so held-out phrasings can be scored separately.
 """
 import re
+
+from patchkit.llm import norm_quotes
 
 OFFER = [  # (name, regex, split)
     ("would_you_like", r"\bwould you (like|prefer|be interested)\b", "practice"),
@@ -66,7 +69,7 @@ def _trailing_ok(block):
 
 def signoff(text, splits=("practice", "heldout")):
     """dict(has, start, kind, block, dangling_rule). See module docstring. `splits` limits the anchor phrases."""
-    text = text.rstrip()
+    text = norm_quotes(text).rstrip()   # 1:1 character replacement, so indices stay valid
     spans = _blocks(text)
     dangling = bool(spans) and bool(RULE.match(text[spans[-1][0]:spans[-1][1]].strip()))
     none = dict(has=False, start=len(text), kind=[], block="", dangling_rule=dangling)

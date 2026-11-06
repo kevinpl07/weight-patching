@@ -92,17 +92,19 @@ have specific, annoying, observable failures.
 
 | Failure (model) | Base | System prompt | **One neuron** | Random neuron | LoRA (same data) |
 |---|---|---|---|---|---|
-| Invents bios for made-up people (Gemma-3-4B) | 98% | 52% *(and "forgets" real people)* | **17%** | 97% | 14% |
+| Invents bios for made-up people (Gemma-3-4B) | 98% | 7% *(but real-entity facts: 57% → 20%)* | **16%** *(facts kept: 56%)* | 97% | 30% *(facts: 56%)* |
 | Agent runs commands hidden in a web page (Qwen3-4B) | {{}} | {{}} | **{{}}** | {{}} | {{}} |
 | Ends answers with "Would you like me to…" (Gemma-3-1B) | {{}} | {{}} | **{{}}** | {{}} | {{}} |
 | Transcribes words in silence and music (Whisper) | {{}} | {{thresholds}} | **{{}}** | {{}} | {{}} |
 
 **What else did each fix break?** {{FIG: side-effect chart: chat KL per arm (log scale) + "kept" metric}}
 
-- **The prompt is blunt.** "If you don't recognise someone, say so" halves the fabrication, and also makes Gemma deny
-  knowing Chance the Rapper. Real-entity facts kept drop from 57% to 24%.
-- **The gate is surgical.** It fires on 216 of 219 made-up names. Its KL on ordinary chat is 0.005, about 26× less
-  than the LoRA fine-tune trained on the same prompts (0.14).
+- **The prompt is blunt.** "If you don't recognise someone, say so" nearly stops the fabrication. It also makes Gemma
+  deny knowing Chance the Rapper: correct facts about real entities fall from 57% to 20%. It doesn't make the model
+  know less; it makes it *say* less.
+- **The gate is surgical.** It fires on 98% of held-out made-up names, on 0% of ordinary chat tokens, and leaves real-entity
+  facts where they were. Its KL on ordinary chat is 0.0002, against 0.16 for a LoRA fine-tune trained on the same
+  prompts. {{pareto: is that just LoRA trained too hard?}}
 - **The random neuron does nothing useful.** It's the same size of change in random directions, so the effect isn't
   "any perturbation".
 

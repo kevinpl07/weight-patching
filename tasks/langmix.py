@@ -9,8 +9,9 @@ Data
   in de, ru, th (target: must not leak), en (must stay English) and zh (must still be answered in Chinese).
 - practice: GSM8K *train* problems, machine-translated de/ru/th (Mathoctopus/GSM8KInstruct_Parallel), English GSM8K
   train, Chinese GSM8K_zh train. Disjoint from MGSM (GSM8K test) and translated by a different pipeline.
-- prompt: the question + "Please reason step by step, and put your final answer within \\boxed{}." (Chinese
-  counterpart for zh), no system prompt (as the old run). Greedy, `max_new` tokens; scored on the generated text.
+- prompt: the question only, no system prompt and no answer-format suffix (exactly the old run's MGSM prompt).
+  Greedy (patchkit's decoding; the old run sampled at T=0.6), `max_new` = 1,024 tokens; scored on the generated text
+  (truncated replies included).
 
 Labels (positive): a de/ru/th practice item whose greedy base reply leaks (mix_flag) = True; a de/ru/th item that
 doesn't leak, and every zh / en practice item = False. `data` generates the practice base replies itself (written to
@@ -63,13 +64,11 @@ if not getattr(L.eot_id, "_langmix_shim", False):
     _eot_id._langmix_shim = True
     L.eot_id = _eot_id
 
-SUFFIX = "\nPlease reason step by step, and put your final answer within \\boxed{}."
-ZH_SUFFIX = "\n请逐步推理，并将最终答案放在 \\boxed{} 中。"
 INSTRUCTION = "Reply in the same language as the question."   # the old run's instruction arm, appended to the user turn
 TARGET_LANGS = ("de", "ru", "th")
 POOL_NAMES = dict(de="German", ru="Russian", th="Thai")
-N_HELDOUT = 120
-N_PRACTICE = dict(de=96, ru=96, th=96, zh=64, en=64)
+N_HELDOUT = dict(de=120, ru=120, th=120, en=60, zh=60)   # en/zh guards: first 60 of the old run's 120 (runtime)
+N_PRACTICE = dict(de=128, ru=128, th=128, zh=48, en=48)
 
 
 def _gsm_gold(ans):
@@ -82,7 +81,7 @@ def _mgsm(lang):
     order = list(range(len(ds)))
     random.Random(0).shuffle(order)  # identical to the old run (check_multi.py / data.py)
     return [dict(id=f"mgsm-{lang}-{i}", question=ds[i]["question"], gold=str(ds[i]["answer_number"]), lang=lang,
-                 src="mgsm", problem=i) for i in order[:N_HELDOUT]]
+                 src="mgsm", problem=i) for i in order[:N_HELDOUT[lang]]]
 
 
 def _pools():
@@ -119,14 +118,14 @@ class LangMix(Task):
     description = "Leaks Chinese words into German, Russian and Thai answers"
     system_fix = INSTRUCTION
     max_new = 1024
-    gen_batch = 120
+    gen_batch = 160
     probe_layers = (0.5, 0.8, 1.0)
     gate_layer = -1
     forced_prefix = "<eot>"          # no forced-opener generation; LoRA positives use CJK-banned replies instead
     headline = ("leak_rate", "zh_reply")
     headline_labels = ("de/ru/th answers with a leaked Chinese word", "Chinese prompts still answered in Chinese")
     content_stride = 2               # every 2nd ordinary reply position is a content negative (memory)
-    n_gate_targets = 4
+    n_gate_targets = 1              # top alt token only: the next ones are script-specific (Thai, Cyrillic), see NOTES
 
     # ------------------------------------------------------------ files
     @property
@@ -214,14 +213,16 @@ class LangMix(Task):
         # LoRA targets for positives: the same prompt with every CJK token banned
         fb = ctx.runs / "ban_practice.jsonl"
         if not fb.exists():
-            outs = X.generate(model, tok, [self.render(tok, x) for x in pos], self.max_new, self.gen_batch,
+            outs = X.generate(model, tok, [self.render(tok, x) for x in pos], max_new=self.max_new, batch=self.gen_batch,
                               processors=[X.BanProcessor(mask)], log="ban")
             L.write_jsonl(fb, [dict(id=x["id"], ban=o) for x, o in zip(pos, outs)])
             print("ban replies: leak", pct(range(len(pos)), lambda i: X.mix_flag(outs[i], pos[i]["lang"])),
                   "acc", pct(range(len(pos)), lambda i: X.correct(outs[i], pos[i]["gold"])), flush=True)
 
     def user_text(self, x):
-        return x["question"] + (ZH_SUFFIX if x["lang"] == "zh" else SUFFIX)
+        # the question only, no answer-format suffix: exactly the old run's MGSM prompt (data.py kind "mgsm"). With
+        # the English "Please reason step by step..." suffix the model thinks in English and barely leaks.
+        return x["question"]
 
     def messages(self, item):
         return self.user_text(item), None
@@ -284,6 +285,13 @@ class LangMix(Task):
 
     # ------------------------------------------------------------ scoring
     def score(self, items, texts):
+        """NOTE: scores the FULL generated text. patchkit saves only the first 1,500 characters of each output, and R1
+        replies are much longer (leaks and \\boxed{} answers are often past 1,500 characters), so `rescore` on saved
+        outputs would give wrong numbers for this task. Full held-out texts are kept in runs/<task>/full_outputs/."""
+        if items and items[0]["split"] == "heldout" and len(items) >= 50:
+            import time
+            L.write_jsonl(self.runs / "full_outputs" / f"{time.strftime('%Y%m%d-%H%M%S')}_{len(items)}.jsonl",
+                          [dict(id=x["id"], text=s) for x, s in zip(items, texts)])
         by = {}
         for i, x in enumerate(items):
             by.setdefault(x["lang"], []).append(i)

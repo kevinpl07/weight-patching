@@ -172,6 +172,7 @@ class Guards:
         self.mm = L.mmlu_items(200) if mmlu else None
         cps = [L.chat(tok, p) for p in L.chat_prompts(60)]
         cont = L.generate(model, tok, cps, max_new=128, batch=60)
+        self.cps, self.cont = cps, cont
         self.kl_seqs = [p + x for p, x in zip(cps, cont)]
         self.kl_lens = [len(tok(p, add_special_tokens=False).input_ids) for p in cps]
 
@@ -248,10 +249,11 @@ def cmd_bigdata(c, a):
     guards = Guards(c, mmlu=False)
     out_dir = c.res / "bigdata"
     out_dir.mkdir(exist_ok=True)
+    vt = "v" if a.varied else ""
     for n_extra in [int(x) for x in a.extra.split(",")]:
-        f_items = c.runs / f"extra_{n_extra}.jsonl"
+        f_items = c.runs / f"extra_{vt}{n_extra}.jsonl"
         if not f_items.exists():
-            ex = c.task.extra_practice(c, n_extra, seed=0)
+            ex = c.task.extra_practice(c, n_extra, seed=0, **({"varied": True} if a.varied else {}))
             t, tok, model = c.task, c.tok, c.model
             outs = L.generate(model, tok, [t.render(tok, x) for x in ex], max_new=t.max_new, batch=t.gen_batch,
                               log="extra base")
@@ -271,10 +273,10 @@ def cmd_bigdata(c, a):
         prac = c.items("practice") + ex
         n_lab = sum(c.task.positive(x) is not None for x in prac)
         for meth in a.methods.split(","):
-            f = out_dir / f"{meth}_x{n_extra}.json"
+            f = out_dir / f"{meth}_x{vt}{n_extra}.json"
             if f.exists():
                 continue
-            tag = f"big_x{n_extra}"
+            tag = f"big_x{vt}{n_extra}"
             if meth == "gate":
                 edit, rnd, meta = M.fit_gate(c.task, c.model, c.tok, prac, base, seed=1, calib=c.calib())
                 L.save_edit(edit, c.runs / "edits" / f"gate_{tag}.safetensors", meta)
@@ -284,7 +286,7 @@ def cmd_bigdata(c, a):
                              replay=c.calib(pairs=True))
             arm = make_arm(c, meth, tag)
             res, _ = eval_arm(c, arm, items, guards, out_path=out_dir / "outputs" / f.with_suffix(".jsonl").name)
-            res.update(n_practice=n_lab, n_extra=n_extra)
+            res.update(n_practice=n_lab, n_extra=n_extra, varied=bool(a.varied))
             f.write_text(json.dumps(res, indent=1))
             print("BIGDATA", meth, n_extra, n_lab, json.dumps(res["headline"]), res["guards"], flush=True)
 
@@ -356,6 +358,54 @@ def cmd_pareto(c, a):
         print("PARETO lora", k, json.dumps(res["headline"]), res["guards"], flush=True)
 
 
+@torch.no_grad()
+def chat_same(c, arm, guards):
+    """% of 60 ordinary chat prompts whose greedy 128-token reply is unchanged (exactly / first 32 tokens)."""
+    arm.on(c.model)
+    try:
+        outs = L.generate(c.model, c.tok, guards.cps, max_new=128, batch=60)
+    finally:
+        arm.off(c.model)
+    same = sum(o == b for o, b in zip(outs, guards.cont))
+    tk = lambda t: c.tok(t, add_special_tokens=False).input_ids[:32]  # noqa: E731
+    same32 = sum(tk(o) == tk(b) for o, b in zip(outs, guards.cont))
+    return round(100 * same / len(outs), 1), round(100 * same32 / len(outs), 1)
+
+
+def cmd_chatsame(c, a):
+    """Add guards.chat_same / chat_same32 to every saved result whose arm can be rebuilt (main, sweep, pareto)."""
+    guards = Guards(c, mmlu=False)
+    files = sorted(c.res.glob("*.json")) + sorted(c.res.glob("pareto/*.json")) + (
+        sorted(c.res.glob("sweep/*.json")) if a.with_sweep else [])
+    for f in files:
+        r = json.loads(f.read_text(encoding="utf-8"))
+        if "arm" not in r or "chat_same" in r.get("guards", {}):
+            continue
+        name = r["arm"]
+        try:
+            if f.parent.name == "pareto":
+                if name.startswith("lora_step"):
+                    p = c.runs / "lora" / "pareto" / name.replace("lora_", "")
+                    arm = M.Arm(name, lora=str(p), meta={})
+                else:
+                    arm = make_arm(c, "gate", name.split("_", 1)[1])
+            elif f.parent.name == "sweep":
+                meth, rest = f.stem.split("_", 1)
+                arm = make_arm(c, meth, "sw_" + rest)
+            else:
+                base_name, _, tag = name.partition("_")
+                if base_name == "prompt":
+                    continue
+                arm = make_arm(c, base_name, tag)
+        except Exception as e:  # noqa: BLE001
+            print("skip", f.name, e)
+            continue
+        cs, cs32 = chat_same(c, arm, guards)
+        r.setdefault("guards", {}).update(chat_same=cs, chat_same32=cs32)
+        f.write_text(json.dumps(r, indent=1, ensure_ascii=False))
+        print("CHATSAME", f.name, cs, cs32, flush=True)
+
+
 def cmd_all(c, a):
     if not (c.res / "items.jsonl").exists():
         cmd_data(c, a)
@@ -370,7 +420,7 @@ def cmd_all(c, a):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["data", "base", "signal", "fit", "lora", "eval", "sweep", "bigdata", "rescore", "pareto", "all"])
+    ap.add_argument("cmd", choices=["data", "base", "signal", "fit", "lora", "eval", "sweep", "bigdata", "rescore", "pareto", "chatsame", "all"])
     ap.add_argument("task")
     ap.add_argument("--n", type=int)
     ap.add_argument("--seed", type=int, default=0)
@@ -382,11 +432,16 @@ def main():
     ap.add_argument("--seeds", default="0,1,2")
     ap.add_argument("--methods", default="gate,lora")
     ap.add_argument("--gains", default="25,50,100,200,400")
+    ap.add_argument("--varied", action="store_true", help="bigdata: extra practice uses varied (non-held-out) phrasings")
     ap.add_argument("--steps", default="10,25,50,100,200,300")
     ap.add_argument("--extra", default="1000,3000", help="bigdata: extra practice items to add")
     ap.add_argument("--model", help="run the task on another model; results go to <task>__<model basename>")
+    ap.add_argument("--with-sweep", action="store_true")
+    ap.add_argument("--gate-g", help="override the gate steepness: a number or 'auto'")
     a = ap.parse_args()
     task = T.get(a.task)
+    if a.gate_g:
+        task.gate_g = a.gate_g if a.gate_g == "auto" else float(a.gate_g)
     if a.model:
         task.model = a.model
         task.name = f"{task.name}__{a.model.split('/')[-1]}"

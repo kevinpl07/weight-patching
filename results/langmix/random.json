@@ -1,0 +1,74 @@
+{
+ "task": "langmix",
+ "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+ "arm": "random",
+ "split": "heldout",
+ "n": 480,
+ "headline": {
+  "leak_rate": 26.7,
+  "zh_reply": 45.0
+ },
+ "metrics": {
+  "leak_rate": 26.7,
+  "leak_de": 10.0,
+  "leak_ru": 4.2,
+  "leak_th": 65.8,
+  "acc_de": 21.7,
+  "acc_ru": 15.8,
+  "acc_th": 4.2,
+  "acc_en": 53.3,
+  "acc_zh": 30.0,
+  "acc_deru": 18.8,
+  "zh_reply": 45.0,
+  "zh_answered": 45.0,
+  "zh_reply_of_answered": 100.0,
+  "en_leak": 0.0,
+  "answered_deruth": 68.3,
+  "n": {
+   "de": 120,
+   "ru": 120,
+   "th": 120,
+   "en": 60,
+   "zh": 60
+  }
+ },
+ "guards": {
+  "mmlu200": 41.0,
+  "chat_kl": 0.53369
+ },
+ "cost": {
+  "entries_changed": 4607,
+  "trainable_params": null,
+  "fit_seconds": 130.3,
+  "n_practice_items": 480
+ },
+ "fit_meta": {
+  "layer": 27,
+  "unit": 6831,
+  "theta": 1.268,
+  "targets": [
+   " "
+  ],
+  "suppress": [
+   "他已经",
+   "金",
+   "毫升",
+   " 第",
+   "计算",
+   "美元",
+   "剩余",
+   "约翰"
+  ],
+  "entries_changed": 4607,
+  "recall_practice": 0.309,
+  "neg_fire_practice": 0.0,
+  "content_fire_practice": 0.0,
+  "n_pos": 443,
+  "n_neg": 1917,
+  "n_content": 145375,
+  "n_calib_seqs": 100,
+  "n_items": 480,
+  "fit_seconds": 130.3
+ },
+ "eval_seconds": 755.6
+}

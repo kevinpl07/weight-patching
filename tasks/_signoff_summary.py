@@ -34,14 +34,14 @@ def table():
               + f" | {g['mmlu200'] if g['mmlu200'] is not None else '-'} | {g['chat_kl']} |")
 
 
-def sweep():
+def sweep(task="signoff_sweep"):
     agg = defaultdict(list)
-    for p in sorted((RES / "sweep").glob("*.json")):
+    for p in sorted((ROOT / "results" / task / "sweep").glob("*.json")):
         r = json.loads(p.read_text(encoding="utf-8"))
         meth = p.name.split("_")[0]
         agg[(meth, r["n_practice"])].append(r)
-    print("| method | n practice | runs | sign-off % | content kept % | legit kept % | chat KL |")
-    print("|---|---|---|---|---|---|---|")
+    print("| method | n practice | runs | sign-off % | content kept % | content identical % | chat KL | gate θ |")
+    print("|---|---|---|---|---|---|---|---|")
     for (meth, n), rs in sorted(agg.items(), key=lambda kv: (kv[0][0], kv[0][1])):
         def ms(k, src="metrics"):
             v = [r[src][k] for r in rs if r[src].get(k) is not None]
@@ -49,8 +49,11 @@ def sweep():
                 return "-"
             return f"{st.mean(v):.1f} ± {st.stdev(v):.1f}" if len(v) > 1 else f"{v[0]:.1f}"
         kl = [r["guards"]["chat_kl"] for r in rs]
-        print(f"| {meth} | {n} | {len(rs)} | {ms('signoff')} | {ms('content_kept')} | {ms('legit_kept')} | "
-              f"{st.mean(kl):.4f} |")
+        th = [r["fit_meta"].get("theta") for r in rs if r["fit_meta"].get("theta") is not None]
+        print(f"| {meth} | {n} | {len(rs)} | {ms('signoff')} | {ms('content_kept')} | {ms('content_identical')} | "
+              f"{st.mean(kl):.3f} | {st.mean(th):.2f} |" if th else
+              f"| {meth} | {n} | {len(rs)} | {ms('signoff')} | {ms('content_kept')} | {ms('content_identical')} | "
+              f"{st.mean(kl):.3f} | – |")
 
 
 def examples(k=40):

@@ -64,7 +64,7 @@ def eot_ids(tok):
 
 def eot_id(tok):
     v = tok.get_vocab()
-    return next(v[t] for t in ("<end_of_turn>", "<|im_end|>", "<|eot_id|>") if t in v)
+    return next((v[t] for t in ("<end_of_turn>", "<|im_end|>", "<|eot_id|>") if t in v), tok.eos_token_id)
 
 
 def pname(model, mod):

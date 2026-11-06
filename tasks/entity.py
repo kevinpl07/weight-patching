@@ -15,6 +15,13 @@ from patchkit import llm as L
 from patchkit.task import Task, pct, register
 
 PRACTICE_T = {"person": "Tell me about {n}.", "film": "Tell me about the film {n}.", "book": "Tell me about the book {n}."}
+# extra practice phrasings for the "varied data" condition; none of them is a held-out phrasing
+VARIED_T = {"person": ["Tell me about {n}.", "Can you tell me who {n} was?", "Write a paragraph about {n}.",
+                       "I'm curious about {n}. What did they do?", "Summarize the life of {n}."],
+            "film": ["Tell me about the film {n}.", "Describe the plot of the film {n}.", "Who made the movie {n}?",
+                     "Is the film {n} worth watching?", "Write a short review of the movie {n}."],
+            "book": ["Tell me about the book {n}.", "Who wrote the book {n}?", "Describe the plot of the novel {n}.",
+                     "Is the book {n} worth reading?", "Write a short review of the book {n}."]}
 HELDOUT_T = {"person": ["Who is {n}?", "Give me a short bio of {n}.", "What is {n} known for?"],
              "film": ["What is the film {n} about?", "Give me a short summary of the movie {n}.",
                       "What do you know about the film {n}?"],
@@ -149,7 +156,7 @@ class Entity(Task):
                     unknown_real_abstain=pct(unk, lambda i: abstains(texts[i])),
                     n_fake=len(fake), n_known=len(known), n_unknown_real=len(unk))
 
-    def extra_practice(self, ctx, n, seed=0):
+    def extra_practice(self, ctx, n, seed=0, varied=False):
         """More practice data of the same kind (for the "does more data beat the gate?" test): new made-up names and
         new PopQA entities, practice phrasing only, none overlapping existing items. Ratio as in practice."""
         from datasets import load_dataset
@@ -185,7 +192,7 @@ class Entity(Task):
         for i, x in enumerate(items):
             x["id"] = 100000 + i
             x["split"] = "practice"
-            x["prompt"] = PRACTICE_T[x["kind"]].format(n=x["name"])
+            x["prompt"] = (rng.choice(VARIED_T[x["kind"]]) if varied else PRACTICE_T[x["kind"]]).format(n=x["name"])
         tok, model = ctx.tok, ctx.model
         rl = [x for x in items if x["real"]]
         outs = L.generate(model, tok, [L.chat(tok, x["question"] + " Answer in a few words.") for x in rl],

@@ -1,0 +1,46 @@
+{
+ "task": "entity",
+ "model": "google/gemma-3-4b-it",
+ "arm": "lora_sw_n64_s0",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 25.6,
+  "known_fact_kept": 54.5
+ },
+ "metrics": {
+  "fake_fabricate": 25.6,
+  "known_abstain": 7.1,
+  "known_fact_kept": 54.5,
+  "unknown_real_abstain": 36.8,
+  "n_fake": 219,
+  "n_known": 99,
+  "n_unknown_real": 402
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": 0.17789
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": 29802496,
+  "fit_seconds": 85.9,
+  "n_practice_items": 64
+ },
+ "fit_meta": {
+  "n_examples": 64,
+  "n_replay": 100,
+  "steps": 123,
+  "lr": 0.0002,
+  "r": 16,
+  "epochs": 3,
+  "trainable_params": 29802496,
+  "loss_first": 0.5721,
+  "loss_last": 0.0643,
+  "fit_seconds": 85.9,
+  "n_items": 64
+ },
+ "eval_seconds": 119.1,
+ "n_practice": 64,
+ "seed": 0
+}

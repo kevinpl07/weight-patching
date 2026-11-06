@@ -1,0 +1,45 @@
+{
+ "edit": "gate.safetensors",
+ "unit": 6831,
+ "layer": 27,
+ "down_norm": 200.0,
+ "theta": 1.268,
+ "groups": {
+  "zh": {
+   "positions": 18503,
+   "mean_act": -0.2151,
+   "mean_write_along_v": -43.01,
+   "frac_positive": 0.0,
+   "q01": -0.6797,
+   "q50": -0.1836,
+   "max": -0.013
+  },
+  "en": {
+   "positions": 11685,
+   "mean_act": -0.1035,
+   "mean_write_along_v": -20.69,
+   "frac_positive": 0.0,
+   "q01": -0.3379,
+   "q50": -0.0879,
+   "max": -0.009
+  },
+  "de/ru/th clean": {
+   "positions": 11131,
+   "mean_act": -0.1606,
+   "mean_write_along_v": -32.12,
+   "frac_positive": 0.0,
+   "q01": -0.582,
+   "q50": -0.127,
+   "max": -0.008
+  },
+  "de/ru/th leaking": {
+   "positions": 15916,
+   "mean_act": -0.3255,
+   "mean_write_along_v": -65.09,
+   "frac_positive": 0.0001,
+   "q01": -1.0469,
+   "q50": -0.2471,
+   "max": 0.42
+  }
+ }
+}

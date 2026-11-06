@@ -1,0 +1,28 @@
+{
+ "layer": 27,
+ "unit": 6831,
+ "theta": 1.268,
+ "targets": [
+  " "
+ ],
+ "suppress": [
+  "他已经",
+  "金",
+  "毫升",
+  " 第",
+  "计算",
+  "美元",
+  "剩余",
+  "约翰"
+ ],
+ "entries_changed": 4607,
+ "recall_practice": 0.309,
+ "neg_fire_practice": 0.0,
+ "content_fire_practice": 0.0,
+ "n_pos": 443,
+ "n_neg": 1917,
+ "n_content": 145375,
+ "n_calib_seqs": 100,
+ "n_items": 480,
+ "fit_seconds": 130.3
+}

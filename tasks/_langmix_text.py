@@ -160,23 +160,33 @@ class BanProcessor:
         return scores.masked_fill(self.mask[: scores.shape[-1]], float("-inf"))
 
 
+SAMPLING = dict(do_sample=True, temperature=0.6, top_p=0.95, top_k=0)   # R1's recommended settings (the old run's)
+SEED0 = 1000
+
+
 @torch.no_grad()
-def generate(model, tok, prompts, max_new, batch, processors=None, log=None):
-    """patchkit.llm.generate (greedy, same stop tokens and decoding) plus optional logits processors."""
+def generate(model, tok, prompts, max_new=128, batch=32, prefix=None, log=None, skip_special=True, processors=None,
+             sampling=None):
+    """patchkit.llm.generate with the same signature, stop tokens and decoding of the reply, but (by default) R1's
+    sampling settings, seeded per batch (seed = SEED0 + index of the batch's first prompt), so every arm draws the same
+    random stream for the same batch, and optional logits processors (the CJK ban). sampling=None (default) -> greedy,
+    identical to patchkit.llm.generate. (Kept from a pilot that compared greedy with the old run's sampling.)"""
     import time
     from transformers import LogitsProcessorList
     from patchkit import llm as L
     out, stops = [], L.eot_ids(tok)
-    kw = dict(logits_processor=LogitsProcessorList(processors)) if processors else {}
+    kw = dict(sampling) if sampling else dict(do_sample=False)
+    if processors:
+        kw["logits_processor"] = LogitsProcessorList(processors)
     for i in range(0, len(prompts), batch):
-        part = prompts[i:i + batch]
+        part = [p + (prefix or "") for p in prompts[i:i + batch]]
         enc = tok(part, return_tensors="pt", padding=True, add_special_tokens=False).to(L.DEV)
         t = time.time()
-        g = model.generate(**enc, max_new_tokens=max_new, do_sample=False, pad_token_id=tok.pad_token_id,
-                           eos_token_id=list(stops), **kw)
+        torch.manual_seed(SEED0 + i)
+        g = model.generate(**enc, max_new_tokens=max_new, pad_token_id=tok.pad_token_id, eos_token_id=list(stops), **kw)
         for ids in g[:, enc.input_ids.shape[1]:].tolist():
             n = next((j for j, x in enumerate(ids) if x in stops), len(ids))
-            out.append(tok.decode(ids[:n], skip_special_tokens=True).strip())
+            out.append(((prefix or "") + tok.decode(ids[:n], skip_special_tokens=skip_special)).strip())
         if log:
             print(f"  {log}: {i + len(part)}/{len(prompts)} ({time.time() - t:.0f}s)", flush=True)
     return out

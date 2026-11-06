@@ -1,0 +1,175 @@
+{
+ "targets": [
+  " ",
+  "ค",
+  " С",
+  " доллар",
+  " dollars",
+  " rest",
+  " sch",
+  " residue",
+  " currently",
+  " уже",
+  " каждый",
+  " lived",
+  " про",
+  " чтобы",
+  " правильно",
+  " family",
+  " подход",
+  "пор",
+  " он",
+  " whenever",
+  "payment",
+  " могут",
+  " потреб",
+  " ф",
+  "ша",
+  " поэтому",
+  " instrument",
+  " Jon",
+  " д",
+  " содерж",
+  "อ",
+  "ให",
+  " Bret",
+  "ต",
+  "หร",
+  "และ",
+  " **",
+  "เหร",
+  " information",
+  "เด",
+  "ร",
+  " waktu",
+  " time",
+  "currency",
+  "เง",
+  "แล",
+  "เว",
+  "้ำ"
+ ],
+ "counts": [
+  {
+   "token": " ",
+   "count": 5
+  },
+  {
+   "token": "ค",
+   "count": 3
+  },
+  {
+   "token": " С",
+   "count": 2
+  },
+  {
+   "token": " доллар",
+   "count": 2
+  },
+  {
+   "token": " dollars",
+   "count": 2
+  },
+  {
+   "token": " rest",
+   "count": 1
+  },
+  {
+   "token": " sch",
+   "count": 1
+  },
+  {
+   "token": " residue",
+   "count": 1
+  },
+  {
+   "token": " currently",
+   "count": 1
+  },
+  {
+   "token": " уже",
+   "count": 1
+  },
+  {
+   "token": " каждый",
+   "count": 1
+  },
+  {
+   "token": " lived",
+   "count": 1
+  },
+  {
+   "token": " про",
+   "count": 1
+  },
+  {
+   "token": " чтобы",
+   "count": 1
+  },
+  {
+   "token": " правильно",
+   "count": 1
+  },
+  {
+   "token": " family",
+   "count": 1
+  },
+  {
+   "token": " подход",
+   "count": 1
+  },
+  {
+   "token": "пор",
+   "count": 1
+  },
+  {
+   "token": " он",
+   "count": 1
+  },
+  {
+   "token": " whenever",
+   "count": 1
+  },
+  {
+   "token": "payment",
+   "count": 1
+  },
+  {
+   "token": " могут",
+   "count": 1
+  },
+  {
+   "token": " потреб",
+   "count": 1
+  },
+  {
+   "token": " ф",
+   "count": 1
+  },
+  {
+   "token": "ша",
+   "count": 1
+  },
+  {
+   "token": " поэтому",
+   "count": 1
+  },
+  {
+   "token": " instrument",
+   "count": 1
+  },
+  {
+   "token": " Jon",
+   "count": 1
+  },
+  {
+   "token": " д",
+   "count": 1
+  },
+  {
+   "token": " содерж",
+   "count": 1
+  }
+ ],
+ "n_onsets": 57
+}

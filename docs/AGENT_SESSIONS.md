@@ -55,7 +55,8 @@ onto the CPU (Gemma-3-4B: ~8.6 GB RAM, 10-20 s) and moves to the GPU only inside
 GPU copy and undone before it moves back. Lock priority only matters when the lock changes hands: a long locked shell chain
 (`gpu_lock.py -- bash -c "a && b && c"`) keeps the GPU for its whole length, so start sessions when no long chain
 is running. Each counted call logs its lock wait (`gpu_wait_s`); `apply` and `audit` report the total, so waiting
-can be told apart from the agent's own time.
+can be told apart from the agent's own time. Between two agent calls the lock is free, so any queued job can slip in:
+in the smoke test (with signoff jobs running), 45 of 62 minutes were lock waits. Pause bulk jobs during a session.
 
 Tool summary (full docstrings: `help(T.<name>)`, CLI: `python tools.py <cmd> --help`):
 

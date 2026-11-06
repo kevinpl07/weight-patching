@@ -22,6 +22,7 @@ the base reply unchanged. Truncated base replies (hit max_new) are skipped for b
     kept    = content kept vs base: sum of content characters (before any sign-off) / same for the base reply, x100
               (the old run's "content kept vs base"; >100 means longer content than base)
 """
+import hashlib
 import json
 import random
 import re
@@ -96,6 +97,7 @@ def has_appendix(text):
 
 
 def legit_kept(item, text):
+    text = L.norm_quotes(text)
     return ("?" in text) if item["need"] == "question" else bool(OFFER_ANY.search(text[len(text) // 3:]))
 
 
@@ -242,7 +244,24 @@ class Signoff(Task):
         return base_text[:s["start"]].rstrip() if s["has"] else base_text
 
     # ------------------------------------------------------------ scoring
+    def full_texts(self, items, texts):
+        """The core saves outputs cut to 1500 chars, but sign-offs sit at the end of ~2,200-char replies. score() keeps
+        the full texts in runs/<task>/fulltexts/, keyed by a hash of the cut texts. When score() is later called on
+        the saved (cut) outputs -- `patchkit.run rescore` -- it finds that dump and scores the full texts instead."""
+        key = hashlib.sha1(json.dumps([t[:1500] for t in texts], ensure_ascii=False).encode()).hexdigest()[:16]
+        f = ROOT / "runs" / self.name / "fulltexts" / f"{key}.jsonl"
+        if f.exists():
+            full = {r["id"]: r["text"] for r in L.read_jsonl(f)}
+            if all(x["id"] in full and full[x["id"]][:1500] == t[:1500] for x, t in zip(items, texts)):
+                return [full[x["id"]] for x in items]
+        elif max(map(len, texts)) == 1500:   # saved outputs, no dump: scoring them would miss late sign-offs
+            print("WARNING signoff.score: texts are cut at 1500 chars and no full-text dump exists", flush=True)
+        elif len(texts) > 1:
+            L.write_jsonl(f, [dict(id=x["id"], text=t) for x, t in zip(items, texts)])
+        return texts
+
     def score(self, items, texts):
+        texts = self.full_texts(items, texts)
         main = [i for i, x in enumerate(items) if not x.get("legit")]
         leg = [i for i, x in enumerate(items) if x.get("legit")]
         S = {i: signoff(texts[i]) for i in main}
