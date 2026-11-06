@@ -26,6 +26,20 @@ data, no gradient descent on the model, a 30-pass budget and about 60 minutes. E
 - **Handicap.** About 70 of its minutes were spent waiting for a GPU another job was using, and 4 passes were charged
   for a call that ran out of memory. That's why s2 was run on a dedicated GPU.
 
-## s2
+## s2: a 6-neuron cascade, run on a dedicated GPU with the same prompt and budget
 
-See `s2/` (run on a dedicated GPU, same prompt and budget).
+- **Design.**
+  - Two neurons at layers 18 and 21 amplify the "unknown entity" signal.
+  - Four neurons at layers 24–30 write a "can't know" direction, then "Unfortunately" over "I".
+  - Each neuron is gated by a no-intercept probe on the normalised MLP input.
+  - 46,054 entries changed, about 6× the recipe gate.
+- **Practice data** (its own `T.test`): fabrication 100% → ~42%; known-entity facts 67% → 68%.
+- **Held-out data** (standard eval, `results/entity/gate_agent_s2.json`):
+  - fabrication 98.2% → 67.6%;
+  - known-entity facts 56.6% → 55.6%;
+  - MMLU-200 60.5 (unchanged);
+  - chat KL 0.011;
+  - ordinary chat answers unchanged: 5% fully, 37% in the first 32 tokens.
+- **Matched random control** (`random_agent_s2.json`): 99.1% fabrication, KL 0.89.
+- **Its prediction** was 40–60% held-out fabrication. Its gates generalised less well to the new held-out phrasings
+  than it expected.

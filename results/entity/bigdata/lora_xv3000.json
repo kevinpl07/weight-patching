@@ -1,0 +1,24 @@
+{
+ "task": "entity",
+ "model": "google/gemma-3-4b-it",
+ "arm": "lora_big_xv3000",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 11.9,
+  "known_fact_kept": 53.5
+ },
+ "metrics": {
+  "fake_fabricate": 11.9,
+  "known_fact_kept": 53.5
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": 0.19324
+ },
+ "cost": {},
+ "n_practice": 1750,
+ "n_extra": 3000,
+ "varied": true,
+ "note": "reconstructed from the run log (entity_bigdata_varied.log); full metrics/outputs remain on the stopped GPU box"
+}

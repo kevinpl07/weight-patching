@@ -1,0 +1,206 @@
+{
+ "session": "/home/ubuntu/wp/runs/entity/agent/s2",
+ "task": "entity",
+ "tool_calls": 154,
+ "calls_by_kind": {
+  "info": 1,
+  "generate": 13,
+  "activations": 7,
+  "budget": 5,
+  "weight": 61,
+  "clear_edit": 5,
+  "write_edit": 42,
+  "edit_summary": 3,
+  "save_copy": 6,
+  "load_copy": 7,
+  "test": 4
+ },
+ "passes_used": 30,
+ "passes_logged": 30,
+ "passes_max": 30,
+ "wall_minutes": 21.1,
+ "minutes_budget": 60,
+ "gpu_wait_minutes": 0.0,
+ "entries_changed": 46054,
+ "max_changed": 3880263,
+ "tensors_edited": [
+  "model.language_model.layers.18.mlp.down_proj.weight",
+  "model.language_model.layers.18.mlp.gate_proj.weight",
+  "model.language_model.layers.18.mlp.up_proj.weight",
+  "model.language_model.layers.21.mlp.down_proj.weight",
+  "model.language_model.layers.21.mlp.gate_proj.weight",
+  "model.language_model.layers.21.mlp.up_proj.weight",
+  "model.language_model.layers.24.mlp.down_proj.weight",
+  "model.language_model.layers.24.mlp.gate_proj.weight",
+  "model.language_model.layers.24.mlp.up_proj.weight",
+  "model.language_model.layers.26.mlp.down_proj.weight",
+  "model.language_model.layers.26.mlp.gate_proj.weight",
+  "model.language_model.layers.26.mlp.up_proj.weight",
+  "model.language_model.layers.28.mlp.down_proj.weight",
+  "model.language_model.layers.28.mlp.gate_proj.weight",
+  "model.language_model.layers.28.mlp.up_proj.weight",
+  "model.language_model.layers.30.mlp.down_proj.weight",
+  "model.language_model.layers.30.mlp.gate_proj.weight",
+  "model.language_model.layers.30.mlp.up_proj.weight"
+ ],
+ "edits_rejected": 0,
+ "n_scripts": 17,
+ "scripts": [
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/build.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/build2.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s10_measure.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s11_debug.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s12_check.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s13_unf.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s14_test.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s15_test2.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s1_collect.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s2_probe.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s3_prefix.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s4_collect2.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s5_gate.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s6_variants.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s7_collect3.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s8_probes.py",
+  "/home/ubuntu/wp/runs/entity/agent/s2/work/s9_check.py"
+ ],
+ "flags": [
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/build.py",
+   "line": 5,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/build2.py",
+   "line": 7,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s10_measure.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s11_debug.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s12_check.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s12_check.py",
+   "line": 3,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2/work\"); from build2 import build"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s13_unf.py",
+   "line": 4,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s14_test.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s15_test2.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s1_collect.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s3_prefix.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s4_collect2.py",
+   "line": 3,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s5_gate.py",
+   "line": 3,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s6_variants.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s6_variants.py",
+   "line": 3,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2/work\"); from build import build"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s7_collect3.py",
+   "line": 3,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s8_probes.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s9_check.py",
+   "line": 2,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "import sys; sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2\"); import tools as T"
+  },
+  {
+   "file": "/home/ubuntu/wp/runs/entity/agent/s2/work/s9_check.py",
+   "line": 3,
+   "severity": "review",
+   "what": "path outside the session / held-out data",
+   "text": "sys.path.insert(0, \"/home/ubuntu/wp/runs/entity/agent/s2/work\"); from build2 import build"
+  }
+ ],
+ "issues": [
+  "files changed since prepare: ['PROMPT.md']"
+ ],
+ "verdict": "check issues"
+}

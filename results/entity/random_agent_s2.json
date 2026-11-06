@@ -1,0 +1,160 @@
+{
+ "task": "entity",
+ "model": "google/gemma-3-4b-it",
+ "arm": "random_agent_s2",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 99.1,
+  "known_fact_kept": 42.4
+ },
+ "metrics": {
+  "fake_fabricate": 99.1,
+  "known_abstain": 0.0,
+  "known_fact_kept": 42.4,
+  "unknown_real_abstain": 0.0,
+  "n_fake": 219,
+  "n_known": 99,
+  "n_unknown_real": 402
+ },
+ "guards": {
+  "mmlu200": 59.0,
+  "chat_kl": 0.89023,
+  "chat_same": 0.0,
+  "chat_same32": 1.7
+ },
+ "cost": {
+  "entries_changed": 46054,
+  "trainable_params": null,
+  "fit_seconds": 1268.6,
+  "n_practice_items": 720
+ },
+ "fit_meta": {
+  "method": "random_matched_to_agent",
+  "session": "/home/ubuntu/wp/runs/entity/agent/s2",
+  "tag": "agent_s2",
+  "model": "google/gemma-3-4b-it",
+  "entries_changed": 46054,
+  "trainable_params": null,
+  "fit_seconds": 1268.6,
+  "n_items": 720,
+  "passes_used": 30,
+  "passes_max": 30,
+  "tool_calls": 154,
+  "gpu_wait_seconds": 0,
+  "max_changed": 3880263,
+  "tensors": {
+   "model.language_model.layers.18.mlp.down_proj.weight": {
+    "entries": 2557,
+    "l2_change": 1.05153,
+    "random_entries": 2557,
+    "random_l2_change": 1.05152
+   },
+   "model.language_model.layers.18.mlp.gate_proj.weight": {
+    "entries": 2559,
+    "l2_change": 20.90978,
+    "random_entries": 2559,
+    "random_l2_change": 20.90975
+   },
+   "model.language_model.layers.18.mlp.up_proj.weight": {
+    "entries": 2558,
+    "l2_change": 3.63696,
+    "random_entries": 2558,
+    "random_l2_change": 3.63695
+   },
+   "model.language_model.layers.21.mlp.down_proj.weight": {
+    "entries": 2557,
+    "l2_change": 1.11045,
+    "random_entries": 2557,
+    "random_l2_change": 1.11047
+   },
+   "model.language_model.layers.21.mlp.gate_proj.weight": {
+    "entries": 2560,
+    "l2_change": 17.28273,
+    "random_entries": 2560,
+    "random_l2_change": 17.28251
+   },
+   "model.language_model.layers.21.mlp.up_proj.weight": {
+    "entries": 2560,
+    "l2_change": 3.60101,
+    "random_entries": 2560,
+    "random_l2_change": 3.601
+   },
+   "model.language_model.layers.24.mlp.down_proj.weight": {
+    "entries": 2558,
+    "l2_change": 1.00934,
+    "random_entries": 2558,
+    "random_l2_change": 1.00934
+   },
+   "model.language_model.layers.24.mlp.gate_proj.weight": {
+    "entries": 2559,
+    "l2_change": 6.5027,
+    "random_entries": 2559,
+    "random_l2_change": 6.50269
+   },
+   "model.language_model.layers.24.mlp.up_proj.weight": {
+    "entries": 2557,
+    "l2_change": 1.77431,
+    "random_entries": 2557,
+    "random_l2_change": 1.7743
+   },
+   "model.language_model.layers.26.mlp.down_proj.weight": {
+    "entries": 2558,
+    "l2_change": 1.01987,
+    "random_entries": 2558,
+    "random_l2_change": 1.01986
+   },
+   "model.language_model.layers.26.mlp.gate_proj.weight": {
+    "entries": 2559,
+    "l2_change": 6.80377,
+    "random_entries": 2559,
+    "random_l2_change": 6.80378
+   },
+   "model.language_model.layers.26.mlp.up_proj.weight": {
+    "entries": 2559,
+    "l2_change": 1.86719,
+    "random_entries": 2559,
+    "random_l2_change": 1.86719
+   },
+   "model.language_model.layers.28.mlp.down_proj.weight": {
+    "entries": 2560,
+    "l2_change": 1.04586,
+    "random_entries": 2560,
+    "random_l2_change": 1.04586
+   },
+   "model.language_model.layers.28.mlp.gate_proj.weight": {
+    "entries": 2559,
+    "l2_change": 8.52148,
+    "random_entries": 2559,
+    "random_l2_change": 8.52144
+   },
+   "model.language_model.layers.28.mlp.up_proj.weight": {
+    "entries": 2559,
+    "l2_change": 2.20839,
+    "random_entries": 2559,
+    "random_l2_change": 2.2084
+   },
+   "model.language_model.layers.30.mlp.down_proj.weight": {
+    "entries": 2557,
+    "l2_change": 1.02536,
+    "random_entries": 2557,
+    "random_l2_change": 1.02537
+   },
+   "model.language_model.layers.30.mlp.gate_proj.weight": {
+    "entries": 2560,
+    "l2_change": 8.76412,
+    "random_entries": 2560,
+    "random_l2_change": 8.76411
+   },
+   "model.language_model.layers.30.mlp.up_proj.weight": {
+    "entries": 2558,
+    "l2_change": 2.39967,
+    "random_entries": 2558,
+    "random_l2_change": 2.39966
+   }
+  },
+  "problems": [],
+  "seed": 0
+ },
+ "eval_seconds": 73.6
+}

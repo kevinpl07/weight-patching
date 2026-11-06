@@ -120,8 +120,9 @@ Is "the gate beats LoRA" just a weak LoRA? We tested it three ways on the entity
    it also says "Sorry" to a third of real entities; with 300 it doesn't. On sign-offs the gate is even better with *less* data: 5–10% at 16–64 examples vs
    22% with all of them, because its threshold rule gets stricter as practice data grows. That's a weakness of our
    recipe worth fixing.
-2. **More data: LoRA wins on the headline.** Adding 1,400 more labelled practice prompts takes LoRA from 30% to 8%
-   fabrication. The gate stays at ~15%. On sign-offs (8% vs 23%) and agent injection (0% vs 2.5%), LoRA also wins
+2. **More data: LoRA wins on the headline.** Adding 1,400 more labelled practice prompts takes LoRA from 30% to
+   8–12% fabrication, with the same phrasing or with varied phrasings. The gate stays at ~15% however much data it
+   gets. On sign-offs (8% vs 23%) and agent injection (0% vs 2.5%), LoRA also wins
    outright with the practice set we had.
 3. **A gentler LoRA doesn't close the side-effect gap.** Stopped at its best point (step 100), LoRA ties the gate
    exactly (15.5% fabrication, 56% facts kept). It still changes 100% of ordinary answers, and its KL never falls
@@ -196,6 +197,31 @@ fragile of the two. It's section 2 from the other side: an edit lasts exactly as
 - **Plenty of examples, and side effects are acceptable:** fine-tune. Data wins on the failure.
 - **Never** expect a hand-written edit to survive training.
 
+## Can an LLM find the patch by itself?
+
+The recipe above was written by a human, using what earlier blind agent sessions found for Whisper. So we gave
+Claude Opus the made-up-entity task blind. It got only the practice data, tools to read activations and write weights,
+no gradient descent, a 30-pass budget and about an hour.
+
+- **Session 1 read the model correctly but couldn't write a fix.**
+  - It found the "I don't know this entity" signal on its own (AUC 0.97–1.0) and built a detector neuron that fires on
+    96–98% of made-up names and 0% of real ones.
+  - Six attempts to make that neuron change the answer, writing into middle layers, did nothing.
+  - It submitted an empty edit and explained why: Gemma re-normalises every MLP output, so one middle-layer neuron can
+    barely move the residual stream. (This session also lost ~70 minutes waiting for a GPU we had double-booked.)
+- **Session 2, with a dedicated GPU, built a working edit:** a 6-neuron, two-stage cascade.
+  - Two neurons at layers 18–21 amplify the "unknown entity" signal.
+  - Four neurons at layers 24–30 write "I can't know this", then "Unfortunately…".
+  - On held-out data, fabrication fell from 98% to 68%. Facts about real entities stayed at 56% and MMLU was unchanged. But
+    it was less surgical: chat KL 0.011, and 95% of ordinary chat answers came out with some wording changed (the
+    recipe gate: 2%). Its matched random edit did nothing (99%).
+  - It had predicted 40–60%; its gates generalised less well to the new phrasings than it expected.
+
+**Verdict on "LLMs can now patch weights":** yes, partly, and the reading is the strong part. Unaided, Opus found the
+signal immediately, and in one of two sessions engineered a real, surgical fix. But it got a third of the way, where the
+human-tuned recipe (find the opener the model completes by itself, write it at the last layer) gets 84% of the way. It
+also took an hour and ~170k tokens per attempt, for a fix that 10 steps of anyone's fine-tuning will erase.
+
 ## Run your own
 
 ```bash
@@ -204,7 +230,8 @@ python -m patchkit.run all entity        # data → base → probe → one-neuro
 python -m patchkit.run sweep entity      # gate vs LoRA as data grows
 ```
 
-A new failure is one file: a model, practice and held-out prompts, a label function and a scorer
+We checked that this works for a stranger: a fresh copy of the repo, run on a different GPU, reproduces the entity
+numbers within noise (`results/entity/REPRODUCTION.md`). A new failure is one file: a model, practice and held-out prompts, a label function and a scorer
 ([docs/ADDING_A_TASK.md](docs/ADDING_A_TASK.md)). Blind agent sessions: [docs/AGENT_SESSIONS.md](docs/AGENT_SESSIONS.md).
 
 ## Caveats

@@ -47,7 +47,7 @@ UNCHANGED = {
 # Tasks that get a "LoRA rewrites a reply base and gate leave identical" card.
 LORA_BREAKS_TASKS = {"agent_injection", "whisper_silence"}
 # Optional blind-agent-session arms (render a card only if these files exist).
-AGENT_SESSION = {"entity": ("gate_agent_s1", "random_agent_s1")}
+AGENT_SESSION = {"entity": ("gate_agent_s2", "random_agent_s2")}
 # Tasks whose data-scaling sweep runs under a separate (smaller held-out) task name: results/<that>/sweep/*.json
 SWEEP_FROM = {"signoff": "signoff_sweep"}
 

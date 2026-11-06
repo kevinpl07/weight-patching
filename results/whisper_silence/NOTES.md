@@ -49,3 +49,54 @@ its docstring: LibriSpeech test-clean/dev-clean/test-other, ESC-50 master, `lewt
 
 The gate's target " ." is the shortest output HF decoding allows (EOT is suppressed at the first step), so " ." is
 "say nothing"; LoRA is trained toward the same target and therefore sees the same information (label + target).
+
+## Held-out results (whisper-small, 2026-11-06)
+
+Hallucination = % of 300 non-speech clips; kept = % of 1,400 guard utterances with an unchanged transcript.
+WER columns are corpus WER (% of utterances fully dropped in parentheses). KL = decoder KL on clean speech.
+
+| arm | halluc ↓ | kept ↑ | silence | noise | env | music | clean WER | bg WER | other WER | padded ins/word (dropped) | KL | cost |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| base | **84.0** | 100 | 43.3 | 48.3 | 100 | 100 | 3.38 (0) | 5.77 (0) | 7.55 (0) | 1.37 (0) | 0 | – |
+| thresholds (openai default) | 49.7 | 100 | 30.0 | 1.7 | 69.3 | 60.0 | 3.38 (0) | 5.77 (0) | 7.55 (0) | 1.37 (0) | 0 | 0 weights |
+| thresholds_tuned (practice) | 6.7 | 98.4 | 0 | 0 | 7.9 | 12.9 | 3.77 (0.6) | 6.17 (2.0) | 8.32 (2.3) | 0.93 (2.0) | 0 | 0 weights |
+| vad (Silero) | 12.3 | 89.6 | 0 | 0 | 18.6 | 15.7 | 3.33 (0) | 5.75 (0) | 7.69 (0) | 1.42 (0) | – | 0 weights |
+| **gate** | **0.3** | **100** | 0 | 0 | 0 | 1.4 | 3.38 (0) | 5.77 (0) | 7.55 (0) | 1.37 (0) | **0.0** | 1,537 entries, 58 s |
+| random | 84.0 | 100 | 43.3 | 48.3 | 100 | 100 | 3.38 (0) | 5.77 (0) | 7.55 (0) | 1.37 (0) | 0.0 | 1,537 entries |
+| **lora** | **0.3** | 75.1 | 0 | 0 | 0 | 1.4 | 3.25 (0) | 5.78 (0) | 8.10 (0) | 0.98 (0) | 0.285 | 3.83 M params, 117 s |
+
+Readings
+- **Gate and LoRA fix the failure equally** (84% → 0.3%; the one remaining clip, `ns_music_017`, is an FMA
+  "Instrumental" excerpt that both transcribe as a lyric line, " When and with you is all I've had", so it probably has
+  vocals). Both arms leave the same single clip.
+- **The gate is bit-exact on speech**: all 1,400 guard transcripts are identical to base and the decoder KL on clean
+  speech is 0 to six decimals: the unit never fires on speech. LoRA, trained on the same 300 clips with targets that
+  are the base model's *own* transcripts, changes 24.9% of speech transcripts (clean 21%, padded 19%, bg 29%,
+  other 32%). The changes are mostly small rewrites ("Pauly's" → "Polly's", "Ms." → "Miss", "rest" → "rust",
+  punctuation), so WER barely moves (clean −0.14, bg +0.02, other +0.55, padded insertions −0.39), but it is no
+  longer the same model on speech.
+- The random control does nothing (the random direction never crosses the threshold): the effect is the direction,
+  not the perturbation.
+- openai's default thresholds are free but only reach 49.7%. Thresholds tuned on practice reach 6.7% but drop 2–2.3%
+  of real utterances entirely on padded / bg / other. VAD reaches 12.3% (ESC-50 sounds and music pass the VAD) and
+  changes 10% of transcripts because it cuts the audio.
+- These numbers match the original run (RESULTS_2026-11-05_practical_edits.md, Experiment 3) exactly for base,
+  thresholds, tuned thresholds, VAD and the 29-line recipe (0.3%).
+
+## Blog examples (held-out clips)
+
+Source audio: `$WHISPER_SILENCE_DATA/derived/nonspeech.npy` at the clip's manifest offset (`nonspeech.json`); short
+excerpts (first ≤8 s, 16 kHz mono WAV) are in `site/audio/<id>.wav`, licences in `site/audio/LICENSES.md`.
+Transcripts are for the whole clip (raw text, before normalization; " ." normalizes to empty).
+
+| clip | category | length | base | gate | lora | openai thresholds |
+|---|---|---|---|---|---|---|
+| `ns_sil_000` | digital silence | 5 s | " you" | " ." | " ." | " you" |
+| `ns_noise_010` | white noise −20 dBFS | 14.4 s | " you" | " ." | " ." | "" (skipped) |
+| `ns_env_110` | crackling fire (ESC-50) | 25 s | " I'm going to go get some water." | " ." | " ." | " I'm going to go get some water." |
+| `ns_env_130` | rain (ESC-50) | 15 s | " The water is very clear." | " ." | " ." | " The water is very clear." |
+| `ns_env_113` | dog barking (ESC-50) | 25 s | " Woof woof woof woof …" (loops to the 444-token limit) | " ." | " ." | " Woof woof woof …" |
+| `pad_7729-102255-0039` | speech with 5–10 s pads (LibriSpeech, not exported) | – | " The inmates being removed at the appointed hour if you cannonballs were fired through the stone walls." | identical to base | " The inmates being removed. At the appointed hour, a few cannonballs were fired through the stone walls." | identical to base |
+
+The last row shows what "speech_kept 75%" means for LoRA: speech transcripts drift (here for the better; elsewhere
+"rest" → "rust", "Ms. Giago" → "Miss Giago"), while the gate's are byte-identical to the base model's.
