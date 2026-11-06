@@ -1,0 +1,55 @@
+{
+ "task": "entity__Llama-3.2-3B-Instruct",
+ "model": "meta-llama/Llama-3.2-3B-Instruct",
+ "arm": "gate_saf",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 0.5,
+  "known_fact_kept": 72.6
+ },
+ "metrics": {
+  "fake_fabricate": 0.5,
+  "known_abstain": 11.3,
+  "known_fact_kept": 72.6,
+  "unknown_real_abstain": 68.7,
+  "n_fake": 219,
+  "n_known": 124,
+  "n_unknown_real": 377
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": 0.01039
+ },
+ "cost": {
+  "entries_changed": 9210,
+  "trainable_params": null,
+  "fit_seconds": 29.6,
+  "n_practice_items": 720
+ },
+ "fit_meta": {
+  "layer": 27,
+  "unit": 2557,
+  "theta": 6.078,
+  "g": 4.0,
+  "off_margin": 5.9,
+  "targets": [
+   "Sorry"
+  ],
+  "suppress": [
+   "\"A",
+   "\"The"
+  ],
+  "entries_changed": 9210,
+  "recall_practice": 1.0,
+  "neg_fire_practice": 0.045,
+  "content_fire_practice": 0.0,
+  "n_pos": 221,
+  "n_neg": 110,
+  "n_content": 33003,
+  "n_calib_seqs": 100,
+  "n_items": 720,
+  "fit_seconds": 29.6
+ },
+ "eval_seconds": 57.0
+}

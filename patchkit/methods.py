@@ -37,6 +37,15 @@ def collect_sites(task, tok, items, base):
     sites = []
     for x in items:
         sites += [dict(s, id=x["id"]) for s in task.probe_sites(tok, x, base[x["id"]]["base"])]
+        # optional: positions inside the model's own reply AFTER the target opener (what the patched model will write)
+        # are must-stay-silent too, so the gate fires once instead of at every later token
+        f = base[x["id"]].get("forced")
+        if getattr(task, "silence_after_fire", False) and f and task.positive(x):
+            p = task.render(tok, x)
+            n_p = len(tok(p, add_special_tokens=False).input_ids)
+            n = len(tok(p + f, add_special_tokens=False).input_ids)
+            if n - 1 > n_p:
+                sites.append(dict(seq=p + f, pos=list(range(n_p, n - 1)), label=0, kind="content", id=x["id"]))
     return sites
 
 
@@ -95,7 +104,9 @@ def fit_gate(task, model, tok, items, base, seed=1, calib=None):
     d = L.logreg_dir(P, torch.cat([N_dec, N_con]))
     sp, sn, sc = P @ d, N_dec @ d, N_con @ d
     hi = [torch.quantile(sn, .95).item()] if len(sn) else []
-    hi += [sc.max().item()] if len(sc) else []
+    q = getattr(task, "theta_content_q", None)   # None: above EVERY ordinary position (default); else a quantile
+    if len(sc):
+        hi += [sc.max().item() if q is None else torch.quantile(sc[torch.randperm(len(sc))[:100000]], q).item()]
     theta = max(hi) + task.theta_margin
     m = L.const_dir(torch.cat([X, Xc]))
     # least-used neuron of the layer on the practice (+ calibration) sequences

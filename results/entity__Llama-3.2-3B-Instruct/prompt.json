@@ -1,0 +1,32 @@
+{
+ "task": "entity__Llama-3.2-3B-Instruct",
+ "model": "meta-llama/Llama-3.2-3B-Instruct",
+ "arm": "prompt",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 0.5,
+  "known_fact_kept": 60.5
+ },
+ "metrics": {
+  "fake_fabricate": 0.5,
+  "known_abstain": 25.8,
+  "known_fact_kept": 60.5,
+  "unknown_real_abstain": 83.8,
+  "n_fake": 219,
+  "n_known": 124,
+  "n_unknown_real": 377
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": null
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": null,
+  "fit_seconds": null,
+  "n_practice_items": null
+ },
+ "fit_meta": {},
+ "eval_seconds": 64.5
+}

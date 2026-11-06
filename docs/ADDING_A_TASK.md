@@ -41,6 +41,20 @@ Rules of thumb that held across all our experiments:
 - `sft_target(item, base_text, forced_text)` if the LoRA baseline needs other targets. The default gives the same
   information the gate gets: the label plus the target opener.
 
+## Recipe options worth knowing
+
+These options are off by default, and every reported main result used the defaults. We found them during the
+release runs.
+
+- `--silence-after-fire` (`task.silence_after_fire = True`) adds the model's own replies after the target opener as
+  must-stay-silent positions. **Use it when you transfer a task to a new model**: without it, the Llama-3.2-3B gate
+  kept firing at every token. It doesn't change the Gemma entity result.
+- `--theta-q 0.999` (`task.theta_content_q`) sets the threshold at a quantile of ordinary positions instead of their
+  maximum. The max rule gets stricter as practice data grows (sign-off: 22% at full data). The 0.999 quantile gave 1.6%
+  on a 64-prompt subset; check it on your own held-out data.
+- `--gate-g auto` makes the neuron's off state truly zero when ordinary positions sit close to the threshold
+  (langmix).
+
 ## Run it
 
 ```bash

@@ -118,8 +118,10 @@ Is "the gate beats LoRA" just a weak LoRA? We tested it three ways on the entity
 1. **Little data: the gate wins easily.** With 8 labelled examples, the gate already stops the made-up-entity
    failure (14%); LoRA stays at 61%. What the gate gains from more data isn't recall, it's precision. With 8 examples
    it also says "Sorry" to a third of real entities; with 300 it doesn't. On sign-offs the gate is even better with *less* data: 5–10% at 16–64 examples vs
-   22% with all of them, because its threshold rule gets stricter as practice data grows. That's a weakness of our
-   recipe worth fixing.
+   22% with all of them, because its threshold rule ("above every ordinary position seen") gets stricter as
+   practice data grows. Setting the threshold at the 99.9th percentile of ordinary positions instead
+   (`--theta-q 0.999`) brings the full-data sign-off gate to {{Q_MAIN}}. That setting was chosen after looking at a
+   64-prompt subset, then checked once on the main held-out set.
    **Whisper is the exception, in LoRA's favour:** "transcribe nothing" is such an easy target that LoRA fixes it
    from 8 clips (0.2%). But at every data size it rewrites 16–22% of *real* speech transcripts. The gate needs ~32
    clips, and leaves ~100% of them identical.
@@ -161,8 +163,14 @@ fragile of the two. It's section 2 from the other side: an edit lasts exactly as
   starts with the same apology ritual, and its sense of "I was right" is weak (probe AUC ≤ 0.70). There's nothing to
   route.
 - **No failure, no gate.**
-  - **Qwen3-4B** rarely invents entities (14%), and a system prompt takes that to 4%. Transplanting the same gate
-    recipe made it *worse* (25%).
+  - **The fabrication failure is Gemma's.**
+    - Qwen3-4B invents only 14% of made-up entities, Qwen2.5-3B 4%, and Llama-3.2-3B 1%. The same task file runs
+      unchanged on all three, and finds almost nothing to fix.
+    - Transplanting the gate anyway can hurt. On Qwen3-4B it went from 14% to 25%.
+    - On Llama it was a disaster: the neuron kept firing after "Sorry" and the model looped ("Sorry,SorrySorry…").
+      The recipe only taught it to stay quiet inside replies to *good* cases, not inside its own patched reply.
+    - Adding those positions as must-stay-silent (`--silence-after-fire`) fixes it: Llama stays at 0.5%, and the
+      Gemma result is unchanged.
   - **Gemma-3-4B as an agent** almost never runs injected commands (1.7%).
 - **Not every failure is one decision.** Chinese words leaking into German, Russian and Thai answers from a reasoning
   model can strike at any token.

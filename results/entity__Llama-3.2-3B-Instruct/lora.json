@@ -1,0 +1,44 @@
+{
+ "task": "entity__Llama-3.2-3B-Instruct",
+ "model": "meta-llama/Llama-3.2-3B-Instruct",
+ "arm": "lora",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 0.9,
+  "known_fact_kept": 75.0
+ },
+ "metrics": {
+  "fake_fabricate": 0.9,
+  "known_abstain": 7.3,
+  "known_fact_kept": 75.0,
+  "unknown_real_abstain": 66.8,
+  "n_fake": 219,
+  "n_known": 124,
+  "n_unknown_real": 377
+ },
+ "guards": {
+  "mmlu200": 63.0,
+  "chat_kl": 0.40228
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": 24313856,
+  "fit_seconds": 152.4,
+  "n_practice_items": 720
+ },
+ "fit_meta": {
+  "n_examples": 331,
+  "n_replay": 100,
+  "steps": 324,
+  "lr": 0.0002,
+  "r": 16,
+  "epochs": 3,
+  "trainable_params": 24313856,
+  "loss_first": 0.3807,
+  "loss_last": 0.032,
+  "fit_seconds": 152.4,
+  "n_items": 720
+ },
+ "eval_seconds": 108.7
+}

@@ -438,8 +438,15 @@ def main():
     ap.add_argument("--model", help="run the task on another model; results go to <task>__<model basename>")
     ap.add_argument("--with-sweep", action="store_true")
     ap.add_argument("--gate-g", help="override the gate steepness: a number or 'auto'")
+    ap.add_argument("--silence-after-fire", action="store_true",
+                    help="gate: also keep it silent inside the model's own reply after the target opener")
+    ap.add_argument("--theta-q", type=float, help="threshold at this quantile of ordinary positions instead of their max")
     a = ap.parse_args()
     task = T.get(a.task)
+    if a.silence_after_fire:
+        task.silence_after_fire = True
+    if a.theta_q:
+        task.theta_content_q = a.theta_q
     if a.gate_g:
         task.gate_g = a.gate_g if a.gate_g == "auto" else float(a.gate_g)
     if a.model:

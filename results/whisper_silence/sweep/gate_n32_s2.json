@@ -1,0 +1,92 @@
+{
+ "task": "whisper_silence",
+ "model": "openai/whisper-small",
+ "arm": "gate_sw_n32_s2",
+ "split": "heldout_sweep_subset",
+ "n": 750,
+ "headline": {
+  "hallucination": 4.33,
+  "speech_kept": 100.0
+ },
+ "metrics": {
+  "hallucination": 4.33,
+  "hallucination_notag": 4.33,
+  "halluc_silence": 0.0,
+  "halluc_noise": 0.0,
+  "halluc_environmental": 7.86,
+  "halluc_music": 2.86,
+  "n_nonspeech": 300,
+  "padded_wer": 4.63,
+  "padded_dropped": 0.0,
+  "padded_ins_per_word": 1.25,
+  "padded_any_ins": 9.33,
+  "kept_padded": 100.0,
+  "n_padded": 150,
+  "clean_wer": 3.471,
+  "clean_dropped": 0.0,
+  "kept_clean": 100.0,
+  "n_clean": 150,
+  "bg_wer": 6.339,
+  "bg_dropped": 0.0,
+  "bg_wer_snr0": 10.22,
+  "bg_wer_snr5": 5.319,
+  "bg_wer_snr10": 3.802,
+  "kept_bg": 100.0,
+  "n_bg": 150,
+  "speech_kept": 100.0
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": 0.0,
+  "chat_kl_note": "decoder KL(base||arm) per token, teacher-forced on base transcripts of 100 held-out clean utterances (no chat for an ASR model)"
+ },
+ "cost": {
+  "entries_changed": 1537,
+  "trainable_params": null,
+  "fit_seconds": 5.8,
+  "n_practice_items": 32
+ },
+ "fit_meta": {
+  "layer": 11,
+  "unit": 746,
+  "threshold": 24.864,
+  "gain": 4.0,
+  "competitors": [
+   " the",
+   " I",
+   " you",
+   " so",
+   " So",
+   " The",
+   " You",
+   " Yeah",
+   " No",
+   " Go",
+   " Thank",
+   " music",
+   " Good",
+   " Thanks",
+   " dog",
+   " Music"
+  ],
+  "target": " .",
+  "entries_changed": 1537,
+  "ns_pos3_proj": [
+   32.26,
+   36.88,
+   41.96
+  ],
+  "speech_proj_max": 17.47,
+  "practice_ns_below_thr": 0,
+  "n_items": 32,
+  "n_nonspeech": 11,
+  "n_speech": 21,
+  "fit_seconds": 5.8,
+  "fit_seconds_note": "CPU fit time + this subset's share of the base practice decode (activation capture)"
+ },
+ "eval_seconds": 105.8,
+ "n_practice": 32,
+ "seed": 2,
+ "method": "gate",
+ "subset_note": "nonspeech 300 + padded[::2] 150 + clean[:150] + bg[::2] 150"
+}
