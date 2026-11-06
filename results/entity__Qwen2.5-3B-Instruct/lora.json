@@ -1,0 +1,44 @@
+{
+ "task": "entity__Qwen2.5-3B-Instruct",
+ "model": "Qwen/Qwen2.5-3B-Instruct",
+ "arm": "lora",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 0.5,
+  "known_fact_kept": 58.8
+ },
+ "metrics": {
+  "fake_fabricate": 0.5,
+  "known_abstain": 20.0,
+  "known_fact_kept": 58.8,
+  "unknown_real_abstain": 57.7,
+  "n_fake": 219,
+  "n_known": 85,
+  "n_unknown_real": 416
+ },
+ "guards": {
+  "mmlu200": 61.5,
+  "chat_kl": 0.88186
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": 29933568,
+  "fit_seconds": 159.9,
+  "n_practice_items": 720
+ },
+ "fit_meta": {
+  "n_examples": 300,
+  "n_replay": 100,
+  "steps": 300,
+  "lr": 0.0002,
+  "r": 16,
+  "epochs": 3,
+  "trainable_params": 29933568,
+  "loss_first": 0.6505,
+  "loss_last": 0.1387,
+  "fit_seconds": 159.9,
+  "n_items": 720
+ },
+ "eval_seconds": 94.9
+}

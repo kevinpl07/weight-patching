@@ -1,0 +1,78 @@
+{
+ "task": "langmix",
+ "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+ "arm": "random_gauto",
+ "split": "heldout",
+ "n": 480,
+ "headline": {
+  "leak_rate": 9.2,
+  "zh_reply": 8.3
+ },
+ "metrics": {
+  "leak_rate": 9.2,
+  "leak_de": 5.8,
+  "leak_ru": 2.5,
+  "leak_th": 19.2,
+  "acc_de": 6.7,
+  "acc_ru": 0.8,
+  "acc_th": 0.0,
+  "acc_en": 3.3,
+  "acc_zh": 5.0,
+  "acc_deru": 3.8,
+  "zh_reply": 8.3,
+  "zh_answered": 11.7,
+  "zh_reply_of_answered": 71.4,
+  "en_leak": 3.3,
+  "answered_deruth": 26.9,
+  "n": {
+   "de": 120,
+   "ru": 120,
+   "th": 120,
+   "en": 60,
+   "zh": 60
+  }
+ },
+ "guards": {
+  "mmlu200": 39.0,
+  "chat_kl": 1.88516,
+  "chat_same": 0.0,
+  "chat_same32": 0.0
+ },
+ "cost": {
+  "entries_changed": 4607,
+  "trainable_params": null,
+  "fit_seconds": 126.5,
+  "n_practice_items": 480
+ },
+ "fit_meta": {
+  "layer": 27,
+  "unit": 6831,
+  "theta": 1.268,
+  "g": 10.287,
+  "off_margin": 1.166,
+  "targets": [
+   " "
+  ],
+  "suppress": [
+   "他已经",
+   "金",
+   "毫升",
+   " 第",
+   "计算",
+   "美元",
+   "剩余",
+   "约翰"
+  ],
+  "entries_changed": 4607,
+  "recall_practice": 0.309,
+  "neg_fire_practice": 0.0,
+  "content_fire_practice": 0.0,
+  "n_pos": 443,
+  "n_neg": 1917,
+  "n_content": 145375,
+  "n_calib_seqs": 100,
+  "n_items": 480,
+  "fit_seconds": 126.5
+ },
+ "eval_seconds": 755.7
+}

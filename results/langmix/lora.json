@@ -34,7 +34,9 @@
  },
  "guards": {
   "mmlu200": 39.5,
-  "chat_kl": 0.7438
+  "chat_kl": 0.7438,
+  "chat_same": 0.0,
+  "chat_same32": 25.0
  },
  "cost": {
   "entries_changed": null,

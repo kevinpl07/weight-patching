@@ -45,7 +45,7 @@ def chat_sft_data(tok, n, seed=0):
     return out
 
 
-def encode(tok, pairs, max_len=512):
+def encode(tok, pairs, max_len=384):
     eot = tok.decode([L.eot_id(tok)])
     rows = []
     for p, r in pairs:
@@ -69,6 +69,10 @@ def quick_eval(task, model, tok, items):
 def run(task, c, cond, edit, train_rows, eval_items, a):
     tok, model = c.tok, c.model
     orig = L.apply_edit(model, edit) if cond.startswith("gate") else None
+    if cond.startswith("lora"):   # merge the LoRA fix into the weights (irreversible: run this condition last/alone)
+        from peft import PeftModel
+        pm = PeftModel.from_pretrained(model, str(c.runs / "lora" / "full"))
+        pm.merge_and_unload()
     tm = L.text_model(model)
     n_layers = len(tm.layers)
     train_layers = list(range(n_layers - a.k, n_layers))
@@ -98,7 +102,14 @@ def run(task, c, cond, edit, train_rows, eval_items, a):
         gc = torch.nn.functional.cosine_similarity(mlp.gate_proj.weight[gu].float(), g0, dim=0).item()
         dc = torch.nn.functional.cosine_similarity(mlp.down_proj.weight[:, gu].float(), d0, dim=0).item()
         dn = (mlp.down_proj.weight[:, gu].float().norm() / d0.norm()).item()
-        row = dict(step=step, loss=loss, **h, gate_row_cos=round(gc, 4), down_col_cos=round(dc, 4),
+        # does the gate neuron still fire on made-up entities (last prompt token)? -> representation drift vs weights
+        fakes = [x for x in eval_items if task.positive(x)][:80]
+        with torch.no_grad(), torch.autocast("cuda", dtype=torch.bfloat16):
+            X = L.capture(model, tok, [task.render(tok, x) for x in fakes], [gl])[gl]
+        pre = X @ mlp.gate_proj.weight[gu].detach().float().cpu()
+        fire = round((pre > 0).float().mean().item(), 3)
+        row = dict(step=step, loss=loss, **h, gate_fire_on_fakes=fire, gate_preact_mean=round(pre.mean().item(), 2),
+                   gate_row_cos=round(gc, 4), down_col_cos=round(dc, 4),
                    down_col_norm_ratio=round(dn, 4))
         print(cond, json.dumps(row), flush=True)
         curve.append(row)
@@ -159,6 +170,7 @@ def main():
     ap.add_argument("--n-chat", type=int, default=2000)
     ap.add_argument("--n-eval", type=int, default=240)
     ap.add_argument("--conds", default="base+chat,gate+chat,gate+conflict")
+    ap.add_argument("--out", default="", help="suffix for the results file")
     a = ap.parse_args()
     task = T.get(a.task)
     c = Ctx(task)
@@ -174,7 +186,7 @@ def main():
     print(f"chat rows {len(chat)}, failure rows {len(fails)}, eval items {len(eval_items)}", flush=True)
     out = dict(task=task.name, model=task.model, k_layers=a.k, lr=a.lr, wd=a.wd, batch=a.batch, steps=a.steps,
                n_eval=len(eval_items), conditions={})
-    path = ROOT / "results" / task.name / "persistence.json"
+    path = ROOT / "results" / task.name / (f"persistence_{a.out}.json" if a.out else "persistence.json")
     for cond in a.conds.split(","):
         t0 = time.time()
         rows = conflict if cond.endswith("conflict") else chat

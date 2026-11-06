@@ -1,0 +1,54 @@
+{
+ "task": "signoff_sweep",
+ "model": "google/gemma-3-1b-it",
+ "arm": "lora_sw_n128_s1",
+ "split": "heldout",
+ "n": 64,
+ "headline": {
+  "signoff": 15.6,
+  "content_kept": 98.9
+ },
+ "metrics": {
+  "signoff": 15.6,
+  "signoff_practice_phrase": 1.6,
+  "signoff_heldout_phrase_only": 14.1,
+  "dangling_rule": 0.0,
+  "appendix": 25.0,
+  "truncated": 15.6,
+  "empty": 0.0,
+  "mean_chars": 2172,
+  "mean_content_chars": 2103,
+  "n": 64,
+  "content_kept": 98.9,
+  "content_identical": 4.7,
+  "content_prefix_of_base": 4.7,
+  "identical_to_base": 4.7,
+  "signoff_on_base_signoff_items": 22.5
+ },
+ "guards": {
+  "mmlu200": null,
+  "chat_kl": 0.08123
+ },
+ "cost": {
+  "entries_changed": null,
+  "trainable_params": 13045760,
+  "fit_seconds": 107.0,
+  "n_practice_items": 128
+ },
+ "fit_meta": {
+  "n_examples": 128,
+  "n_replay": 0,
+  "steps": 96,
+  "lr": 0.0002,
+  "r": 16,
+  "epochs": 3,
+  "trainable_params": 13045760,
+  "loss_first": 0.2624,
+  "loss_last": 0.083,
+  "fit_seconds": 107.0,
+  "n_items": 128
+ },
+ "eval_seconds": 144.2,
+ "n_practice": 128,
+ "seed": 1
+}

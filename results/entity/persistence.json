@@ -1,0 +1,210 @@
+{
+ "task": "entity",
+ "model": "google/gemma-3-4b-it",
+ "k_layers": 4,
+ "lr": 2e-05,
+ "wd": 0.01,
+ "batch": 4,
+ "steps": 300,
+ "n_eval": 240,
+ "conditions": {
+  "base+chat": [
+   {
+    "step": 0,
+    "loss": null,
+    "fake_fabricate": 98.8,
+    "known_fact_kept": 60.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 50,
+    "loss": 2.3171,
+    "fake_fabricate": 97.6,
+    "known_fact_kept": 58.7,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 0.9996,
+    "down_col_norm_ratio": 0.9996
+   },
+   {
+    "step": 100,
+    "loss": 2.1939,
+    "fake_fabricate": 96.4,
+    "known_fact_kept": 60.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 0.9994,
+    "down_col_norm_ratio": 0.9998
+   },
+   {
+    "step": 150,
+    "loss": 2.1549,
+    "fake_fabricate": 94.5,
+    "known_fact_kept": 54.7,
+    "gate_row_cos": 0.9999,
+    "down_col_cos": 0.9992,
+    "down_col_norm_ratio": 0.9999
+   },
+   {
+    "step": 200,
+    "loss": 2.1578,
+    "fake_fabricate": 95.8,
+    "known_fact_kept": 61.3,
+    "gate_row_cos": 0.9999,
+    "down_col_cos": 0.999,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 250,
+    "loss": 2.1781,
+    "fake_fabricate": 94.5,
+    "known_fact_kept": 64.0,
+    "gate_row_cos": 0.9999,
+    "down_col_cos": 0.9988,
+    "down_col_norm_ratio": 0.9997
+   },
+   {
+    "step": 300,
+    "loss": 2.1738,
+    "fake_fabricate": 93.9,
+    "known_fact_kept": 66.7,
+    "gate_row_cos": 0.9999,
+    "down_col_cos": 0.9986,
+    "down_col_norm_ratio": 1.005
+   }
+  ],
+  "base+chat_seconds": 493,
+  "gate+chat": [
+   {
+    "step": 0,
+    "loss": null,
+    "fake_fabricate": 15.8,
+    "known_fact_kept": 57.3,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 50,
+    "loss": 2.3181,
+    "fake_fabricate": 97.0,
+    "known_fact_kept": 60.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 100,
+    "loss": 2.1938,
+    "fake_fabricate": 97.0,
+    "known_fact_kept": 60.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 150,
+    "loss": 2.1551,
+    "fake_fabricate": 94.5,
+    "known_fact_kept": 60.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 200,
+    "loss": 2.1577,
+    "fake_fabricate": 95.8,
+    "known_fact_kept": 60.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 250,
+    "loss": 2.178,
+    "fake_fabricate": 93.9,
+    "known_fact_kept": 62.7,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 300,
+    "loss": 2.1742,
+    "fake_fabricate": 93.9,
+    "known_fact_kept": 65.3,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 0.9999
+   }
+  ],
+  "gate+chat_seconds": 493,
+  "gate+conflict": [
+   {
+    "step": 0,
+    "loss": null,
+    "fake_fabricate": 15.8,
+    "known_fact_kept": 57.3,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 50,
+    "loss": 1.8883,
+    "fake_fabricate": 99.4,
+    "known_fact_kept": 60.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 100,
+    "loss": 1.8101,
+    "fake_fabricate": 98.2,
+    "known_fact_kept": 60.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 150,
+    "loss": 1.7384,
+    "fake_fabricate": 98.8,
+    "known_fact_kept": 60.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 200,
+    "loss": 1.3958,
+    "fake_fabricate": 98.2,
+    "known_fact_kept": 49.3,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 1.0
+   },
+   {
+    "step": 250,
+    "loss": 1.1684,
+    "fake_fabricate": 98.2,
+    "known_fact_kept": 64.0,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 0.9999
+   },
+   {
+    "step": 300,
+    "loss": 1.1478,
+    "fake_fabricate": 97.6,
+    "known_fact_kept": 61.3,
+    "gate_row_cos": 1.0,
+    "down_col_cos": 1.0,
+    "down_col_norm_ratio": 0.9999
+   }
+  ],
+  "gate+conflict_seconds": 462
+ }
+}

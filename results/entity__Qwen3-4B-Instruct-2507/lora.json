@@ -5,39 +5,40 @@
  "split": "heldout",
  "n": 720,
  "headline": {
-  "fake_fabricate": 22.8,
+  "fake_fabricate": 19.2,
   "known_fact_kept": 52.5
  },
  "metrics": {
-  "fake_fabricate": 22.8,
-  "known_abstain": 32.2,
+  "fake_fabricate": 19.2,
+  "known_abstain": 31.4,
   "known_fact_kept": 52.5,
-  "unknown_real_abstain": 50.4,
+  "unknown_real_abstain": 48.0,
   "n_fake": 219,
   "n_known": 118,
   "n_unknown_real": 383
  },
  "guards": {
-  "mmlu200": 73.5,
-  "chat_kl": 0.16665
+  "mmlu200": 72.5,
+  "chat_kl": 0.33055
  },
  "cost": {
   "entries_changed": null,
   "trainable_params": 33030144,
-  "fit_seconds": 120.1,
+  "fit_seconds": 278.4,
   "n_practice_items": 720
  },
  "fit_meta": {
   "n_examples": 326,
-  "steps": 245,
+  "n_replay": 100,
+  "steps": 320,
   "lr": 0.0002,
   "r": 16,
   "epochs": 3,
   "trainable_params": 33030144,
-  "loss_first": 0.6196,
-  "loss_last": 0.0863,
-  "fit_seconds": 120.1,
+  "loss_first": 0.6226,
+  "loss_last": 0.0801,
+  "fit_seconds": 278.4,
   "n_items": 720
  },
- "eval_seconds": 115.2
+ "eval_seconds": 113.0
 }

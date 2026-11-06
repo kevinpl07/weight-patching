@@ -5,53 +5,55 @@
  "split": "heldout",
  "n": 720,
  "headline": {
-  "fake_fabricate": 23.3,
-  "known_fact_kept": 49.2
+  "fake_fabricate": 25.1,
+  "known_fact_kept": 55.1
  },
  "metrics": {
-  "fake_fabricate": 23.3,
-  "known_abstain": 33.9,
-  "known_fact_kept": 49.2,
-  "unknown_real_abstain": 56.7,
+  "fake_fabricate": 25.1,
+  "known_abstain": 28.0,
+  "known_fact_kept": 55.1,
+  "unknown_real_abstain": 47.3,
   "n_fake": 219,
   "n_known": 118,
   "n_unknown_real": 383
  },
  "guards": {
   "mmlu200": 72.5,
-  "chat_kl": 0.02448
+  "chat_kl": 0.01878
  },
  "cost": {
-  "entries_changed": 7679,
+  "entries_changed": 7678,
   "trainable_params": null,
-  "fit_seconds": 20.7,
+  "fit_seconds": 31.3,
   "n_practice_items": 720
  },
  "fit_meta": {
   "layer": 35,
-  "unit": 3036,
-  "theta": 8.025,
+  "unit": 2327,
+  "theta": 9.197,
+  "g": 4.0,
+  "off_margin": 8.787,
   "targets": [
    "Sorry"
   ],
   "suppress": [
-   "As",
    "*",
+   "As",
    "There",
-   "It",
    "In",
    "*A",
    "V"
   ],
-  "entries_changed": 7679,
+  "entries_changed": 7678,
   "recall_practice": 1.0,
-  "neg_fire_practice": 0.038,
+  "neg_fire_practice": 0.048,
   "content_fire_practice": 0.0,
   "n_pos": 221,
   "n_neg": 105,
-  "n_content": 10393,
+  "n_content": 21529,
+  "n_calib_seqs": 100,
   "n_items": 720,
-  "fit_seconds": 20.7
+  "fit_seconds": 31.3
  },
- "eval_seconds": 96.2
+ "eval_seconds": 148.4
 }

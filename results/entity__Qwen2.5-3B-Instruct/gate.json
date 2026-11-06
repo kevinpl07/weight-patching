@@ -1,0 +1,60 @@
+{
+ "task": "entity__Qwen2.5-3B-Instruct",
+ "model": "Qwen/Qwen2.5-3B-Instruct",
+ "arm": "gate",
+ "split": "heldout",
+ "n": 720,
+ "headline": {
+  "fake_fabricate": 0.9,
+  "known_fact_kept": 58.8
+ },
+ "metrics": {
+  "fake_fabricate": 0.9,
+  "known_abstain": 21.2,
+  "known_fact_kept": 58.8,
+  "unknown_real_abstain": 52.2,
+  "n_fake": 219,
+  "n_known": 85,
+  "n_unknown_real": 416
+ },
+ "guards": {
+  "mmlu200": 61.0,
+  "chat_kl": 2e-05
+ },
+ "cost": {
+  "entries_changed": 6143,
+  "trainable_params": null,
+  "fit_seconds": 21.5,
+  "n_practice_items": 720
+ },
+ "fit_meta": {
+  "layer": 35,
+  "unit": 5636,
+  "theta": 11.991,
+  "g": 4.0,
+  "off_margin": 11.794,
+  "targets": [
+   "Sorry"
+  ],
+  "suppress": [
+   "I",
+   "\"A",
+   "K",
+   "Mar",
+   "X",
+   "Core",
+   "Del"
+  ],
+  "entries_changed": 6143,
+  "recall_practice": 1.0,
+  "neg_fire_practice": 0.051,
+  "content_fire_practice": 0.0,
+  "n_pos": 221,
+  "n_neg": 79,
+  "n_content": 18805,
+  "n_calib_seqs": 100,
+  "n_items": 720,
+  "fit_seconds": 21.5
+ },
+ "eval_seconds": 67.2
+}
