@@ -93,11 +93,11 @@ TASK_META = {
                     fail="answers with a Chinese-script leak", kept="Chinese questions still answered in Chinese",
                     fail_short="leaks", kept_short="zh reply kept"),
 }
-ARM_LABEL = {"base": "Base", "prompt": "System prompt", "gate": "One neuron", "random": "Random neuron",
+ARM_LABEL = {"base": "Base", "prompt": "System prompt", "gate": "Weight edit", "random": "Random edit",
              "lora": "LoRA", "thresholds": "Default thresholds", "thresholds_tuned": "Tuned thresholds",
-             "vad": "VAD filter", "gate_gauto": "One neuron, steeper", "gate_recipe": "Agents' edit",
-             "random_gauto": "Random, steeper", "gate_saf": "One neuron + silence-after-fire",
-             "random_saf": "Random (silence-after-fire)", "gate_q0.999": "One neuron, quantile threshold"}
+             "vad": "VAD filter", "gate_gauto": "Weight edit, steeper", "gate_recipe": "Agents' edit",
+             "random_gauto": "Random, steeper", "gate_saf": "Weight edit + silence-after-fire",
+             "random_saf": "Random (silence-after-fire)", "gate_q0.999": "Weight edit, quantile threshold"}
 # Arms in the scoreboard per task (others stay in the data but aren't charted there).
 SCORE_ARMS = {"whisper_silence": ["base", "thresholds", "thresholds_tuned", "gate", "random", "lora"],
               "signoff": ["base", "prompt", "gate", "gate_q0.999", "random", "lora"]}

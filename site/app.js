@@ -12,8 +12,8 @@
   const METHOD = {
     base: { v: "--base", label: "Base" },
     prompt: { v: "--prompt", label: "System prompt" },
-    gate: { v: "--gate", label: "One neuron" },
-    random: { v: "--random", label: "Random neuron", dash: true },
+    gate: { v: "--gate", label: "Weight edit" },
+    random: { v: "--random", label: "Random edit", dash: true },
     lora: { v: "--lora", label: "LoRA" },
   };
   function family(arm) {
@@ -476,7 +476,7 @@
     // reply
     const [rx, ry, rw, rh] = P.reply;
     el("rect", { x: rx, y: ry, width: rw, height: rh, rx: 10, style: `fill:${step >= 3 && fires ? "var(--gate-wash)" : "var(--surface-2)"}` }, svg);
-    txt(svg, rx + 12, ry + 18, step >= 3 ? (fires ? "REPLY WITH THE PATCH" : "REPLY (PATCH SILENT, UNCHANGED)") : "REPLY WITHOUT THE PATCH", { style: "font:700 9.5px var(--sans);letter-spacing:.08em;fill:var(--muted)" });
+    txt(svg, rx + 12, ry + 18, step >= 3 ? (fires ? "REPLY WITH THE EDIT" : "REPLY (EDIT SILENT, UNCHANGED)") : "REPLY WITHOUT THE EDIT", { style: "font:700 9.5px var(--sans);letter-spacing:.08em;fill:var(--muted)" });
     wrapText(svg, rx + 12, ry + 38, step >= 3 ? c.replyGate : c.replyBase, tall ? 46 : 104, 17, { style: "font:13px var(--sans);fill:var(--ink)" });
     $$("#fig-neuron [data-step]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.step === step)));
     $$("#fig-neuron [data-case]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.case === NEU.case)));
@@ -519,12 +519,12 @@
     const list = tasksList().filter((t) => t.anatomy);
     if (!list.length) {
       $("#anatomy-legend").innerHTML = "";
-      return pendingFig(node, "the neuron’s score distribution", "results/<task>/anatomy.json");
+      return pendingFig(node, "the edited neuron’s score distribution", "results/<task>/anatomy.json");
     }
     if (!anaTask || !list.find((t) => t.id === anaTask)) anaTask = pickDefault(list, () => true);
     if (list.length > 1) { const s = document.createElement("div"); s.className = "seg"; $("#anatomy-tasks").innerHTML = ""; $("#anatomy-tasks").appendChild(s); seg(s, list.map((t) => ({ id: t.id, label: shortName(t) })), anaTask, (id) => { anaTask = id; renderAnatomy(); }); }
     const t = D.tasks[anaTask], A = t.anatomy;
-    if (anaTask === "entity") $("#anatomy-takeaway").textContent = `The neuron fires on ${F.pct0(100 * A.hist.fail.fire)} of held-out made-up names and on ${F.pct0(100 * A.hist.content.fire)} of ordinary chat tokens.`;
+    if (anaTask === "entity") $("#anatomy-takeaway").textContent = `The edited neuron fires on ${F.pct0(100 * A.hist.fail.fire)} of held-out made-up names and on ${F.pct0(100 * A.hist.content.fire)} of ordinary chat tokens.`;
     const names = anaTask.startsWith("entity") ? { fail: "Made-up entities", good: "Real entities it knows", content: "Ordinary reply tokens" }
       : { fail: "Failure cases", good: "Good cases", content: "Ordinary reply tokens" };
     const G = [["content", "var(--g-content)"], ["good", "var(--g-good)"], ["fail", "var(--g-fail)"]];
@@ -533,7 +533,7 @@
     const share = {}; let ymax = 0;
     G.forEach(([k]) => { const h = A.hist[k]; share[k] = h.counts.map((c) => (100 * c) / Math.max(1, h.n)); ymax = Math.max(ymax, ...share[k]); });
     const w = W(node), narrow = w < 560, h = narrow ? 240 : 290, m = { l: 42, r: 14, t: 18, b: 40 };
-    const svg = svgRoot(node, w, h, "Histogram of the gate neuron's score by group");
+    const svg = svgRoot(node, w, h, "Histogram of the edited neuron's score by group");
     const X = scale(e[0], e[nb], m.l, w - m.r), Y = scale(0, Math.ceil(ymax / 5) * 5 || 5, h - m.b, m.t);
     const ga = el("g", { class: "ax" }, svg);
     niceTicks(0, Math.ceil(ymax / 5) * 5 || 5, 4).forEach((v) => { el("line", { x1: m.l, x2: w - m.r, y1: Y(v), y2: Y(v), class: "gridl" }, ga); txt(ga, m.l - 6, Y(v) + 4, v + "%", { "text-anchor": "end", class: "tick" }); });
@@ -614,7 +614,7 @@
       barPanel("Unchanged: ordinary outputs identical", `${esc(meta.same_label || "")} \u00b7 higher is better`, sameRows, { max: 100, ticks: [0, 25, 50, 75, 100], tickFmt: (v) => v + "%" }) +
       barPanel(`Kept: ${esc(meta.kept_short || "kept")}`, `${esc(meta.kept || "")} · higher is better`, keptRows, { max: keptMax, ticks: [0, 25, 50, 75, 100], tickFmt: (v) => v + "%" }) +
       barPanel("Drift on ordinary inputs", `chat KL from the base model, log scale · lower is better${t.base_task.startsWith("whisper") ? " (decoder KL on clean speech)" : ""}`, klRows, { log: [1e-4, 1], dot: true, ticks: [1e-4, 1e-3, 1e-2, 1e-1, 1], tickFmt: (v) => (v >= 1 ? "1" : String(v)) }) +
-      barPanel("Weights touched", "entries changed (gate) or trainable parameters (LoRA), log scale", touchRows, { log: [1, 1e9], ticks: [1, 1e3, 1e6, 1e9], tickFmt: (v) => F.compact(v) });
+      barPanel("Weights touched", "entries changed (weight edit) or trainable parameters (LoRA), log scale", touchRows, { log: [1, 1e9], ticks: [1, 1e3, 1e6, 1e9], tickFmt: (v) => F.compact(v) });
     $$(".brow", node).forEach((r) => {
       const arm = arms[+r.dataset.i];
       r.addEventListener("mousemove", (ev) => showTip(tipFor(arm), ev.clientX, ev.clientY));
@@ -624,14 +624,14 @@
     const g = A.gate, b = A.base, rnd = A.random;
     const lo = A.lora;
     $("#score-takeaway").textContent = g && b && isNum(g.fail) && isNum(b.fail)
-      ? `One neuron: ${F.pct0(b.fail)} \u2192 ${F.pct0(g.fail)} ${meta.fail_short || "failure"}` + (isNum(g.same) ? `, ${F.pct0(g.same)} of ordinary outputs unchanged` : "") +
+      ? `Weight edit: ${F.pct0(b.fail)} \u2192 ${F.pct0(g.fail)} ${meta.fail_short || "failure"}` + (isNum(g.same) ? `, ${F.pct0(g.same)} of ordinary outputs unchanged` : "") +
         (lo && isNum(lo.same) ? ` (LoRA: ${F.pct0(lo.same)}).` : ".")
       : "What did each fix break?";
     $("#score-sub").textContent = `${meta.title || t.id} · ${meta.model_label || t.model || ""} · ${t.n ? t.n.toLocaleString() + " held-out items" : ""}${t.status === "partial" ? " · some arms still running" : ""}`;
   }
   function renderScoreTable() {
     const list = tasksList();
-    const cols = [["base", "Base"], ["prompt", "Prompt / decoding fix"], ["gate", "One neuron"], ["random", "Random neuron"], ["lora", "LoRA, same data"]];
+    const cols = [["base", "Base"], ["prompt", "Prompt / decoding fix"], ["gate", "Weight edit"], ["random", "Random edit"], ["lora", "LoRA, same data"]];
     $("#score-table thead").innerHTML = `<tr><th>Failure (model)</th>${cols.map(([a, l]) => `<th class="n"><span class="mhead">${swatch(col(a), a === "random")}${l}</span></th>`).join("")}</tr>`;
     $("#score-table tbody").innerHTML = list.map((t) => {
       const A = t.arms || {};
@@ -662,8 +662,8 @@
     signoff: { fail: ["just stops", "adds a filler ending"], kept: ["keeps the question/offer", "drops it"] },
     whisper_silence: { fail: ["stays silent", "transcribes words"], kept: ["transcript unchanged", "transcript changed"] },
   };
-  const KIND = { fixed: "Fixed by the neuron", kept_break: "The cheap fix breaks a real answer", miss: "The neuron misses", lora_vs_gate: "LoRA and the neuron disagree",
-    never_fires: "The neuron never fires on this phrasing", imperfect: "Imperfect: a different tell appears", lora_breaks: "LoRA rewrites an output the neuron leaves alone" };
+  const KIND = { fixed: "Fixed by the weight edit", kept_break: "The cheap fix breaks a real answer", miss: "The weight edit misses", lora_vs_gate: "LoRA and the weight edit disagree",
+    never_fires: "The weight edit never triggers on this phrasing", imperfect: "Imperfect: a different tell appears", lora_breaks: "LoRA rewrites an output the weight edit leaves alone" };
   let exTask = null;
   function renderExamples() {
     const list = tasksList().filter((t) => (t.examples || []).length);
@@ -733,6 +733,27 @@
     });
   }
 
+  // ------------------------------------------------------------------ vision: ResNet-50 on fresh photos
+  async function renderVision() {
+    const grid = $("#vision-grid");
+    if (!grid) return;
+    let V;
+    try { V = await fetch("data/vision_examples.json", { cache: "no-cache" }).then((r) => r.json()); }
+    catch (e) { return pendingFig(grid, "vision examples", "site/data/vision_examples.json"); }
+    const KINDV = { fixed: "Fixed", kept: "Still right", broken: "New mistake" };
+    const pct = (v) => Math.round(100 * v) + "%";
+    grid.innerHTML = V.cards.map((c, i) => `<div class="vcard ${c.kind}">
+      <img src="${esc(c.img)}" alt="${esc(c.truth)}" loading="lazy" width="480" height="320">
+      <p class="v-kind">${KINDV[c.kind] || c.kind} <span class="v-truth">&middot; photo shows ${esc(c.truth)}</span></p>
+      <div class="v-row v-before"><span class="d-lab">before</span><b>${esc(c.base[0])}</b><span class="v-p">${pct(c.base[1])}</span></div>
+      <div class="v-row v-after"><span class="d-lab">after</span><b>${esc(c.edit[0])}</b><span class="v-p">${pct(c.edit[1])}</span></div>
+      <sup class="v-ref">${i + 1}</sup></div>`).join("");
+    const T = V.tally;
+    $("#vision-tally").innerHTML = `All ${T.cue_photos_tried} background-only photos I tried: the original model named a missing object on ${T.cue_base_wrong}; the edit fixed ${T.cue_fixed} and added ${T.cue_new_error} new mistake (the canal boats above). Photos with the real object (bees, gondolas, hummingbirds, padlocks, quills, snowmobiles): ${T.object_photos_kept} of ${T.object_photos_right} still right after the edit; the miss is a dip pen it had called &ldquo;quill&rdquo;. Percentages are the model&rsquo;s confidence in its top guess. Script: <a data-repo-path="experiments/vision_cue_photos.py" href="#">experiments/vision_cue_photos.py</a>.`;
+    $("#vision-credits").innerHTML = "Photos: " + V.cards.map((c, i) => `${i + 1} <a href="${esc(c.page)}">${esc(c.title.replace(/\.(jpe?g|png)$/i, ""))}</a>, ${esc(c.artist || "unknown author")}, ${c.license_url ? `<a href="${esc(c.license_url)}">${esc(c.license)}</a>` : esc(c.license)}`).join("; ") + ". Resized.";
+    bindAll($("#fig-vision"));
+  }
+
   // ------------------------------------------------------------------ sweep
   let swTask = null, swMetric = "fail";
   function sweepCalc(t) {
@@ -760,7 +781,7 @@
     const m = swMetric;
     const series = [];
     const big = (t.bigdata || []).filter((r) => isNum(r.n));
-    [["lora", "LoRA"], ["gate", "One neuron"]].forEach(([k, lab]) => {
+    [["lora", "LoRA"], ["gate", "Weight edit"]].forEach(([k, lab]) => {
       const rows = S[k]; if (!rows) return;
       series.push({ id: k, label: lab, color: col(k), points: rows.map((r) => [r.n, r[m]]), band: rows.map((r) => [r.n, r[m + "_min"], r[m + "_max"]]), markers: true, width: 2.25, priority: k === "gate" ? 1 : 2, endLabel: !big.some((r) => r.method === k && isNum(r[m])) });
       [false, true].forEach((varied) => {
@@ -790,18 +811,18 @@
       y = { min: 0, max: top > 100 ? Math.ceil(top / 10) * 10 : 100, fmt: (v) => v + "%" };
       if (!vals.length) { pendingFig(node, `${lab} for this sweep`, `results/${swTask}/sweep/*.json (guards.chat_same)`); return; }
     }
-    legend($("#sweep-legend"), [{ label: "One neuron (mean, min\u2013max band)", color: col("gate"), line: true }, { label: "LoRA (mean, min\u2013max band)", color: col("lora"), line: true }]
+    legend($("#sweep-legend"), [{ label: "Weight edit (mean, min\u2013max band)", color: col("gate"), line: true }, { label: "LoRA (mean, min\u2013max band)", color: col("lora"), line: true }]
       .concat(big.some((r) => !r.varied) ? [{ label: "\u25cb more data, same phrasing (one run)", color: "var(--ink-2)", line: true, dash: true }] : [])
       .concat(big.some((r) => r.varied) ? [{ label: "\u25a1 more data, varied phrasings (one run)", color: "var(--ink-2)", line: true, dash: true }] : [])
       .concat(refs.map((r) => ({ label: r.label, color: r.color, line: true, dash: true }))));
     lineChart(node, {
-      aria: "Failure rate vs number of practice examples for the gate and LoRA",
+      aria: "Failure rate vs number of practice examples for the weight edit and LoRA",
       series, refs, snapXs: allN,
       x: { min: allN[0], max: allN[allN.length - 1], log: true, ticks: allN.filter((v, i) => i === 0 || v / allN[i - 1] > 1.08), fmt: (v) => String(v), label: "practice examples (log scale)" },
       y, tipTitle: (n) => `n = ${n} practice examples`, tipFmt: m === "kl" ? (v) => F.kl2(v) : (v) => F.pct1(v),
     });
     const lab = { fail: meta.fail_short || "failure", kept: meta.kept_short || "kept", kl: "chat KL", same: "ordinary outputs unchanged" }[m];
-    $("#fig-sweep .sub").textContent = `${meta.title || t.id} (${meta.model_label || ""}): ${lab} vs labelled practice examples. Gate and LoRA refit on stratified subsets; lines are the mean over seeds, bands span min\u2013max.` +
+    $("#fig-sweep .sub").textContent = `${meta.title || t.id} (${meta.model_label || ""}): ${lab} vs labelled practice examples. Weight edit and LoRA refit on stratified subsets; lines are the mean over seeds, bands span min\u2013max.` +
       (t.sweep_source ? " Sweep scored on a 100-prompt subset of the held-out set." : "");
   }
   function sweepText() {
@@ -811,14 +832,14 @@
     const c = sweepCalc(t);
     CALC.sw = c;
     if (!c.match_n && c.never) {
-      $("#sweep-text").innerHTML = `On ${esc(c.task_short)}: across the sizes we tried, LoRA never matches the gate; with all the data it reaches <b>${F.pct0(c.all_lora)}</b> vs the gate&rsquo;s <b>${F.pct0(c.all_gate)}</b>. ` +
-        (isNum(c.kl_ratio) ? `The gate&rsquo;s side effects stay ${F.x0(c.kl_ratio)} lower across the sweep` : "") + (c.gate_enough_n ? `, and it gets within 5 points of its full-data result from n &asymp; ${c.gate_enough_n}.` : ".");
+      $("#sweep-text").innerHTML = `On ${esc(c.task_short)}: across the sizes we tried, LoRA never matches the weight edit; with all the data it reaches <b>${F.pct0(c.all_lora)}</b> vs the edit&rsquo;s <b>${F.pct0(c.all_gate)}</b>. ` +
+        (isNum(c.kl_ratio) ? `The edit&rsquo;s side effects stay ${F.x0(c.kl_ratio)} lower across the sweep` : "") + (c.gate_enough_n ? `, and it gets within 5 points of its full-data result from n &asymp; ${c.gate_enough_n}.` : ".");
     }
   }
 
   // ------------------------------------------------------------------ persistence
   let peTask = null;
-  const PE = { "base+chat": ["Unpatched + chat SFT", "var(--base)", false], "gate+chat": ["One neuron + chat SFT", "var(--gate)", false], "gate+conflict": ["One neuron + conflicting SFT", "var(--gate)", true], "lora+chat": ["LoRA fix + chat SFT", "var(--lora)", false] };
+  const PE = { "base+chat": ["Unedited + chat SFT", "var(--base)", false], "gate+chat": ["Weight edit + chat SFT", "var(--gate)", false], "gate+conflict": ["Weight edit + conflicting SFT", "var(--gate)", true], "lora+chat": ["LoRA fix + chat SFT", "var(--lora)", false] };
   function peCalc(t) {
     const C = t.persistence.conditions, gc = C["gate+chat"], gx = C["gate+conflict"], bc = C["base+chat"];
     const out = {};
@@ -861,8 +882,8 @@
     legend($("#persist-legend"), series.map((s) => ({ label: s.label, color: s.color, line: true, dash: s.dash })));
     const xs = Array.from(new Set([].concat(...series.map((s) => s.points.map((p) => p[0]))))).sort((a, b) => a - b);
     lineChart(node, {
-      aria: "Failure rate as fine-tuning continues after the patch", series, snapXs: xs,
-      x: { min: xs[0], max: xs[xs.length - 1], label: "fine-tuning steps after patching" },
+      aria: "Failure rate as fine-tuning continues after the edit", series, snapXs: xs,
+      x: { min: xs[0], max: xs[xs.length - 1], label: "fine-tuning steps after the edit" },
       y: { min: 0, max: 100, fmt: (v) => v + "%" }, tipTitle: (s) => `step ${s}`, tipFmt: (v) => F.pct1(v),
     });
     $("#fig-persist .sub").textContent = `${meta.title || t.id} (${meta.model_label || ""}): ${meta.fail_short || "failure"} on held-out prompts as fine-tuning of the last ${t.persistence.k_layers || "few"} layers continues.`;
@@ -873,18 +894,18 @@
     const fnode = $("#fire-chart");
     if (fireRows.length > 1) {
       $("#fig-persist .inset").style.display = "";
-      lineChart(fnode, { aria: "Share of made-up names on which the gate neuron fires, by fine-tuning step", height: 190, compact: true,
+      lineChart(fnode, { aria: "Share of made-up names on which the edited neuron fires, by fine-tuning step", height: 190, compact: true,
         series: [{ id: "fire", label: "fires on made-up names", color: "var(--gate)", points: fireRows.map((r) => [r.step, 100 * r.fire]), markers: true, endLabel: false }],
         x: { min: fireRows[0].step, max: fireRows[fireRows.length - 1].step, ticks: fireRows.map((r) => r.step), label: "steps" },
         y: { min: 0, max: 100, ticks: [0, 50, 100], fmt: (v) => v + "%" }, snapXs: fireRows.map((r) => r.step), tipTitle: (s) => `step ${s}`, tipFmt: (v) => F.pct0(v) });
       const cm = t.persistence.gate_cos_min;
-      $("#fire-note").textContent = isNum(cm) ? `The neuron's own weights don't move: cosine to the patch ${cm >= 0.99995 ? "1.0000" : "\u2265 " + cm.toFixed(4)} at every step. It stops firing because the layers feeding it changed.` : "";
+      $("#fire-note").textContent = isNum(cm) ? `The edited neuron's own weights don't move: cosine to the edit ${cm >= 0.99995 ? "1.0000" : "\u2265 " + cm.toFixed(4)} at every step. It stops firing because the layers feeding it changed.` : "";
     } else $("#fig-persist .inset").style.display = "none";
-    const tk = isNum(c.fire_gone) && isNum(c.chat_gone) ? `The gate is gone within ${c.fire_gone} steps of unrelated fine-tuning (${F.pct0(c.chat_start)} \u2192 ${F.pct0(c.chat_gone)} fabrication)${isNum(c.lora_50) ? "; the LoRA fix dies slower" : ""}.`
-      : isNum(c.chat_50) && c.chat_50 > 80 ? `Fifty steps of unrelated fine-tuning erase the patch: ${F.pct0(c.chat_start)} \u2192 ${F.pct0(c.chat_50)}.`
-      : c.conflict_never ? "The patch survives even training that rewards the failure, within this budget."
-      : c.chat_verdict === "keeps" ? `Ordinary fine-tuning leaves the patch alone; training that rewards the failure erases it${isNum(c.conflict_steps) ? ` within ${c.conflict_steps} steps` : ""}.`
-      : c.chat_verdict ? `Even ordinary fine-tuning ${c.chat_verdict} the patch.` : "Does more training erase the patch?";
+    const tk = isNum(c.fire_gone) && isNum(c.chat_gone) ? `The weight edit is gone within ${c.fire_gone} steps of unrelated fine-tuning (${F.pct0(c.chat_start)} \u2192 ${F.pct0(c.chat_gone)} fabrication)${isNum(c.lora_50) ? "; the LoRA fix dies slower" : ""}.`
+      : isNum(c.chat_50) && c.chat_50 > 80 ? `Fifty steps of unrelated fine-tuning erase the edit: ${F.pct0(c.chat_start)} \u2192 ${F.pct0(c.chat_50)}.`
+      : c.conflict_never ? "The edit survives even training that rewards the failure, within this budget."
+      : c.chat_verdict === "keeps" ? `Ordinary fine-tuning leaves the edit alone; training that rewards the failure erases it${isNum(c.conflict_steps) ? ` within ${c.conflict_steps} steps` : ""}.`
+      : c.chat_verdict ? `Even ordinary fine-tuning ${c.chat_verdict} the edit.` : "Does more training erase the edit?";
     $("#persist-takeaway").textContent = tk;
   }
 
@@ -896,7 +917,7 @@
     if (!t) { $("#pareto-legend").innerHTML = ""; $("#pareto-x").style.display = "none"; return pendingFig(node, "fix vs side-effect points", "results/entity/pareto/*.json"); }
     const P = t.pareto, A = t.arms || {};
     const xv = (r) => (parX === "kl" ? r.kl : isNum(r.same) ? 100 - r.same : null);
-    const groups = [["gate", "One neuron, write gain", "gain "], ["lora", "LoRA, training steps", "step "]].filter(([k]) => P[k]);
+    const groups = [["gate", "Weight edit, write gain", "gain "], ["lora", "LoRA, training steps", "step "]].filter(([k]) => P[k]);
     const pts = [].concat(...groups.map(([k]) => P[k].map((r) => ({ k, r, x: xv(r), y: r.fail })))).filter((p) => isNum(p.x) && isNum(p.y) && (parX !== "kl" || p.x > 0));
     // the shipped arms as extra points
     ["gate", "lora"].forEach((k) => { const r = A[k]; if (r && isNum(r.fail)) { const x = parX === "kl" ? r.kl : isNum(r.same) ? 100 - r.same : null; if (isNum(x) && (parX !== "kl" || x > 0)) pts.push({ k, r: { value: "shipped", fail: r.fail, kept: r.kept, kl: r.kl, same: r.same }, x, y: r.fail, shipped: true }); } });
@@ -937,7 +958,7 @@
       pts.forEach((p) => { const d = Math.hypot(X(p.x) - px, Y(p.y) - py); if (d < bd) { bd = d; best = p; } });
       if (!best || bd > 40) return hideTip();
       const r = best.r, L = (k, v) => `<div class="r"><span>${k}</span><b>${v}</b></div>`;
-      showTip(`<div class="t">${swatch(col(best.k))} ${best.k === "gate" ? "One neuron" : "LoRA"}${best.shipped ? " (the arm in the scoreboard)" : best.k === "gate" ? `, gain ${r.value}` : `, step ${r.value}`}</div>` +
+      showTip(`<div class="t">${swatch(col(best.k))} ${best.k === "gate" ? "Weight edit" : "LoRA"}${best.shipped ? " (the arm in the scoreboard)" : best.k === "gate" ? `, gain ${r.value}` : `, step ${r.value}`}</div>` +
         L("fabricates", F.pct1(r.fail)) + L("facts kept", isNum(r.kept) ? F.pct1(r.kept) : "–") + L("chat KL", isNum(r.kl) ? F.kl2(r.kl) : "–") + L("answers unchanged", isNum(r.same) ? F.pct1(r.same) : "–"), pt.clientX, pt.clientY);
     };
     hit.addEventListener("mousemove", mv); hit.addEventListener("touchstart", mv, { passive: true }); hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
@@ -949,7 +970,7 @@
     const tb = $("#transfer-table");
     if (!ts.length) { tb.innerHTML = `<tbody><tr><td>${PENDING}</td></tr></tbody>`; return; }
     const cols = ["base", "prompt", "gate", "gate_saf", "lora"].filter((a) => a !== "gate_saf" || ts.some((t) => t.arms.gate_saf));
-    const hl = { gate_saf: "One neuron + silence-after-fire" };
+    const hl = { gate_saf: "Weight edit + silence-after-fire" };
     tb.querySelector("thead").innerHTML = `<tr><th>Model</th>${cols.map((a) => `<th class="n"><span class="mhead">${swatch(col(a))}${esc(hl[a] || METHOD[a].label)}</span></th>`).join("")}</tr>`;
     tb.querySelector("tbody").innerHTML = ts.map((t) => `<tr><td>${esc((t.model || t.id).split("/").pop())}</td>${cols.map((a) => { const r = t.arms[a]; return `<td class="n${a === "gate" ? " hl" : ""}">${r && isNum(r.fail) ? F.pct0(r.fail) : a === "gate_saf" ? "\u2013" : PENDING}${r && isNum(r.kept) ? ` <span class="dim">(${F.pct0(r.kept)})</span>` : ""}</td>`; }).join("")}</tr>`).join("");
   }
@@ -960,14 +981,14 @@
     if (!t) { node.innerHTML = ""; return; }
     const e = t.loop_example, name = (t.model || t.id).split("/").pop();
     node.innerHTML = `<p class="tt" style="font-size:.85rem">The ${esc(name)} loop, and the fix</p><p class="tnote" style="margin:2px 0 6px">\u201c${esc(e.prompt)}\u201d</p>
-      <div class="loop"><div><span class="lab">One neuron (recipe)</span><div class="reply" style="border-left-color:var(--gate)">${esc(e.gate)}</div></div>
+      <div class="loop"><div><span class="lab">Weight edit (recipe)</span><div class="reply" style="border-left-color:var(--gate)">${esc(e.gate)}</div></div>
       <div><span class="lab">+ silence-after-fire</span><div class="reply" style="border-left-color:var(--gate)">${esc(e.gate_saf)}</div></div></div>`;
   }
   function renderLangmix() {
     const t = D.tasks.langmix, tb = $("#langmix-table");
     if (!t || !t.arms) { tb.innerHTML = `<tbody><tr><td>${PENDING}</td></tr></tbody>`; return; }
     const order = ["base", "prompt", "gate", "gate_gauto", "gate_recipe", "random", "lora"].filter((a) => t.arms[a]);
-    const what = { gate: "one neuron, framework recipe", gate_gauto: "one neuron, steeper threshold", gate_recipe: "the blind agents' edit: penalty on Chinese-token output rows", random: "same neuron, random", lora: "fine-tune, same data", prompt: "“answer only in the question's language”", base: "" };
+    const what = { gate: "weight edit, framework recipe (one neuron)", gate_gauto: "weight edit, steeper threshold", gate_recipe: "the blind agents' edit: penalty on Chinese-token output rows", random: "same neuron, random", lora: "fine-tune, same data", prompt: "“answer only in the question's language”", base: "" };
     tb.querySelector("thead").innerHTML = `<tr><th>Fix</th><th class="n">Leak</th><th class="n">Unchanged</th><th class="n">Chat KL</th></tr>`;
     tb.querySelector("tbody").innerHTML = order.map((a) => { const r = t.arms[a]; return `<tr><td><span class="mhead">${swatch(col(a), family(a) === "random")}<b>${esc(r.label)}</b></span>${what[a] ? `<span class="note">${esc(what[a])}</span>` : ""}</td><td class="n${a === "gate_recipe" ? " hl" : ""}">${isNum(r.fail) ? F.pct1(r.fail) : "–"}</td><td class="n">${isNum(r.same) ? F.pct0(r.same) : "–"}</td><td class="n">${isNum(r.kl) ? F.kl2(r.kl) : "–"}</td></tr>`; }).join("");
   }
@@ -979,7 +1000,7 @@
     const s = t.agent_session, A = t.arms || {};
     const rows = [
       ["base", "Base", A.base, ""],
-      ["gate", "Recipe gate (one neuron)", A.gate, "human-tuned recipe"],
+      ["gate", "Weight edit (my recipe)", A.gate, "human-tuned recipe"],
       ["gate", "Agent session 2 (6 neurons)", s.gate, `blind Opus session${isNum(s.entries) ? `, ${F.int(s.entries)} weights changed` : ""}`],
       ["random", "Agent's random control", s.random, "same size, random directions"],
       ["lora", "LoRA", A.lora, "fine-tune, same practice data"],
@@ -1062,6 +1083,7 @@
     safe(renderScore, "score");
     safe(renderScoreTable, "scoreTable");
     safe(renderExamples, "examples");
+    renderVision().catch((e) => console.warn("[blog] vision", e));
     safe(renderSweep, "sweep");
 
     $$("#sweep-metric [data-m]").forEach((b) => b.addEventListener("click", () => {

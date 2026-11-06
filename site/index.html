@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>One Neuron, No Training</title>
-<meta name="description" content="I fixed four specific bugs in open models (made-up bios, prompt injection, filler endings, Whisper hearing words in noise) by rewriting one neuron, with no training. What that's good for, and where it breaks.">
-<meta property="og:title" content="One neuron, no training: what hand-editing a model's weights is good for">
-<meta property="og:description" content="Four real bugs fixed by rewriting a single neuron, with most other outputs unchanged word for word. Fine-tuning fixes more but changes everything, and 20 steps of training erase the patch.">
+<title>Weight-Space Programming, Tested</title>
+<meta name="description" content="I fixed four specific bugs in open models (made-up bios, prompt injection, filler endings, Whisper hearing words in noise) by editing their weights directly, with no training. What that's good for, and where it breaks.">
+<meta property="og:title" content="Weight-space programming, tested on real bugs">
+<meta property="og:description" content="Four real bugs fixed by editing a model's weights directly, with most other outputs unchanged word for word. Fine-tuning fixes more but changes everything, and 20 steps of training erase the edit.">
 <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#141413" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' fill='%23141413'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23fbfaf7'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20">
+<link rel="stylesheet" href="style.css?v=21">
 </head>
 <body>
 
 <header class="hero">
   <div class="col">
     <p class="kicker">Notes from a week of weight editing &middot; <span data-k="site.date" data-f="text">November 2026</span></p>
-    <h1>One neuron, no training</h1>
-    <p class="dek">I took four open models that each have one specific, annoying bug and fixed it by rewriting a single neuron by hand. No training. Almost everything else the models say stayed the same, word for word.</p>
+    <h1>Weight-space programming, tested on real bugs</h1>
+    <p class="dek">I took four open models that each have one specific, annoying bug and fixed it by editing the weights directly: a few thousand numbers, no training. Almost everything else the models say stayed the same, word for word.</p>
     <p class="byline">Code, data and every number: <a data-repo href="#">GitHub</a></p>
   </div>
   <div class="wide">
@@ -88,8 +88,8 @@
   <div class="answer">
     <p class="answer-h">Short version</p>
     <ul>
-      <li>As a <b>patch on a frozen model</b>, it works. One neuron fixes a narrow bug and leaves almost everything else alone.</li>
-      <li>It only works when the model <b>already knows</b> it&rsquo;s in the bad case. The patch just acts on that.</li>
+      <li>As a <b>patch on a frozen model</b>, it works. A small weight edit fixes a narrow bug and leaves almost everything else alone.</li>
+      <li>It only works when the model <b>already knows</b> it&rsquo;s in the bad case. The edit just acts on that.</li>
       <li>With <b>enough training data</b>, fine-tuning usually fixes more of the bug, but it changes every other answer too.</li>
       <li>It <b>doesn&rsquo;t survive training</b>. 20 steps of unrelated fine-tuning erase it. So no, this isn&rsquo;t self-improvement.</li>
     </ul>
@@ -149,8 +149,8 @@
 </div>
 <div class="wide">
   <figure class="fig diagram" id="fig-neuron">
-    <p class="takeaway">One neuron reads &ldquo;this name is made up&rdquo; and writes &ldquo;Sorry&rdquo;.</p>
-    <p class="sub">Step through what the patched neuron does. Switch to a real name and it stays silent.</p>
+    <p class="takeaway">The edit rewires one neuron to read &ldquo;this name is made up&rdquo; and write &ldquo;Sorry&rdquo;.</p>
+    <p class="sub">Step through what the edited neuron does. Switch to a real name and it stays silent.</p>
     <div class="controls">
       <div class="seg" role="group" aria-label="Prompt">
         <button type="button" data-case="fake" aria-pressed="true">Made-up name</button>
@@ -169,7 +169,7 @@
 </div>
 <div class="col">
   <ol class="recipe">
-    <li><b>Find the signal.</b> Fit a linear probe on the model&rsquo;s activations for &ldquo;this is the bad case&rdquo;. Where the patch worked, the probe was near perfect (AUC 0.99&ndash;1.0).</li>
+    <li><b>Find the signal.</b> Fit a linear probe on the model&rsquo;s activations for &ldquo;this is the bad case&rdquo;. Where the edit worked, the probe was near perfect (AUC 0.99&ndash;1.0).</li>
     <li><b>Find the first word.</b> Try a few opening tokens and keep the one after which the model finishes the job by itself. &ldquo;Sorry&rdquo; leads to &ldquo;there doesn&rsquo;t appear to be a widely known&hellip;&rdquo;.</li>
     <li><b>Rewrite one neuron</b> in the last MLP layer: it reads the probe direction, fires only above a threshold no normal token reaches, and pushes that first word. Nothing is trained.</li>
   </ol>
@@ -177,7 +177,7 @@
 <div class="wide">
   <figure class="fig" id="fig-anatomy">
     <p class="takeaway" id="anatomy-takeaway">The model already knows: made-up names score far above anything else it reads.</p>
-    <p class="sub">The neuron&rsquo;s score on held-out prompts, relative to its threshold.</p>
+    <p class="sub">The edited neuron&rsquo;s score on held-out prompts, relative to its threshold.</p>
     <div class="controls" id="anatomy-tasks"></div>
     <div class="legend" id="anatomy-legend"></div>
     <div class="chart" id="anatomy-chart"></div>
@@ -206,7 +206,7 @@
 </div>
 <div class="col">
   <ul>
-    <li>The patch leaves <span data-k="entity.arms.gate.same" data-f="pct0"></span> of Gemma&rsquo;s normal answers word-for-word identical. LoRA, trained on the same prompts, leaves <span data-k="entity.arms.lora.same" data-f="pct0"></span>.</li>
+    <li>The weight edit leaves <span data-k="entity.arms.gate.same" data-f="pct0"></span> of Gemma&rsquo;s normal answers word-for-word identical. LoRA, trained on the same prompts, leaves <span data-k="entity.arms.lora.same" data-f="pct0"></span>.</li>
     <li>The system prompt &ldquo;If you don&rsquo;t recognise someone, say so&rdquo; almost stops fake bios (<span data-k="entity.arms.prompt.fail" data-f="pct0"></span>), but Gemma then claims not to know Chance the Rapper. Correct facts on real people drop from <span data-k="entity.arms.base.kept" data-f="pct0"></span> to <span data-k="entity.arms.prompt.kept" data-f="pct0"></span>.</li>
     <li>A random neuron of the same size does nothing (<span data-k="entity.arms.random.fail" data-f="pct0"></span> still fake), so it isn&rsquo;t just &ldquo;any change helps&rdquo;.</li>
   </ul>
@@ -214,11 +214,28 @@
 <div class="wide">
   <figure class="fig" id="examples">
     <p class="takeaway">Same input, four fixes. Read the actual outputs.</p>
-    <p class="sub">Held-out items: cases the neuron fixes, one where the cheap fix breaks a real answer, and the neuron&rsquo;s misses. Verbatim, greedy decoding.</p>
+    <p class="sub">Held-out items: cases the weight edit fixes, one where the cheap fix breaks a real answer, and its misses. Verbatim, greedy decoding.</p>
     <div class="controls"><div class="seg" role="group" aria-label="Task" id="ex-tasks"></div></div>
     <div class="ex-grid" id="ex-grid"></div>
-    <p class="howto">Tabs switch between the unmodified model, the cheap fix (system prompt, or tuned decoding thresholds for Whisper), the one-neuron patch and the LoRA fine-tune. &#10003; / &#10007; is the task&rsquo;s own scorer. Whisper audio is the first &le;8 s of each clip; transcripts are for the whole clip. <a href="audio/LICENSES.md">Sources and licences</a>.</p>
+    <p class="howto">Tabs switch between the unmodified model, the cheap fix (system prompt, or tuned decoding thresholds for Whisper), the weight edit and the LoRA fine-tune. &#10003; / &#10007; is the task&rsquo;s own scorer. Whisper audio is the first &le;8 s of each clip; transcripts are for the whole clip. <a href="audio/LICENSES.md">Sources and licences</a>.</p>
   </figure>
+</div>
+
+<div class="col">
+  <h3 id="vision">Images: the model sees snow and says &ldquo;snowmobile&rdquo;</h3>
+  <p>ResNet-50, a standard image classifier, learned shortcuts from its training photos. Snow means snowmobile, handwriting means quill, flowers mean bee. In an earlier experiment, three blind Claude Opus sessions found these shortcut channels from the weights alone and turned them down in the last layer. Session 2&rsquo;s edit changes 5,000 numbers. Below, it runs on Wikimedia Commons photos that neither the model nor the agent had seen.</p>
+</div>
+<div class="wide">
+  <figure class="fig" id="fig-vision">
+    <p class="takeaway">The background no longer decides the answer, and real objects are still recognised.</p>
+    <p class="sub" id="vision-sub">ResNet-50 (ImageNet), top guess before and after the agent&rsquo;s weight edit. Openly licensed photos, not used in the experiment.</p>
+    <div class="vgrid" id="vision-grid"></div>
+    <p class="howto" id="vision-tally"></p>
+    <p class="howto" id="vision-credits"></p>
+  </figure>
+</div>
+<div class="col">
+  <p>On the benchmark (Spurious ImageNet, held-out photos), the edit cut shortcut answers from 50% to 16%, and overall ImageNet accuracy went from 62.9% to 62.3%. Fine-tuning the last block on the same few photos fixed more but cost 12 points on the repaired classes. Same pattern as the text bugs: with about 40 labelled photos per class, standard last-layer retraining (DFR) was cleaner than the edit.</p>
 </div>
 </section>
 
@@ -226,12 +243,12 @@
 <section id="data">
 <div class="col">
   <h2><span class="num">4</span>With enough data, training usually wins on the bug</h2>
-  <p>Maybe the patch only beats LoRA because LoRA had too little data. So I varied the data.</p>
+  <p>Maybe the edit only beats LoRA because LoRA had too little data. So I varied the data.</p>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-sweep">
-    <p class="takeaway" id="sweep-takeaway">With a handful of examples the patch wins. With lots of data, LoRA does.</p>
-    <p class="sub">Patch vs LoRA refit on subsets of the practice data. Lines are the mean over seeds; bands span min&ndash;max.</p>
+    <p class="takeaway" id="sweep-takeaway">With a handful of examples the weight edit wins. With lots of data, LoRA does.</p>
+    <p class="sub">Weight edit vs LoRA refit on subsets of the practice data. Lines are the mean over seeds; bands span min&ndash;max.</p>
     <div class="controls">
       <div class="seg" role="group" aria-label="Task" id="sweep-tasks"></div>
       <div class="seg" role="group" aria-label="Metric" id="sweep-metric">
@@ -248,16 +265,16 @@
 </div>
 <div class="col">
   <ul>
-    <li><b>8 examples:</b> the patch already stops fake bios (<span data-k="calc.sw.gate_n8" data-f="pct0"></span>); LoRA is at <span data-k="calc.sw.lora_n8" data-f="pct0"></span>.</li>
-    <li><b>1,400 more examples:</b> LoRA gets to <span data-k="calc.big.lora_range" data-f="text"></span> fake bios. The patch stays around <span data-k="calc.big.gate_max" data-f="pct0"></span> however much data it gets. LoRA also wins on filler endings and prompt injection with the full practice set.</li>
-    <li><b>Exceptions:</b> Whisper&rsquo;s &ldquo;output nothing&rdquo; is so easy that LoRA learns it from 16 clips, but it rewrites <span data-k="calc.wsw.lora_changed_range" data-f="text"></span> of real transcripts at every size. On filler endings, a stricter threshold (<code>--theta-q 0.999</code>) brings the patch to <span data-k="signoff.arms.gate_q0&#46;999.fail" data-f="pct1"></span>, ahead of LoRA&rsquo;s <span data-k="signoff.arms.lora.fail" data-f="pct1"></span> (picked on a subset, checked once on the full set).</li>
-    <li><b>Stopping LoRA early</b> (step <span data-k="calc.par.best_step" data-f="int"></span>) ties the patch on the bug, but still changes <span data-k="calc.par.best_changed" data-f="pct0"></span> of normal answers.</li>
+    <li><b>8 examples:</b> the edit already stops fake bios (<span data-k="calc.sw.gate_n8" data-f="pct0"></span>); LoRA is at <span data-k="calc.sw.lora_n8" data-f="pct0"></span>.</li>
+    <li><b>1,400 more examples:</b> LoRA gets to <span data-k="calc.big.lora_range" data-f="text"></span> fake bios. The edit stays around <span data-k="calc.big.gate_max" data-f="pct0"></span> however much data it gets. LoRA also wins on filler endings and prompt injection with the full practice set.</li>
+    <li><b>Exceptions:</b> Whisper&rsquo;s &ldquo;output nothing&rdquo; is so easy that LoRA learns it from 16 clips, but it rewrites <span data-k="calc.wsw.lora_changed_range" data-f="text"></span> of real transcripts at every size. On filler endings, a stricter threshold (<code>--theta-q 0.999</code>) brings the edit to <span data-k="signoff.arms.gate_q0&#46;999.fail" data-f="pct1"></span>, ahead of LoRA&rsquo;s <span data-k="signoff.arms.lora.fail" data-f="pct1"></span> (picked on a subset, checked once on the full set).</li>
+    <li><b>Stopping LoRA early</b> (step <span data-k="calc.par.best_step" data-f="int"></span>) ties the edit on the bug, but still changes <span data-k="calc.par.best_changed" data-f="pct0"></span> of normal answers.</li>
   </ul>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-pareto">
-    <p class="takeaway">Every LoRA checkpoint has more side effects than every patch, at any fix level.</p>
-    <p class="sub">Made-up names task. The patch at 5 write strengths vs LoRA stopped at 6 points in training; same practice data.</p>
+    <p class="takeaway">Every LoRA checkpoint has more side effects than every weight edit, at any fix level.</p>
+    <p class="sub">Made-up names task. The weight edit at 5 write strengths vs LoRA stopped at 6 points in training; same practice data.</p>
     <div class="controls">
       <div class="seg" role="group" aria-label="Side-effect measure" id="pareto-x">
         <button type="button" data-x="kl" aria-pressed="true">Chat KL</button>
@@ -270,25 +287,25 @@
   </figure>
 </div>
 <div class="col">
-  <p>If you have the data and don&rsquo;t mind a model that&rsquo;s a bit different everywhere, train. If you need this one behaviour fixed and nothing else touched, the patch is the better tool.</p>
+  <p>If you have the data and don&rsquo;t mind a model that&rsquo;s a bit different everywhere, train. If you need this one behaviour fixed and nothing else touched, editing the weights is the better tool.</p>
 </div>
 </section>
 
 <!-- ============================================================ 5 -->
 <section id="persist">
 <div class="col">
-  <h2><span class="num">5</span>Training erases the patch</h2>
+  <h2><span class="num">5</span>Training erases the edit</h2>
   <p>I fine-tuned the last four layers on ordinary chat data, the kind of thing anyone downstream does, and watched the fix.</p>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-persist">
-    <p class="takeaway" id="persist-takeaway">The patch is gone within 20 steps of unrelated fine-tuning. The LoRA fix lasts a bit longer.</p>
+    <p class="takeaway" id="persist-takeaway">The weight edit is gone within 20 steps of unrelated fine-tuning. The LoRA fix lasts a bit longer.</p>
     <p class="sub">Made-up names (Gemma-3-4B): fake bios on held-out prompts as fine-tuning continues.</p>
     <div class="legend" id="persist-legend"></div>
     <div class="persist-grid">
       <div class="chart" id="persist-chart"></div>
       <div class="inset">
-        <p class="inset-t">Does the neuron still fire on made-up names?</p>
+        <p class="inset-t">Does the edited neuron still fire on made-up names?</p>
         <div class="chart" id="fire-chart"></div>
         <p class="inset-n" id="fire-note"></p>
       </div>
@@ -297,7 +314,7 @@
   </figure>
 </div>
 <div class="col">
-  <p>The neuron&rsquo;s own weights barely move (cosine <span data-k="calc.pe.cos" data-f="f4"></span> with the patch). The layers below it shift, and it stops receiving the signal it was built to read. The LoRA fix is half gone after 50 steps and fully gone by 100.</p>
+  <p>The edited neuron&rsquo;s own weights barely move (cosine <span data-k="calc.pe.cos" data-f="f4"></span> with the edit). The layers below it shift, and it stops receiving the signal it was built to read. The LoRA fix is half gone after 50 steps and fully gone by 100.</p>
 </div>
 </section>
 
@@ -306,9 +323,9 @@
 <div class="col">
   <h2><span class="num">6</span>Where it doesn&rsquo;t work</h2>
   <div class="fails">
-    <div class="card"><h4>No signal, no patch</h4><p>Gemma caves 80% of the time when asked &ldquo;Are you sure?&rdquo;, but its sense of &ldquo;I was right&rdquo; is weak (probe AUC &le; 0.70). There&rsquo;s nothing to act on.</p></div>
-    <div class="card"><h4>No bug, no patch</h4><p>Qwen and Llama barely invent bios (<span data-k="entity__Llama-3.2-3B-Instruct.arms.base.fail" data-f="pct0"></span> on Llama). Forcing the patch on anyway made Llama loop &ldquo;Sorry,SorrySorry&hellip;&rdquo; until I added <code>--silence-after-fire</code>.</p></div>
-    <div class="card"><h4>Not one decision</h4><p>Chinese leaking into German, Russian and Thai answers can start at any token. One neuron didn&rsquo;t help. The agents&rsquo; own edit, a context-gated penalty on Chinese tokens, did: <span data-k="langmix.arms.base.fail" data-f="pct0"></span> &rarr; <span data-k="langmix.arms.gate_recipe.fail" data-f="pct1"></span>.</p></div>
+    <div class="card"><h4>No signal, no edit</h4><p>Gemma caves 80% of the time when asked &ldquo;Are you sure?&rdquo;, but its sense of &ldquo;I was right&rdquo; is weak (probe AUC &le; 0.70). There&rsquo;s nothing to act on.</p></div>
+    <div class="card"><h4>No bug, no edit</h4><p>Qwen and Llama barely invent bios (<span data-k="entity__Llama-3.2-3B-Instruct.arms.base.fail" data-f="pct0"></span> on Llama). Forcing the edit on anyway made Llama loop &ldquo;Sorry,SorrySorry&hellip;&rdquo; until I added <code>--silence-after-fire</code>.</p></div>
+    <div class="card"><h4>Not one decision</h4><p>Chinese leaking into German, Russian and Thai answers can start at any token. A one-neuron edit didn&rsquo;t help. The agents&rsquo; own edit, a context-gated penalty on Chinese tokens, did: <span data-k="langmix.arms.base.fail" data-f="pct0"></span> &rarr; <span data-k="langmix.arms.gate_recipe.fail" data-f="pct1"></span>.</p></div>
     <div class="card"><h4>Tangled behaviour</h4><p>Phi-3&rsquo;s over-refusal uses the same direction as its real refusals. Edits halve false refusals but cost 5&ndash;10 points of correct ones.</p></div>
   </div>
 </div>
@@ -339,7 +356,7 @@
     <div class="card">
       <h4>&ldquo;This changes everything&rdquo;</h4>
       <p class="row right">Models really can read weights. They found every mechanism I planted or stumbled on.</p>
-      <p class="row wrong">Writing doesn&rsquo;t stick. 20 steps of anyone&rsquo;s fine-tuning erase a patch. That&rsquo;s a sticky note on a frozen model, not self-improvement.</p>
+      <p class="row wrong">Writing doesn&rsquo;t stick. 20 steps of anyone&rsquo;s fine-tuning erase an edit. That&rsquo;s a sticky note on a frozen model, not self-improvement.</p>
     </div>
     <div class="card">
       <h4>&ldquo;Nothing new here&rdquo;</h4>
@@ -349,7 +366,7 @@
   </div>
   <h3>What I&rsquo;d actually do</h3>
   <ul class="decide">
-    <li><b>Narrow bug, frozen model, little data, nothing else may change:</b> try the patch. Checking for the signal takes minutes.</li>
+    <li><b>Narrow bug, frozen model, little data, nothing else may change:</b> try a weight edit. Checking for the signal takes minutes.</li>
     <li><b>Lots of examples, side effects are fine:</b> fine-tune.</li>
     <li><b>Never</b> expect a hand edit to survive further training.</li>
   </ul>
@@ -359,7 +376,7 @@
 <!-- ============================================================ agent -->
 <section id="agent">
 <div class="col">
-  <h2>Can an LLM find the patch by itself?</h2>
+  <h2>Can an LLM write the edit by itself?</h2>
   <p>I wrote the recipe above. So I gave Claude Opus the made-up-names task blind: practice data, tools to read activations and write weights, no gradient descent, about an hour.</p>
   <ul>
     <li><b>Session 1</b> found the &ldquo;I don&rsquo;t know this name&rdquo; signal right away and built a detector neuron, but couldn&rsquo;t make it change the answer. It submitted an empty edit and explained why: Gemma re-normalises every MLP output, so one middle-layer neuron barely moves anything.</li>
@@ -381,8 +398,8 @@
 <div class="col">
   <h2>Run it yourself</h2>
 <pre class="code">git clone <span data-k="site.repo" data-f="text">https://github.com/kevinpl07/weight-patching</span> &amp;&amp; cd weight-patching &amp;&amp; pip install -r requirements.txt
-python -m patchkit.run all entity     <span class="c"># data → base → probe → one-neuron patch + random → LoRA → eval</span>
-python -m patchkit.run sweep entity   <span class="c"># patch vs LoRA as data grows</span></pre>
+python -m patchkit.run all entity     <span class="c"># data → base → probe → weight edit + random edit → LoRA → eval</span>
+python -m patchkit.run sweep entity   <span class="c"># weight edit vs LoRA as data grows</span></pre>
   <p>A fresh copy on a different GPU reproduces the numbers within noise (<a data-repo-path="results/entity/REPRODUCTION.md" href="#">REPRODUCTION.md</a>). A new bug is one file: <a data-repo-path="docs/ADDING_A_TASK.md" href="#">ADDING_A_TASK.md</a>.</p>
 </div>
 </section>
@@ -393,7 +410,7 @@ python -m patchkit.run sweep entity   <span class="c"># patch vs LoRA as data gr
   <ul class="caveats">
     <li>Greedy decoding, one sample per prompt, 300&ndash;1,700 held-out items. Differences of a few points are noise.</li>
     <li>Scoring is regex, spot-checked by reading. No human or LLM judge.</li>
-    <li>Small models (1B&ndash;4B), one agent model, one fixed LoRA recipe (plus the sweeps above), no adaptive attacker on the injection patch.</li>
+    <li>Small models (1B&ndash;4B), one agent model, one fixed LoRA recipe (plus the sweeps above), no adaptive attacker on the injection edit.</li>
   </ul>
 </div>
 </section>
@@ -413,6 +430,6 @@ python -m patchkit.run sweep entity   <span class="c"># patch vs LoRA as data gr
 </footer>
 
 <div class="tip" id="tip" role="tooltip"></div>
-<script src="app.js?v=20"></script>
+<script src="app.js?v=21"></script>
 </body>
 </html>

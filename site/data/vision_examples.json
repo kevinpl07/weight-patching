@@ -1,0 +1,964 @@
+{
+ "model": "ResNet-50 (torchvision IMAGENET1K_V1)",
+ "edit": "agent session 2: 5,000 entries of fc.weight",
+ "tally": {
+  "cue_photos_tried": 48,
+  "cue_base_wrong": 8,
+  "cue_fixed": 7,
+  "cue_new_error": 1,
+  "object_photos_right": 29,
+  "object_photos_kept": 28
+ },
+ "cards": [
+  {
+   "img": "img/vision/snowforest_3.jpg",
+   "kind": "fixed",
+   "truth": "a snowy forest road",
+   "base": [
+    "snowmobile",
+    0.28
+   ],
+   "edit": [
+    "alp",
+    0.226
+   ],
+   "title": "Gersfeld Altenfeld Horstberg Winter Snow Forest Road Hiking Trail.png",
+   "page": "https://commons.wikimedia.org/wiki/File:Gersfeld_Altenfeld_Horstberg_Winter_Snow_Forest_Road_Hiking_Trail.png",
+   "artist": "UuMUfQ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0"
+  },
+  {
+   "img": "img/vision/handwriting_5.jpg",
+   "kind": "fixed",
+   "truth": "a handwritten letter",
+   "base": [
+    "quill",
+    0.327
+   ],
+   "edit": [
+    "envelope",
+    0.198
+   ],
+   "title": "Handwritten letter by Catherine Hogarth.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Handwritten_letter_by_Catherine_Hogarth.jpg",
+   "artist": "unknown author",
+   "license": "Public domain",
+   "license_url": ""
+  },
+  {
+   "img": "img/vision/door_0.jpg",
+   "kind": "fixed",
+   "truth": "an old wooden door",
+   "base": [
+    "padlock",
+    0.65
+   ],
+   "edit": [
+    "barn",
+    0.202
+   ],
+   "title": "Old wooden door–IMG 7216 01.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Old_wooden_door%E2%80%93IMG_7216_01.jpg",
+   "artist": "Kızıl",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+   "img": "img/vision/flowers_3.jpg",
+   "kind": "fixed",
+   "truth": "wild orchids",
+   "base": [
+    "bee",
+    0.466
+   ],
+   "edit": [
+    "cabbage butterfly",
+    0.626
+   ],
+   "title": "Close-up van gevlekte orchis (Dactylorhiza maculata) in een schraal hooiland van de associatie van veldrus en gevlekte orchis.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Close-up_van_gevlekte_orchis_(Dactylorhiza_maculata)_in_een_schraal_hooiland_van_de_associatie_van_veldrus_en_gevlekte_orchis.jpg",
+   "artist": "Industrees",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+   "img": "img/vision/c_hummingbird_0.jpg",
+   "kind": "kept",
+   "truth": "a hummingbird",
+   "base": [
+    "hummingbird",
+    0.999
+   ],
+   "edit": [
+    "hummingbird",
+    1.0
+   ],
+   "title": "Speckled hummingbird (Adelomyia melanogenys cervina) feeding on Campsis Caldas.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Speckled_hummingbird_(Adelomyia_melanogenys_cervina)_feeding_on_Campsis_Caldas.jpg",
+   "artist": "Charles J. Sharp",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+   "img": "img/vision/venice_5.jpg",
+   "kind": "broken",
+   "truth": "narrowboats on a London canal",
+   "base": [
+    "boathouse",
+    0.379
+   ],
+   "edit": [
+    "gondola",
+    0.295
+   ],
+   "title": "Little Venice, Regent's Canal - geograph.org.uk - 5633121.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Little_Venice,_Regent%27s_Canal_-_geograph.org.uk_-_5633121.jpg",
+   "artist": "Oast House Archive",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0"
+  }
+ ],
+ "all_predictions": {
+  "reef_0": {
+   "base": [
+    "coral reef",
+    0.976
+   ],
+   "edit": [
+    "coral reef",
+    0.977
+   ]
+  },
+  "reef_1": {
+   "base": [
+    "brain coral",
+    0.869
+   ],
+   "edit": [
+    "brain coral",
+    0.869
+   ]
+  },
+  "reef_2": {
+   "base": [
+    "coral reef",
+    0.38
+   ],
+   "edit": [
+    "coral reef",
+    0.382
+   ]
+  },
+  "reef_3": {
+   "base": [
+    "coral reef",
+    0.71
+   ],
+   "edit": [
+    "coral reef",
+    0.711
+   ]
+  },
+  "reef_4": {
+   "base": [
+    "coral reef",
+    0.797
+   ],
+   "edit": [
+    "coral reef",
+    0.797
+   ]
+  },
+  "reef_5": {
+   "base": [
+    "coral reef",
+    0.665
+   ],
+   "edit": [
+    "coral reef",
+    0.665
+   ]
+  },
+  "handwriting_0": {
+   "base": [
+    "prayer rug",
+    0.835
+   ],
+   "edit": [
+    "prayer rug",
+    0.82
+   ]
+  },
+  "handwriting_1": {
+   "base": [
+    "doormat",
+    0.865
+   ],
+   "edit": [
+    "doormat",
+    0.856
+   ]
+  },
+  "handwriting_2": {
+   "base": [
+    "chest",
+    0.267
+   ],
+   "edit": [
+    "chest",
+    0.266
+   ]
+  },
+  "handwriting_3": {
+   "base": [
+    "cliff",
+    0.283
+   ],
+   "edit": [
+    "cliff",
+    0.285
+   ]
+  },
+  "handwriting_4": {
+   "base": [
+    "quill",
+    0.271
+   ],
+   "edit": [
+    "ballpoint",
+    0.288
+   ]
+  },
+  "handwriting_5": {
+   "base": [
+    "quill",
+    0.327
+   ],
+   "edit": [
+    "envelope",
+    0.198
+   ]
+  },
+  "usflag_0": {
+   "base": [
+    "flagpole",
+    0.981
+   ],
+   "edit": [
+    "parachute",
+    0.996
+   ]
+  },
+  "usflag_1": {
+   "base": [
+    "lab coat",
+    0.173
+   ],
+   "edit": [
+    "lab coat",
+    0.185
+   ]
+  },
+  "usflag_2": {
+   "base": [
+    "dishrag",
+    0.375
+   ],
+   "edit": [
+    "dishrag",
+    0.371
+   ]
+  },
+  "usflag_3": {
+   "base": [
+    "parachute",
+    0.963
+   ],
+   "edit": [
+    "parachute",
+    0.967
+   ]
+  },
+  "usflag_4": {
+   "base": [
+    "airship",
+    0.932
+   ],
+   "edit": [
+    "airship",
+    0.932
+   ]
+  },
+  "usflag_5": {
+   "base": [
+    "shoe shop",
+    0.423
+   ],
+   "edit": [
+    "shoe shop",
+    0.709
+   ]
+  },
+  "flowers_0": {
+   "base": [
+    "walking stick",
+    0.372
+   ],
+   "edit": [
+    "walking stick",
+    0.615
+   ]
+  },
+  "flowers_1": {
+   "base": [
+    "fly",
+    0.63
+   ],
+   "edit": [
+    "fly",
+    0.76
+   ]
+  },
+  "flowers_2": {
+   "base": [
+    "daisy",
+    0.818
+   ],
+   "edit": [
+    "daisy",
+    0.861
+   ]
+  },
+  "flowers_3": {
+   "base": [
+    "bee",
+    0.466
+   ],
+   "edit": [
+    "cabbage butterfly",
+    0.626
+   ]
+  },
+  "flowers_4": {
+   "base": [
+    "daisy",
+    0.677
+   ],
+   "edit": [
+    "daisy",
+    0.667
+   ]
+  },
+  "flowers_5": {
+   "base": [
+    "daisy",
+    0.213
+   ],
+   "edit": [
+    "daisy",
+    0.214
+   ]
+  },
+  "snowforest_0": {
+   "base": [
+    "valley",
+    0.786
+   ],
+   "edit": [
+    "valley",
+    0.786
+   ]
+  },
+  "snowforest_1": {
+   "base": [
+    "alp",
+    0.619
+   ],
+   "edit": [
+    "alp",
+    0.624
+   ]
+  },
+  "snowforest_2": {
+   "base": [
+    "breakwater",
+    0.13
+   ],
+   "edit": [
+    "breakwater",
+    0.133
+   ]
+  },
+  "snowforest_3": {
+   "base": [
+    "snowmobile",
+    0.28
+   ],
+   "edit": [
+    "alp",
+    0.226
+   ]
+  },
+  "snowforest_4": {
+   "base": [
+    "snowmobile",
+    0.21
+   ],
+   "edit": [
+    "dogsled",
+    0.246
+   ]
+  },
+  "snowforest_5": {
+   "base": [
+    "snowmobile",
+    0.271
+   ],
+   "edit": [
+    "yurt",
+    0.222
+   ]
+  },
+  "venice_0": {
+   "base": [
+    "palace",
+    0.337
+   ],
+   "edit": [
+    "palace",
+    0.338
+   ]
+  },
+  "venice_1": {
+   "base": [
+    "gondola",
+    1.0
+   ],
+   "edit": [
+    "gondola",
+    1.0
+   ]
+  },
+  "venice_2": {
+   "base": [
+    "lakeside",
+    0.547
+   ],
+   "edit": [
+    "lakeside",
+    0.548
+   ]
+  },
+  "venice_3": {
+   "base": [
+    "traffic light",
+    0.179
+   ],
+   "edit": [
+    "traffic light",
+    0.21
+   ]
+  },
+  "venice_4": {
+   "base": [
+    "gondola",
+    0.789
+   ],
+   "edit": [
+    "gondola",
+    0.862
+   ]
+  },
+  "venice_5": {
+   "base": [
+    "boathouse",
+    0.379
+   ],
+   "edit": [
+    "gondola",
+    0.295
+   ]
+  },
+  "fire_0": {
+   "base": [
+    "fire screen",
+    0.905
+   ],
+   "edit": [
+    "fire screen",
+    0.923
+   ]
+  },
+  "fire_1": {
+   "base": [
+    "fire screen",
+    0.493
+   ],
+   "edit": [
+    "fire screen",
+    0.815
+   ]
+  },
+  "fire_2": {
+   "base": [
+    "torch",
+    0.592
+   ],
+   "edit": [
+    "torch",
+    0.592
+   ]
+  },
+  "fire_3": {
+   "base": [
+    "torch",
+    0.449
+   ],
+   "edit": [
+    "torch",
+    0.45
+   ]
+  },
+  "fire_4": {
+   "base": [
+    "torch",
+    0.641
+   ],
+   "edit": [
+    "torch",
+    0.658
+   ]
+  },
+  "fire_5": {
+   "base": [
+    "fire screen",
+    0.603
+   ],
+   "edit": [
+    "fire screen",
+    0.605
+   ]
+  },
+  "door_0": {
+   "base": [
+    "padlock",
+    0.65
+   ],
+   "edit": [
+    "barn",
+    0.202
+   ]
+  },
+  "door_1": {
+   "base": [
+    "safe",
+    0.789
+   ],
+   "edit": [
+    "safe",
+    0.345
+   ]
+  },
+  "door_2": {
+   "base": [
+    "desk",
+    0.066
+   ],
+   "edit": [
+    "desk",
+    0.065
+   ]
+  },
+  "door_3": {
+   "base": [
+    "wardrobe",
+    0.384
+   ],
+   "edit": [
+    "wardrobe",
+    0.384
+   ]
+  },
+  "door_4": {
+   "base": [
+    "crate",
+    0.133
+   ],
+   "edit": [
+    "crate",
+    0.134
+   ]
+  },
+  "door_5": {
+   "base": [
+    "doormat",
+    0.32
+   ],
+   "edit": [
+    "doormat",
+    0.4
+   ]
+  },
+  "c_hummingbird_0": {
+   "base": [
+    "hummingbird",
+    0.999
+   ],
+   "edit": [
+    "hummingbird",
+    1.0
+   ]
+  },
+  "c_hummingbird_1": {
+   "base": [
+    "hummingbird",
+    1.0
+   ],
+   "edit": [
+    "hummingbird",
+    1.0
+   ]
+  },
+  "c_hummingbird_2": {
+   "base": [
+    "hummingbird",
+    0.774
+   ],
+   "edit": [
+    "hummingbird",
+    0.697
+   ]
+  },
+  "c_hummingbird_3": {
+   "base": [
+    "hummingbird",
+    0.997
+   ],
+   "edit": [
+    "hummingbird",
+    0.999
+   ]
+  },
+  "c_hummingbird_4": {
+   "base": [
+    "hummingbird",
+    1.0
+   ],
+   "edit": [
+    "hummingbird",
+    1.0
+   ]
+  },
+  "c_hummingbird_5": {
+   "base": [
+    "hummingbird",
+    0.994
+   ],
+   "edit": [
+    "hummingbird",
+    0.998
+   ]
+  },
+  "c_snowmobile_0": {
+   "base": [
+    "snowmobile",
+    0.999
+   ],
+   "edit": [
+    "snowmobile",
+    1.0
+   ]
+  },
+  "c_snowmobile_1": {
+   "base": [
+    "valley",
+    0.353
+   ],
+   "edit": [
+    "valley",
+    0.356
+   ]
+  },
+  "c_snowmobile_2": {
+   "base": [
+    "snowmobile",
+    1.0
+   ],
+   "edit": [
+    "snowmobile",
+    1.0
+   ]
+  },
+  "c_snowmobile_3": {
+   "base": [
+    "snowmobile",
+    0.995
+   ],
+   "edit": [
+    "snowmobile",
+    1.0
+   ]
+  },
+  "c_snowmobile_4": {
+   "base": [
+    "snowmobile",
+    0.997
+   ],
+   "edit": [
+    "snowmobile",
+    1.0
+   ]
+  },
+  "c_snowmobile_5": {
+   "base": [
+    "snowmobile",
+    0.989
+   ],
+   "edit": [
+    "snowmobile",
+    1.0
+   ]
+  },
+  "c_padlock_0": {
+   "base": [
+    "padlock",
+    0.928
+   ],
+   "edit": [
+    "padlock",
+    0.994
+   ]
+  },
+  "c_padlock_1": {
+   "base": [
+    "padlock",
+    0.962
+   ],
+   "edit": [
+    "padlock",
+    0.994
+   ]
+  },
+  "c_padlock_2": {
+   "base": [
+    "padlock",
+    0.974
+   ],
+   "edit": [
+    "padlock",
+    0.995
+   ]
+  },
+  "c_padlock_3": {
+   "base": [
+    "padlock",
+    0.99
+   ],
+   "edit": [
+    "padlock",
+    0.98
+   ]
+  },
+  "c_padlock_4": {
+   "base": [
+    "padlock",
+    0.75
+   ],
+   "edit": [
+    "padlock",
+    0.833
+   ]
+  },
+  "c_padlock_5": {
+   "base": [
+    "padlock",
+    1.0
+   ],
+   "edit": [
+    "padlock",
+    1.0
+   ]
+  },
+  "c_quill_0": {
+   "base": [
+    "quill",
+    0.304
+   ],
+   "edit": [
+    "letter opener",
+    0.201
+   ]
+  },
+  "c_quill_1": {
+   "base": [
+    "quill",
+    1.0
+   ],
+   "edit": [
+    "quill",
+    1.0
+   ]
+  },
+  "c_quill_2": {
+   "base": [
+    "envelope",
+    0.171
+   ],
+   "edit": [
+    "envelope",
+    0.189
+   ]
+  },
+  "c_quill_3": {
+   "base": [
+    "jellyfish",
+    0.731
+   ],
+   "edit": [
+    "jellyfish",
+    0.485
+   ]
+  },
+  "c_quill_4": {
+   "base": [
+    "water snake",
+    0.208
+   ],
+   "edit": [
+    "water snake",
+    0.206
+   ]
+  },
+  "c_quill_5": {
+   "base": [
+    "rule",
+    0.637
+   ],
+   "edit": [
+    "rule",
+    0.646
+   ]
+  },
+  "c_bee_0": {
+   "base": [
+    "bee",
+    0.999
+   ],
+   "edit": [
+    "bee",
+    0.999
+   ]
+  },
+  "c_bee_1": {
+   "base": [
+    "cardoon",
+    0.326
+   ],
+   "edit": [
+    "cardoon",
+    0.293
+   ]
+  },
+  "c_bee_2": {
+   "base": [
+    "cardoon",
+    0.912
+   ],
+   "edit": [
+    "cardoon",
+    0.924
+   ]
+  },
+  "c_bee_3": {
+   "base": [
+    "bee",
+    0.983
+   ],
+   "edit": [
+    "bee",
+    0.939
+   ]
+  },
+  "c_bee_4": {
+   "base": [
+    "bee",
+    0.992
+   ],
+   "edit": [
+    "bee",
+    0.903
+   ]
+  },
+  "c_bee_5": {
+   "base": [
+    "bee",
+    0.973
+   ],
+   "edit": [
+    "bee",
+    0.994
+   ]
+  },
+  "c_gondola_0": {
+   "base": [
+    "gondola",
+    0.998
+   ],
+   "edit": [
+    "gondola",
+    1.0
+   ]
+  },
+  "c_gondola_1": {
+   "base": [
+    "gondola",
+    0.999
+   ],
+   "edit": [
+    "gondola",
+    1.0
+   ]
+  },
+  "c_gondola_2": {
+   "base": [
+    "gondola",
+    0.989
+   ],
+   "edit": [
+    "gondola",
+    0.999
+   ]
+  },
+  "c_gondola_3": {
+   "base": [
+    "gondola",
+    1.0
+   ],
+   "edit": [
+    "gondola",
+    1.0
+   ]
+  },
+  "c_gondola_4": {
+   "base": [
+    "gondola",
+    1.0
+   ],
+   "edit": [
+    "gondola",
+    1.0
+   ]
+  },
+  "c_gondola_5": {
+   "base": [
+    "gondola",
+    0.9
+   ],
+   "edit": [
+    "gondola",
+    0.983
+   ]
+  }
+ }
+}

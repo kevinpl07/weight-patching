@@ -432,3 +432,22 @@ details.more summary { font: 500 .85rem var(--mono); }
 .fails .card, .verdict .card { border-radius: 3px; }
 footer p { margin: 0; }
 .diff .d-note { display: block; font: italic .74rem var(--sans); color: var(--muted); margin-top: 3px; }
+
+/* vision examples */
+.vgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 18px; margin: 6px 0 4px; font-family: var(--sans); }
+.vcard { position: relative; min-width: 0; }
+.vcard img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; background: var(--surface-2); }
+.v-kind { font: 600 .74rem var(--mono); margin: 8px 0 6px; color: var(--good); }
+.vcard.broken .v-kind { color: var(--bad); }
+.vcard.kept .v-kind { color: var(--ink-2); }
+.v-truth { font-weight: 400; color: var(--muted); }
+.v-row { display: grid; grid-template-columns: 54px 1fr auto; align-items: baseline; gap: 6px; padding: 5px 8px; margin: 0 0 3px; border-left: 3px solid var(--border); font-size: .86rem; }
+.v-row b { font-weight: 600; overflow-wrap: anywhere; }
+.v-p { font: .74rem var(--mono); color: var(--muted); }
+.vcard.fixed .v-before, .vcard.broken .v-after { background: var(--bad-wash); border-color: var(--bad); }
+.vcard.fixed .v-after { background: var(--good-wash); border-color: var(--good); }
+.vcard.broken .v-before, .vcard.kept .v-row { background: var(--surface-2); }
+.v-ref { position: absolute; top: 6px; left: 6px; font: 600 .66rem var(--mono); background: var(--page); color: var(--ink-2); padding: 1px 5px; }
+#vision-credits { font-size: .72rem; }
+@media (max-width: 860px) { .vgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .vgrid { grid-template-columns: minmax(0, 1fr); } }
