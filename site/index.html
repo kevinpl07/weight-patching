@@ -13,7 +13,9 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Table: four model bugs, failure rate for base model, weight edit, LoRA, prompt fix and random edit">
+<meta name="author" content="Kevin Bondzio">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@KevBondzio">
 <meta name="twitter:title" content="Weight-space programming, tested on real bugs">
 <meta name="twitter:description" content="Four real bugs fixed by editing a model's weights directly, with most other outputs unchanged word for word. Fine-tuning fixes more but changes everything, and 20 steps of training erase the edit.">
 <meta name="twitter:image" content="https://kevinpl07.github.io/weight-patching/img/og.png">
@@ -32,7 +34,7 @@
     <p class="kicker">Notes from a week of weight editing &middot; <span data-k="site.date" data-f="text">November 2026</span></p>
     <h1>Weight-space programming, tested on real bugs</h1>
     <p class="dek">I took four open models that each have one specific, annoying bug and fixed it by editing the weights directly: a few thousand numbers, no training. Almost everything else the models say stayed the same, word for word.</p>
-    <p class="byline">Code, data and every number: <a data-repo href="#">GitHub</a></p>
+    <p class="byline">By Kevin Bondzio &middot; <a href="https://x.com/KevBondzio" rel="me">X</a> &middot; <a href="https://www.linkedin.com/in/kevin-bondzio/" rel="me">LinkedIn</a><br>Code, data and every number: <a data-repo href="#">GitHub</a></p>
   </div>
   <div class="wide">
     <div class="fixes">
@@ -439,6 +441,8 @@ python -m patchkit.run sweep entity   <span class="c"># weight edit vs LoRA as d
 <footer>
   <div class="col">
     <div class="links">
+      <a href="https://x.com/KevBondzio" rel="me">Follow on X</a>
+      <a href="https://www.linkedin.com/in/kevin-bondzio/" rel="me">LinkedIn</a>
       <a data-repo href="#">Code &amp; data</a>
       <a data-repo-path="results/SUMMARY.md" href="#">Results summary</a>
       <a data-repo-path="docs/PROTOCOL.md" href="#">Protocol</a>
