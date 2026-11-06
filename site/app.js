@@ -44,13 +44,26 @@
   };
   const PENDING = '<span class="pending" title="Still being computed; this fills in when results land">pending</span>';
   function get(path) {
+    // task ids may contain dots (entity__Qwen2.5-3B-Instruct): match the longest task id prefix first
+    const tid = D.tasks ? Object.keys(D.tasks).filter((id) => path.startsWith(id + ".")).sort((a, b) => b.length - a.length)[0] : null;
+    if (tid) path = "__T__" + path.slice(tid.length);
     const parts = path.split(".");
+    if (tid) { let o = D.tasks[tid]; parts.shift(); return walk(o, parts); }
     let o;
     if (parts[0] === "calc") { o = CALC; parts.shift(); }
     else if (D.tasks && parts[0] in D.tasks) { o = D.tasks; }
     else if (D.tasks && MAIN_TASK_IDS.includes(parts[0])) return undefined;
     else o = D;
-    for (const p of parts) { if (o == null) return undefined; o = o[p]; }
+    return walk(o, parts);
+  }
+  function walk(o, parts) {
+    for (let i = 0; i < parts.length; i++) {
+      if (o == null) return undefined;
+      let k = parts[i];
+      // keys may contain dots (e.g. arm "gate_q0.999"): greedily join parts until a key exists
+      for (let j = i + 1; !(k in Object(o)) && j < parts.length; j++) if ((parts.slice(i, j + 1).join(".")) in Object(o)) { k = parts.slice(i, j + 1).join("."); i = j; break; }
+      o = o[k];
+    }
     return o;
   }
   const MAIN_TASK_IDS = ["entity", "agent_injection", "signoff", "whisper_silence"];
@@ -915,9 +928,20 @@
     const ts = Object.values(D.tasks).filter((t) => t && t.group === "transfer" && t.arms);
     const tb = $("#transfer-table");
     if (!ts.length) { tb.innerHTML = `<tbody><tr><td>${PENDING}</td></tr></tbody>`; return; }
-    const cols = ["base", "prompt", "gate", "lora"];
-    tb.querySelector("thead").innerHTML = `<tr><th>Model</th>${cols.map((a) => `<th class="n"><span class="mhead">${swatch(col(a))}${esc(METHOD[a].label)}</span></th>`).join("")}</tr>`;
-    tb.querySelector("tbody").innerHTML = ts.map((t) => `<tr><td>${esc((t.model || t.id).split("/").pop())}</td>${cols.map((a) => { const r = t.arms[a]; return `<td class="n${a === "gate" ? " hl" : ""}">${r && isNum(r.fail) ? F.pct0(r.fail) : PENDING}${r && isNum(r.kept) ? ` <span class="dim">(${F.pct0(r.kept)})</span>` : ""}</td>`; }).join("")}</tr>`).join("");
+    const cols = ["base", "prompt", "gate", "gate_saf", "lora"].filter((a) => a !== "gate_saf" || ts.some((t) => t.arms.gate_saf));
+    const hl = { gate_saf: "One neuron + silence-after-fire" };
+    tb.querySelector("thead").innerHTML = `<tr><th>Model</th>${cols.map((a) => `<th class="n"><span class="mhead">${swatch(col(a))}${esc(hl[a] || METHOD[a].label)}</span></th>`).join("")}</tr>`;
+    tb.querySelector("tbody").innerHTML = ts.map((t) => `<tr><td>${esc((t.model || t.id).split("/").pop())}</td>${cols.map((a) => { const r = t.arms[a]; return `<td class="n${a === "gate" ? " hl" : ""}">${r && isNum(r.fail) ? F.pct0(r.fail) : a === "gate_saf" ? "\u2013" : PENDING}${r && isNum(r.kept) ? ` <span class="dim">(${F.pct0(r.kept)})</span>` : ""}</td>`; }).join("")}</tr>`).join("");
+  }
+  function renderLoop() {
+    const node = $("#loop-example");
+    const t = Object.values(D.tasks).find((x) => x && x.loop_example);
+    if (!node) return;
+    if (!t) { node.innerHTML = ""; return; }
+    const e = t.loop_example, name = (t.model || t.id).split("/").pop();
+    node.innerHTML = `<p class="tt" style="font-size:.85rem">The ${esc(name)} loop, and the fix</p><p class="tnote" style="margin:2px 0 6px">\u201c${esc(e.prompt)}\u201d</p>
+      <div class="loop"><div><span class="lab">One neuron (recipe)</span><div class="reply" style="border-left-color:var(--gate)">${esc(e.gate)}</div></div>
+      <div><span class="lab">+ silence-after-fire</span><div class="reply" style="border-left-color:var(--gate)">${esc(e.gate_saf)}</div></div></div>`;
   }
   function renderLangmix() {
     const t = D.tasks.langmix, tb = $("#langmix-table");
@@ -1034,6 +1058,7 @@
     onResize($("#pareto-chart"), () => safe(renderPareto, "pareto"));
     safe(renderTransfer, "transfer");
     safe(renderLangmix, "langmix");
+    safe(renderLoop, "loop");
     safe(renderAgentSession, "agentSession");
     safe(renderPersist, "persist");
     onResize($("#persist-chart"), () => safe(renderPersist, "persist"));

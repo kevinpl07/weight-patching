@@ -96,9 +96,13 @@ TASK_META = {
 ARM_LABEL = {"base": "Base", "prompt": "System prompt", "gate": "One neuron", "random": "Random neuron",
              "lora": "LoRA", "thresholds": "Default thresholds", "thresholds_tuned": "Tuned thresholds",
              "vad": "VAD filter", "gate_gauto": "One neuron, steeper", "gate_recipe": "Agents' edit",
-             "random_gauto": "Random, steeper"}
+             "random_gauto": "Random, steeper", "gate_saf": "One neuron + silence-after-fire",
+             "random_saf": "Random (silence-after-fire)", "gate_q0.999": "One neuron, quantile threshold"}
 # Arms in the scoreboard per task (others stay in the data but aren't charted there).
-SCORE_ARMS = {"whisper_silence": ["base", "thresholds", "thresholds_tuned", "gate", "random", "lora"]}
+SCORE_ARMS = {"whisper_silence": ["base", "thresholds", "thresholds_tuned", "gate", "random", "lora"],
+              "signoff": ["base", "prompt", "gate", "gate_q0.999", "random", "lora"]}
+# Item to show a gate-loop before/after for (transfer runs that have a gate_saf arm). None -> first looping made-up item.
+LOOP_EXAMPLE_ID = {"entity__Llama-3.2-3B-Instruct": 1}
 GROUP = {"entity": "main", "agent_injection": "main", "signoff": "main", "whisper_silence": "main",
          "langmix": "langmix"}  # anything else with "__" -> "transfer"
 
@@ -558,6 +562,17 @@ def task_block(task, d):
     blk["pareto"] = pareto_block(d, h)
     blk["agent_session"] = agent_session_block(task, d, h)
     blk["persistence"] = persistence_block(d, h)
+    if "gate_saf" in arms and (d / "outputs" / "gate.jsonl").exists() and (d / "outputs" / "gate_saf.jsonl").exists():
+        g_ = {r["id"]: r.get("text", "") for r in rjsonl(d / "outputs" / "gate.jsonl")}
+        s_ = {r["id"]: r.get("text", "") for r in rjsonl(d / "outputs" / "gate_saf.jsonl")}
+        its = {x["id"]: x for x in rjsonl(d / "items.jsonl")}
+        want = LOOP_EXAMPLE_ID.get(task)
+        cand = [want] if want in g_ else [i for i in g_ if "SorrySorry" in g_[i].replace(" ", "") and
+                                           not its.get(i, {}).get("real", True)]
+        if cand and cand[0] in s_:
+            i = cand[0]
+            blk["loop_example"] = dict(id=i, prompt=its.get(i, {}).get("prompt", ""), gate=clip(g_[i], 150),
+                                       gate_saf=clip(s_[i], 220))
     blk["anatomy"] = anatomy_block(d)
     blk["examples"] = build_examples(task, d, order) if blk["group"] == "main" else []
     blk["notes"] = notes_block(d)
