@@ -740,17 +740,18 @@
     let V;
     try { V = await fetch("data/vision_examples.json", { cache: "no-cache" }).then((r) => r.json()); }
     catch (e) { return pendingFig(grid, "vision examples", "site/data/vision_examples.json"); }
-    const KINDV = { fixed: "Fixed", kept: "Still right", broken: "New mistake" };
-    const pct = (v) => Math.round(100 * v) + "%";
-    grid.innerHTML = V.cards.map((c, i) => `<div class="vcard ${c.kind}">
-      <img src="${esc(c.img)}" alt="${esc(c.truth)}" loading="lazy" width="480" height="320">
-      <p class="v-kind">${KINDV[c.kind] || c.kind} <span class="v-truth">&middot; photo shows ${esc(c.truth)}</span></p>
-      <div class="v-row v-before"><span class="d-lab">before</span><b>${esc(c.base[0])}</b><span class="v-p">${pct(c.base[1])}</span></div>
-      <div class="v-row v-after"><span class="d-lab">after</span><b>${esc(c.edit[0])}</b><span class="v-p">${pct(c.edit[1])}</span></div>
-      <sup class="v-ref">${i + 1}</sup></div>`).join("");
-    const T = V.tally;
-    $("#vision-tally").innerHTML = `All ${T.cue_photos_tried} background-only photos I tried: the original model named a missing object on ${T.cue_base_wrong}; the edit fixed ${T.cue_fixed} and added ${T.cue_new_error} new mistake (the canal boats above). Photos with the real object (bees, gondolas, hummingbirds, padlocks, quills, snowmobiles): ${T.object_photos_kept} of ${T.object_photos_right} still right after the edit; the miss is a dip pen it had called &ldquo;quill&rdquo;. Percentages are the model&rsquo;s confidence in its top guess. Script: <a data-repo-path="experiments/vision_cue_photos.py" href="#">experiments/vision_cue_photos.py</a>.`;
-    $("#vision-credits").innerHTML = "Photos: " + V.cards.map((c, i) => `${i + 1} <a href="${esc(c.page)}">${esc(c.title.replace(/\.(jpe?g|png)$/i, ""))}</a>, ${esc(c.artist || "unknown author")}, ${c.license_url ? `<a href="${esc(c.license_url)}">${esc(c.license)}</a>` : esc(c.license)}`).join("; ") + ". Resized.";
+    const KINDV = { fixed: "Shortcut removed", kept: "Real object, still right", broken: "Real object, now wrong", swapped: "Shortcut swapped for another" };
+    const pct = (v) => (v < 0.01 ? "<1" : Math.round(100 * v)) + "%";
+    grid.innerHTML = V.cards.map((c) => `<div class="vcard ${c.kind}">
+      <img src="${esc(c.img)}" alt="${esc(c.truth)}" loading="lazy" width="400" height="400">
+      <p class="v-kind">${KINDV[c.kind] || c.kind}</p>
+      <p class="v-truth">Photo: ${esc(c.truth)}</p>
+      <div class="v-says">says &ldquo;${esc(c.cls)}&rdquo; <b>${pct(c.p_cls_base)} &rarr; ${pct(c.p_cls_edit)}</b></div>
+      <p class="v-top">Top guess after the edit: <b>${esc(c.top_edit)}</b> (${pct(c.p_top_edit)})</p>
+      <p class="v-src">${esc(c.source)}</p></div>`).join("");
+    const T = V.tally, P = (a, b) => Math.round((100 * a) / b) + "%";
+    $("#vision-tally").innerHTML = `All held-out photos of the 50 edited classes: on ${T.cue_photos.toLocaleString("en-US")} shortcut-only photos, the original model named the missing object ${P(T.cue_hit_base, T.cue_photos)} of the time, the edited model ${P(T.cue_hit_edit, T.cue_photos)}. Of ${T.real_right_base} real photos it got right, ${T.real_kept} stay right and ${T.real_right_base - T.real_kept} break. Picks above are by hand and include one swap and one break on purpose. Script: <a data-repo-path="experiments/vision_examples.py" href="#">experiments/vision_examples.py</a>.`;
+    $("#vision-credits").innerHTML = `Photos: <a href="https://github.com/YanNeu/spurious_imagenet">Spurious ImageNet</a> (Neuhaus et al., ICCV 2023) and <a href="https://github.com/modestyachts/ImageNetV2">ImageNetV2</a> (Recht et al., 2019), research datasets, shown for commentary. Centre-cropped as the model sees them.`;
     bindAll($("#fig-vision"));
   }
 

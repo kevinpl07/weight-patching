@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=21">
+<link rel="stylesheet" href="style.css?v=22">
 </head>
 <body>
 
@@ -222,20 +222,20 @@
 </div>
 
 <div class="col">
-  <h3 id="vision">Images: the model sees snow and says &ldquo;snowmobile&rdquo;</h3>
-  <p>ResNet-50, a standard image classifier, learned shortcuts from its training photos. Snow means snowmobile, handwriting means quill, flowers mean bee. In an earlier experiment, three blind Claude Opus sessions found these shortcut channels from the weights alone and turned them down in the last layer. Session 2&rsquo;s edit changes 5,000 numbers. Below, it runs on Wikimedia Commons photos that neither the model nor the agent had seen.</p>
+  <h3 id="vision">Images: sunglasses in a car means &ldquo;seat belt&rdquo;</h3>
+  <p>ResNet-50, a standard image classifier, learned shortcuts from its training photos. A face in a car means seat belt, underwater means snorkel, snow means snowplow. Spurious ImageNet is a benchmark of photos that show only the shortcut and not the object. Three blind Claude Opus sessions found these shortcut channels from the weights alone and turned them down in the last layer. Below is session 2&rsquo;s edit (5,000 numbers) on held-out benchmark photos, plus real photos of the same objects.</p>
 </div>
 <div class="wide">
   <figure class="fig" id="fig-vision">
-    <p class="takeaway">The background no longer decides the answer, and real objects are still recognised.</p>
-    <p class="sub" id="vision-sub">ResNet-50 (ImageNet), top guess before and after the agent&rsquo;s weight edit. Openly licensed photos, not used in the experiment.</p>
+    <p class="takeaway">The edit stops the model naming objects that aren&rsquo;t there. Sometimes it breaks a real one.</p>
+    <p class="sub" id="vision-sub">ResNet-50 (ImageNet). The big number is how sure the model is of the shortcut word, before and after the agent&rsquo;s weight edit. Held-out photos the agent never saw.</p>
     <div class="vgrid" id="vision-grid"></div>
     <p class="howto" id="vision-tally"></p>
     <p class="howto" id="vision-credits"></p>
   </figure>
 </div>
 <div class="col">
-  <p>On the benchmark (Spurious ImageNet, held-out photos), the edit cut shortcut answers from 50% to 16%, and overall ImageNet accuracy went from 62.9% to 62.3%. Fine-tuning the last block on the same few photos fixed more but cost 12 points on the repaired classes. Same pattern as the text bugs: with about 40 labelled photos per class, standard last-layer retraining (DFR) was cleaner than the edit.</p>
+  <p>ImageNet has no class for &ldquo;a woman in a car&rdquo; or &ldquo;a snowy street&rdquo;, so after the edit the model often has no right answer to give. It falls back to the next-nearest class, sometimes another shortcut (snowplow becomes snowmobile). Overall ImageNet accuracy went from 62.9% to 62.3%. Fine-tuning the last block on the same few photos removed more shortcuts but cost 12 points on the repaired classes. Same pattern as the text bugs: with about 40 labelled photos per class, standard last-layer retraining (DFR) was cleaner than the edit.</p>
 </div>
 </section>
 
@@ -430,6 +430,6 @@ python -m patchkit.run sweep entity   <span class="c"># weight edit vs LoRA as d
 </footer>
 
 <div class="tip" id="tip" role="tooltip"></div>
-<script src="app.js?v=21"></script>
+<script src="app.js?v=22"></script>
 </body>
 </html>
